@@ -83,13 +83,13 @@ module.exports = function(grunt) {
       copy: {
         files: ['src/**', '!src/**/*.less', '!src/**/*.pug', '!src/**/*.js'],
         tasks: ['copy']
-      },
-      'gh-pages': {
-        options: {
-          base: 'public'
-        },
-        src: ['**']
       }
+    },
+    'gh-pages': {
+      options: {
+        base: 'public'
+      },
+      src: ['**']
     }
   });
 
@@ -121,13 +121,13 @@ module.exports = function(grunt) {
 
   grunt.registerTask(
     'deploy',
-    'Deploy to GitHub Pages',
+    'Build and deploy to GitHub Pages.',
     ['build', 'gh-pages']
   )
 
   grunt.registerTask(
     'default',
-    'Build, start server and watch.',
+    'Build and start watching.',
     ['build', 'watch']
   );
 
