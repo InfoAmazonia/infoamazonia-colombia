@@ -1,0 +1,155 @@
+/*
+* Typography
+*/
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'OpenSansCondensedBold';
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+h1 a,h2 a,h3 a,h4 a,h5 a,h6 a
+h1 a:visited,h2 a:visited,h3 a:visited,h4 a:visited,h5 a:visited,h6 a:visited {
+	color: #404040;
+}
+h1 {
+	font-size: 22px;
+	margin: 0 0 10px;
+}
+h2 {
+	font-size: 24px;
+	line-height: 28px;
+	margin: 5px 0 10px;
+}
+h3 {
+	font-size: 24px;
+	line-height: 28px;
+	margin: 0 0 10px;
+}
+h4 {
+	font-size: 16px;
+	line-height: 18px;
+	margin: 0 0 8px;
+}
+input {
+	padding: 5px;
+}
+strong {
+	font-weight: bold;
+}
+
+html,
+body {
+	font: normal 12px/20px 'OpenSansRegular','Helvetica Neue',Helvetica,Verdana,Arial,sans-serif;
+	color: #404040;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	background: #f6f6f6;
+}
+
+.timeline-items {
+	position: relative;
+	padding: 60px 0;
+	&:before {
+		content: '';
+		position: absolute;
+		width: 4px;
+		margin-left: -2px;
+		top: 0;
+		bottom: 0;
+		left: 50%;
+		background: #e6e6e6;
+	}
+	.timeline-item {
+		position: relative;
+		margin-top: -60px;
+		&:first-child {
+			margin-top: 0;
+		}
+		&:nth-child(odd) {
+			.post-box {
+				float: left;
+			}
+			&:before {
+				left: 40%;
+				right: 50%;
+			}
+		}
+		&:nth-child(even) {
+			.post-box {
+				float: right;
+			}
+			&:before {
+				left: 50%;
+				right: 40%;
+			}
+		}
+		&:before {
+			content: '';
+			position: absolute;
+			width: auto;
+			height: 2px;
+			background: #e6e6e6;
+			top: 65px;
+			visibility: visible;
+		}
+		.post-box {
+			background: #fff;
+			width: 40%;
+			box-shadow: 0 0 10px rgba(0,0,0,0.2);
+			img {
+				width: 100%;
+				height: auto;
+			}
+			h2 {
+				padding: 20px 20px 0;
+				margin: 0;
+			}
+			p.meta {
+				padding: 10px 20px 0;
+				margin: 0;
+			}
+			.post-content {
+				padding: 20px;
+				p {
+					margin: 0;
+				}
+			}
+			.post-actions {
+				display: table;
+				width: 100%;
+				a {
+					width: 1%;
+					display: table-cell;
+					padding: 10px 0;
+				}
+			}
+		}
+		.post-date {
+			position: absolute;
+			left: 50%;
+			top: 40px;
+			width: 100px;
+			margin-left: -50px;
+			text-align: center;
+			p.date {
+				display: block;
+				background: @green;
+				color: #fff;
+				line-height: 50px;
+				font-size: 16px;
+				font-family: 'OpenSansCondensedBold';
+				margin: 0 0 15px;
+			}
+			p.time {
+				color: #666;
+				width: 70%;
+				margin: 5px auto;
+				padding: 10px 0;
+				background: #f6f6f6;
+				border: 1px solid #e6e6e6;
+			}
+		}
+	}
+}
