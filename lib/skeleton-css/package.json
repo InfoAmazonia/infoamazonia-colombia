@@ -1,0 +1,79 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "skeleton-css",
+        "scope": null,
+        "escapedName": "skeleton-css",
+        "name": "skeleton-css",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/home/miguelpeixe/devel/infoamazonia-colombia"
+    ]
+  ],
+  "_from": "skeleton-css@latest",
+  "_id": "skeleton-css@2.0.4",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/skeleton-css",
+  "_nodeVersion": "0.12.7",
+  "_npmUser": {
+    "name": "pgrimard",
+    "email": "pgrimard@gmail.com"
+  },
+  "_npmVersion": "2.12.1",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "skeleton-css",
+    "scope": null,
+    "escapedName": "skeleton-css",
+    "name": "skeleton-css",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/skeleton-css/-/skeleton-css-2.0.4.tgz",
+  "_shasum": "d70db2f01fe8209ac79f2f4eee83fae8a40591b8",
+  "_shrinkwrap": null,
+  "_spec": "skeleton-css",
+  "_where": "/home/miguelpeixe/devel/infoamazonia-colombia",
+  "author": {
+    "name": "Patrick Grimard",
+    "email": "pgrimard@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/pgrimard/Skeleton/issues"
+  },
+  "dependencies": {},
+  "description": "npm installer for Skeleton with normalize.css",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "d70db2f01fe8209ac79f2f4eee83fae8a40591b8",
+    "tarball": "https://registry.npmjs.org/skeleton-css/-/skeleton-css-2.0.4.tgz"
+  },
+  "gitHead": "b815d9a43643a7a3d31d993c0809d157bb2132d0",
+  "homepage": "https://github.com/pgrimard/Skeleton",
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "pgrimard",
+      "email": "pgrimard@gmail.com"
+    }
+  ],
+  "name": "skeleton-css",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pgrimard/Skeleton.git"
+  },
+  "scripts": {},
+  "version": "2.0.4"
+}

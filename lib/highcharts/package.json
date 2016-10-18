@@ -1,0 +1,94 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "highcharts",
+        "scope": null,
+        "escapedName": "highcharts",
+        "name": "highcharts",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/home/miguelpeixe/devel/infoamazonia-colombia"
+    ]
+  ],
+  "_from": "highcharts@latest",
+  "_id": "highcharts@5.0.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/highcharts",
+  "_nodeVersion": "4.4.5",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/highcharts-5.0.0.tgz_1475144433720_0.08623426640406251"
+  },
+  "_npmUser": {
+    "name": "highsoft",
+    "email": "torstein@highsoft.com"
+  },
+  "_npmVersion": "2.15.5",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "highcharts",
+    "scope": null,
+    "escapedName": "highcharts",
+    "name": "highcharts",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/highcharts/-/highcharts-5.0.0.tgz",
+  "_shasum": "fcce444ee4301ea1bd0acd36b34b3103b7c26915",
+  "_shrinkwrap": null,
+  "_spec": "highcharts",
+  "_where": "/home/miguelpeixe/devel/infoamazonia-colombia",
+  "author": {
+    "name": "Highsoft AS",
+    "email": "support@highcharts.com",
+    "url": "http://www.highcharts.com/about"
+  },
+  "bugs": {
+    "url": "https://github.com/highcharts/highcharts/issues"
+  },
+  "dependencies": {},
+  "description": "JavaScript charting framework",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "fcce444ee4301ea1bd0acd36b34b3103b7c26915",
+    "tarball": "https://registry.npmjs.org/highcharts/-/highcharts-5.0.0.tgz"
+  },
+  "gitHead": "8eead7172468a02b898c7702274660433fac09d9",
+  "homepage": "http://www.highcharts.com",
+  "keywords": [
+    "charts",
+    "dataviz",
+    "graphs",
+    "visualization",
+    "data",
+    "browserify",
+    "webpack"
+  ],
+  "license": "https://www.highcharts.com/license",
+  "main": "highcharts.js",
+  "maintainers": [
+    {
+      "name": "highsoft",
+      "email": "torstein@highsoft.com"
+    }
+  ],
+  "name": "highcharts",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/highcharts/highcharts-dist.git"
+  },
+  "scripts": {},
+  "version": "5.0.0"
+}

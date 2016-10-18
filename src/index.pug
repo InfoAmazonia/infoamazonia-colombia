@@ -1,6 +1,14 @@
 extends views/includes/layouts/site
 
 block title
-  title InfoAmazonia Colombia
+	title InfoAmazonia Colombia
 
 block head
+
+block content
+	#dashboard
+		.container
+			.six.columns
+				iframe(src="https://infoamazonia.carto.com/builder/3b2c6114-9483-11e6-9b14-0e3ebc282e83/embed" frameborder="0" allowfullscreen)
+			.six.columns
+				highchart#chart1(config="chartConfig")
