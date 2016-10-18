@@ -13,7 +13,10 @@
   },
   "homepage": "https://github.com/InfoAmazonia/infoamazonia-colombia#readme",
   "dependencies": {
-    "angular": "^1.5.8"
+    "angular": "^1.5.8",
+    "highcharts": "^5.0.0",
+    "highcharts-ng": "0.0.13",
+    "skeleton-css": "^2.0.4"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
