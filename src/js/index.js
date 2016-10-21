@@ -1,8 +1,11 @@
-require('angular');
-Highcharts = require('highcharts');
-require('highcharts-ng');
+// require('angular');
+// Highcharts = require('highcharts');
+// require('highcharts-ng');
+// carto = require('cartodb.js/dist/cartodb.uncompressed.js');
 
 highchartsDefaults = require('./highcharts-defaults');
+
+// console.log(carto);
 
 angular.module('ia-colombia', [
 	'highcharts-ng'
