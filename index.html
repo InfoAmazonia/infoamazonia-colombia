@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:300,300i,400,400i,600,700,800" rel="stylesheet">
     <link rel="stylesheet" href="lib/skeleton/css/normalize.css">
     <link rel="stylesheet" href="lib/skeleton/css/skeleton.css">
+    <link rel="stylesheet" href="lib/leaflet/dist/leaflet.css">
     <link rel="stylesheet" href="lib/highcharts/css/highcharts.css">
     <link rel="stylesheet" href="css/app.css">
   </head>
@@ -30,7 +31,9 @@
     <div id="dashboard">
       <div class="container">
         <div class="six columns">
-          <iframe src="https://infoamazonia.carto.com/builder/3b2c6114-9483-11e6-9b14-0e3ebc282e83/embed" frameborder="0" allowfullscreen></iframe>
+          <div class="map-container">
+            <div id="map" map sql="sql" username="user" query="query" columns="columns" data-table="dataTable"></div>
+          </div>
         </div>
         <div class="six columns">
           <highchart id="chart1" config="chartConfig"></highchart>
@@ -38,6 +41,8 @@
       </div>
     </div>
   </body>
+  <script type="text/javascript" src="lib/leaflet/dist/leaflet.js"></script>
+  <script type="text/javascript" src="lib/Leaflet.utfgrid/dist/leaflet.utfgrid.js"></script>
   <script type="text/javascript" src="lib/angular/angular.min.js"></script>
   <script type="text/javascript" src="lib/cartodb.js/cartodb.core.js"></script>
   <script type="text/javascript" src="lib/highcharts/highcharts.js"></script>

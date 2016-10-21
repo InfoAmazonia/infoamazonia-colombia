@@ -26,7 +26,7 @@ module.exports = {
 					color: '#fff'
 				}
 			},
-			gridLineColor: 'rgba(255,255,255,0.2)'
+			gridLineColor: 'rgba(255,255,255,0.1)'
 		},
 		xAxis: {
 			labels: {
