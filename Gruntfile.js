@@ -65,10 +65,9 @@ module.exports = function(grunt) {
 			modules: {
 				files: [
 					{
-						cwd: 'node_modules',
+						cwd: 'bower_components',
 						src: [
-							'skeleton-css/**/*',
-							'highcharts/**/*'
+							'**/*'
 						],
 						dest: 'public/lib',
 						expand: true

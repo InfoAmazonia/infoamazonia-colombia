@@ -1,0 +1,24 @@
+{
+  "name": "infoamazonia-colombia",
+  "description": "InfoAmazonia Colombia",
+  "main": "",
+  "authors": [
+    "Miguel Peixe <miguel@cardume.art.br>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/InfoAmazonia/infoamazonia-colombia",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.8",
+    "cartodb.js": "^3.15.9",
+    "highcharts": "^5.0.0",
+    "highcharts-ng": "^0.0.13",
+    "skeleton": "^2.0.4"
+  }
+}
