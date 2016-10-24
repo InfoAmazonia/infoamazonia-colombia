@@ -18,7 +18,7 @@ var app = angular.module('ia-colombia', [
 
 		$scope.user = 'infoamazonia';
 		$scope.dataTable = 'ideam_deforestacion_anual';
-		$scope.geomTable = 'subregiones_nomdepto_area_estudio_amz4326';
+		$scope.geomTable = 'depto_amzideam';
 		$scope.queryWhere = 'data.departamentos = geom.nom_depto';
 
 		$scope.sql = new cartodb.SQL({user: $scope.user});
