@@ -67,7 +67,9 @@ module.exports = function(grunt) {
 					{
 						cwd: 'bower_components',
 						src: [
-							'**/*'
+							'**',
+							'!**/*.md',
+							'!**/*.html'
 						],
 						dest: 'public/lib',
 						expand: true
