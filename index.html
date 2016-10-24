@@ -28,23 +28,17 @@
         </div>
       </div>
     </header>
+    <div class="map-container">
+      <div id="map" map sql="sql" username="user" query="query" columns="columns" table="dataTable"></div>
+    </div>
     <div id="dashboard">
-      <div class="container">
-        <div class="six columns">
-          <div class="map-container">
-            <div id="map" map sql="sql" username="user" query="query" columns="columns" data-table="dataTable"></div>
-          </div>
-        </div>
-        <div class="six columns">
-          <highchart id="chart1" config="chartConfig"></highchart>
-        </div>
-      </div>
+      <highchart id="chart1" config="chartConfig"></highchart>
     </div>
   </body>
   <script type="text/javascript" src="lib/leaflet/dist/leaflet.js"></script>
   <script type="text/javascript" src="lib/Leaflet.utfgrid/dist/leaflet.utfgrid.js"></script>
   <script type="text/javascript" src="lib/angular/angular.min.js"></script>
-  <script type="text/javascript" src="lib/cartodb.js/cartodb.core.js"></script>
+  <script type="text/javascript" src="lib/cartodb.js/cartodb.core.uncompressed.js"></script>
   <script type="text/javascript" src="lib/highcharts/highcharts.js"></script>
   <script type="text/javascript" src="lib/highcharts-ng/dist/highcharts-ng.min.js"></script>
   <script type="text/javascript" src="js/app.js"></script>

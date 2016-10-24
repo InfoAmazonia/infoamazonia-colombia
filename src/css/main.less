@@ -11,7 +11,7 @@
 	left: 0;
 	right: 0;
 	padding: 2rem 0;
-	z-index: 4;
+	z-index: 3;
 	h1 {
 		color: #fff;
 		font-size: 2.5em;
@@ -25,69 +25,33 @@
 	}
 }
 
-#apphead {
-	padding: 25rem 0 0rem;
-	background: #000 url(../img/deforest.jpg) center;
-	background-size: cover;
-	color: #fff;
-	position: relative;
-	border-bottom: 20px solid #111;
-	> * {
-		position: relative;
-		z-index: 1;
-	}
-	h1 {
-		margin: 0 0 -1.5rem;
-		padding: 0;
-		font-size: 8em;
-		text-transform: uppercase;
-		line-height: 1;
-		text-align: center;
-		letter-spacing: -.5rem;
-		color: rgba(255,255,255,0.9);
-		text-shadow: 0 0 2rem rgba(0,0,0,.8);
-	}
-	&:before {
-		content: '';
-		position: absolute;
-		top: 0;
-		bottom: 50%;
-		left: 0;
-		right: 0;
-		.gradient(rgba(0,0,0,0.7), transparent, rgba(0,0,0,0.7));
-	}
-	&:after {
-		content: '';
-		position: absolute;
-		top: 50%;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		.gradient(transparent, rgba(0,0,0,0.9), transparent);
-	}
-}
-
 .map-container {
-	width: 100%;
-	height: 400px;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	position: fixed;
 }
 .leaflet-container {
 	width: 100%;
+	height: 100%;
 	min-height: 400px;
 }
 
 #dashboard {
-	background: #222;
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 33.3333%;
+	bottom: 0;
 	color: #f0f0f0;
 	padding: 2rem;
-	.container {
-		width: 100%;
-		max-width: none;
-	}
-	iframe {
-		width: 100%;
-		height: 600px;
-	}
+	overflow: auto;
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,222222+100&0+0,1+100 */
+	background: -moz-linear-gradient(left,  rgba(0,0,0,0) 0%, rgba(34,34,34,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left,  rgba(0,0,0,0) 0%,rgba(34,34,34,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right,  rgba(0,0,0,0) 0%,rgba(34,34,34,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#222222',GradientType=1 ); /* IE6-9 */
 }
 
 .timeline-items {

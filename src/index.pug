@@ -6,10 +6,7 @@ block title
 block head
 
 block content
+	.map-container
+		#map(map sql="sql" username="user" query="query" columns="columns" table="dataTable")
 	#dashboard
-		.container
-			.six.columns
-				.map-container
-					#map(map sql="sql" username="user" query="query" columns="columns" data-table="dataTable")
-			.six.columns
-				highchart#chart1(config="chartConfig")
+		highchart#chart1(config="chartConfig")
