@@ -21,6 +21,7 @@
     "highcharts-ng": "^0.0.13",
     "skeleton": "^2.0.4",
     "leaflet": "^1.0.1",
-    "Leaflet.utfgrid": "*"
+    "Leaflet.utfgrid": "*",
+		"leaflet-bing-layer": "gmaclennan/leaflet-bing-layer#v3.0.1"
   }
 }
