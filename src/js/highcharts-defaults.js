@@ -20,6 +20,11 @@ module.exports = {
 		legend: {
 			enabled: false
 		},
+		plotOptions: {
+			series: {
+				color: '#f26969'
+			}
+		},
 		yAxis: {
 			labels: {
 				style: {

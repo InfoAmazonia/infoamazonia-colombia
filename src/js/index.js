@@ -1,11 +1,4 @@
-// require('angular');
-// Highcharts = require('highcharts');
-// require('highcharts-ng');
-// carto = require('cartodb.js/dist/cartodb.uncompressed.js');
-
-highchartsDefaults = require('./highcharts-defaults');
-
-// console.log(carto);
+var highchartsDefaults = require('./highcharts-defaults');
 
 var app = angular.module('ia-colombia', [
 	'highcharts-ng'
@@ -24,14 +17,15 @@ var app = angular.module('ia-colombia', [
 		$scope.sql = new cartodb.SQL({user: $scope.user});
 		$scope.dataQuery = 'SELECT * FROM ' + $scope.dataTable;
 
+		$scope.gridItem = false;
+
 		$scope.sql.execute($scope.dataQuery).done(function(data) {
-			console.log(data);
+
 			var fields = [];
 			for(var key in data.fields) {
 				if(key !== 'the_geom' && key !== 'the_geom_webmercator' && key !== 'cartodb_id')
-					fields.push(key);
+				fields.push(key);
 			}
-
 			$rootScope.$apply(function() {
 
 				$scope.columns = fields;
@@ -42,11 +36,14 @@ var app = angular.module('ia-colombia', [
 
 		});
 
-		$scope.chartConfig = angular.extend({
-			series: [{
-				data: [10, 15, 12, 8, 7]
-			}]
-		}, highchartsDefaults);
+		$scope.$watch('gridItem', function() {
+			$scope.chartConfig = angular.extend({
+				series: [{
+					data: [$scope.gridItem._2014_deforestacion, $scope.gridItem._2015_deforestacion]
+				}]
+			}, highchartsDefaults);
+			console.log($scope.chartConfig);
+		})
 
 	}
 ]);

@@ -12,18 +12,23 @@ module.exports = function(app) {
 					sql: '=',
 					query: '=',
 					columns: '=',
-					table: '='
+					table: '=',
+					gridItem: '='
 				},
 				link: function(scope, element, attrs) {
 
 					var map = L.map(element[0], {
 						center: [0,0],
 						zoom: 1,
-						scrollWheelZoom: false,
-						infowindow: true
+						scrollWheelZoom: true
 					});
 
-					map.addLayer(L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));
+					var BING_KEY = 'AqcPFocZWfHGkBoBjZ0e3NlBbKqN9t_lRuRyjVg7xHlc7JXWrGvupqLFYWRVqfv4';
+
+					map.addLayer(L.tileLayer.bing({
+						bingMapsKey: BING_KEY,
+						opacity: .5
+					}));
 
 					var layer;
 					var grid;
@@ -43,7 +48,7 @@ module.exports = function(app) {
 						}
 						if(scope.username && scope.query && scope.sql && scope.columns) {
 
-							scope.column = scope.columns[1];
+							scope.column = scope.columns[2];
 
 							getCartoDBQuantiles(scope.sql, scope.table, scope.column, function(bins) {
 
@@ -77,7 +82,9 @@ module.exports = function(app) {
 								grid = new L.UtfGrid(tilesUrl.grids[0][0] + '&callback={cb}');
 								map.addLayer(grid);
 								grid.on('mouseover', function(e) {
-									console.log('hover', e.data);
+									scope.$apply(function() {
+										scope.gridItem = e.data;
+									})
 								});
 							}
 						});
@@ -92,12 +99,12 @@ module.exports = function(app) {
 function getCartoCSS(column, quantiles) {
 
 	var cartocss = [
-		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #000; }',
+		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #f26969; }',
 		'#layer[ ' + column + ' <= 0 ] { polygon-fill: transparent; }'
 	];
 
 	quantiles.forEach(function(qt, i) {
-		cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(0,0,0, ' + ((i+1)/5) + ');	}');
+		cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(242, 105, 105, ' + ((i+1)/5) + ');	}');
 	});
 
 	return cartocss.join(' ');
