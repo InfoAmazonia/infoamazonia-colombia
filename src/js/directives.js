@@ -1,10 +1,13 @@
 'use strict';
 
+var baseLayers = require('./base-layers');
+
 module.exports = function(app) {
 
 	app.directive('map', [
 		'$rootScope',
-		function($rootScope) {
+		'$http',
+		function($rootScope, $http) {
 			return {
 				restrict: 'EAC',
 				scope: {
@@ -20,15 +23,28 @@ module.exports = function(app) {
 					var map = L.map(element[0], {
 						center: [0,0],
 						zoom: 1,
-						scrollWheelZoom: true
+						scrollWheelZoom: true,
+						fadeAnimation: true,
+						zoomAnimation: true
 					});
 
-					var BING_KEY = 'AqcPFocZWfHGkBoBjZ0e3NlBbKqN9t_lRuRyjVg7xHlc7JXWrGvupqLFYWRVqfv4';
-
-					map.addLayer(L.tileLayer.bing({
-						bingMapsKey: BING_KEY,
-						opacity: .5
+					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/cirgitmlm0010gdm9cd48fmlz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+						zIndexOffset: 1
 					}));
+
+					var baseLayerGroup = L.layerGroup({
+						zIndexOffset: 2
+					});
+					var dataLayerGroup = L.layerGroup({
+						zIndexOffset: 3
+					});
+
+					setTimeout(function() {
+						baseLayerGroup.addTo(map);
+						dataLayerGroup.addTo(map);
+					}, 2000);
+
+					baseLayers(baseLayerGroup, $http);
 
 					var layer;
 					var grid;
@@ -41,23 +57,17 @@ module.exports = function(app) {
 						'dataTable'
 					], function() {
 						if(typeof layer !== 'undefined') {
-							map.removeLayer(layer);
+							dataLayerGroup.removeLayer(layer);
 						}
 						if(typeof grid !== 'undefined') {
-							map.removeLayer(grid);
+							dataLayerGroup.removeLayer(grid);
 						}
 						if(scope.username && scope.query && scope.sql && scope.columns) {
-
 							scope.column = scope.columns[2];
-
 							getCartoDBQuantiles(scope.sql, scope.table, scope.column, function(bins) {
-
 								var cartocss = getCartoCSS(scope.column, bins);
-
 								addLayers(cartocss);
-
 							});
-
 						}
 					});
 
@@ -74,18 +84,34 @@ module.exports = function(app) {
 							if(tilesUrl == null) {
 								console.log("error: ", err.errors.join('\n'));
 							} else {
-								layer = L.tileLayer(tilesUrl.tiles[0]);
-								map.addLayer(layer);
+								layer = L.tileLayer(tilesUrl.tiles[0], {
+									zIndexOffset: 3
+								});
+								dataLayerGroup.addLayer(layer);
 								scope.sql.getBounds(scope.query).done(function(bounds) {
-									map.fitBounds(bounds);
+									map.fitBounds(bounds, {
+										paddingTopLeft: [
+											0,
+											100
+										],
+										paddingBottomRight: [
+											window.innerWidth * .4,
+											0
+										]
+									});
 								});
 								grid = new L.UtfGrid(tilesUrl.grids[0][0] + '&callback={cb}');
-								map.addLayer(grid);
+								dataLayerGroup.addLayer(grid);
 								grid.on('mouseover', function(e) {
 									scope.$apply(function() {
 										scope.gridItem = e.data;
-									})
+									});
 								});
+								grid.on('mouseout', function(e) {
+									scope.$apply(function() {
+										scope.gridItem = false;
+									});
+								})
 							}
 						});
 					}
@@ -99,12 +125,12 @@ module.exports = function(app) {
 function getCartoCSS(column, quantiles) {
 
 	var cartocss = [
-		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #f26969; }',
+		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: .5; line-opacity: 0.5; line-color: #fff; }',
 		'#layer[ ' + column + ' <= 0 ] { polygon-fill: transparent; }'
 	];
 
 	quantiles.forEach(function(qt, i) {
-		cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(242, 105, 105, ' + ((i+1)/5) + ');	}');
+		cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(255, 255, 255, ' + ((i+1)/10) + ');	}');
 	});
 
 	return cartocss.join(' ');
@@ -114,7 +140,6 @@ function getCartoCSS(column, quantiles) {
 function getCartoDBQuantiles(sql, table, column, cb) {
 	sql.execute('SELECT CDB_HeadsTailsBins(array_agg(cast(' + column + ' as numeric)), 7) FROM ' + table).done(function(data) {
 		var bins = data.rows[0].cdb_headstailsbins;
-		console.log(data);
 		cb(bins);
 	});
 }

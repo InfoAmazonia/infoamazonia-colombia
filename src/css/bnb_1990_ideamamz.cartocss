@@ -1,0 +1,31 @@
+#bnb_1990_ideamamz{
+ //comp-op:overlay; //contrast; //xor; //lighten; //hue;//
+
+
+  polygon-opacity: 1;
+  polygon-gamma-method: multiply;
+  line-opacity: 0.25;
+  line-width: 0;
+  [zoom>=5] {line-width: 0.1;}
+  [zoom>9] {line-width: 0.2;}
+  [zoom>11] {line-width: 1;}
+
+
+  [dn=0]{polygon-fill: transparent;}
+
+  [dn=1]{
+  polygon-fill: #009966;//#33cc66
+  line-color: #00cc99; //#2B6547
+  }
+
+  [dn=2]{
+  polygon-fill: #FF9966;//#666633;
+  line-color: #ff6633;
+  }
+
+  [dn=3]{
+  polygon-fill: #330000; //663333;
+  line-color: #330033;
+  }
+
+  }

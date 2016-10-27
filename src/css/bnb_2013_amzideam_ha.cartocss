@@ -1,0 +1,33 @@
+#bnb_2013_amzideam_ha{
+//line-comp-op: hard-light;
+//polygon-comp-op: overlay;
+ //comp-op: dst;//plus; grain-extract;//hue;//invert-rgb; //exclusion;//difference; //contrast;//hard-light; //
+
+  polygon-opacity: 0.9;
+  //polygon-gamma-method: multiply;
+  line-opacity: 0.25;
+  line-width: 0;
+  [zoom>=5] {line-width: 0.1;}
+  [zoom>9] {line-width: 0.2;}
+  [zoom>11] {line-width: 1;}
+
+
+  [dn=0]{polygon-fill: transparent;}
+
+  [dn=1]{
+  polygon-fill: #009966;//#2B6547; //#33cc66; //
+  line-color: #00cc99; //#2B6547
+  }
+
+  [dn=2]{
+  polygon-fill: #FF9966;
+  line-color: #663333; //ff6633;
+  //polygon-comp-op: contrast;
+  }
+
+  [dn=3]{
+  polygon-fill: #330000; //663333;
+  line-color: #330033;
+  }
+
+  }

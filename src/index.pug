@@ -6,17 +6,40 @@ block title
 block head
 
 block content
-	.map-container
-		#map(map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem")
-	#dashboard
-		.grid-item(ng-show="gridItem")
-			h2 {{gridItem.departamentos}}
-			p
-				strong 2014
-				br
-				| {{gridItem._2014_deforestacion}} ha
-			p
-				strong 2015
-				br
-				| {{gridItem._2015_deforestacion}} ha
-		highchart#chart1(config="chartConfig")
+	div(ng-controller="MapCtrl")
+		.map-container
+			#map(map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem")
+		section#sidebar
+			header
+				nav#sidebar-nav
+					a.active Dashboard
+					a Stories
+			section#dashboard
+				.grid-item(ng-show="gridItem")
+					h2 {{gridItem.departamento}}
+					p
+						strong 2014
+						br
+						| {{gridItem.deforestacion_2014}} ha
+					p
+						strong 2015
+						br
+						| {{gridItem.deforestacion_2015}} ha
+				highchart#chart1(config="chartConfig")
+			section#stories
+				.timeline-items
+					.timeline-item.clearfix(ng-repeat="story in stories")
+						article
+							.post-box
+								header.post-header
+									h2
+										a(ng-href="{{story.properties.url}}") {{story.properties.title}}
+									//- p.meta.clearfix
+									//- 	span.publisher
+									//- 		span.lsf clip
+									//- 		span.publisher-content
+								section.post-content
+									p {{story.properties.excerpt}}
+							aside.post-date
+								p.date 09/28/2016
+								p.time 02:08 PM
