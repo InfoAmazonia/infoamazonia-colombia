@@ -23,24 +23,26 @@ module.exports = function(app) {
 					var map = L.map(element[0], {
 						center: [0,0],
 						zoom: 1,
-						scrollWheelZoom: true
+						scrollWheelZoom: true,
+						fadeAnimation: true,
+						zoomAnimation: true
 					});
 
-					var BING_KEY = 'AqcPFocZWfHGkBoBjZ0e3NlBbKqN9t_lRuRyjVg7xHlc7JXWrGvupqLFYWRVqfv4';
-
-					map.addLayer(L.tileLayer.bing({
-						bingMapsKey: BING_KEY,
-						opacity: .5,
+					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/cirgitmlm0010gdm9cd48fmlz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
 						zIndexOffset: 1
 					}));
 
 					var baseLayerGroup = L.layerGroup({
 						zIndexOffset: 2
-					}).addTo(map);
-
+					});
 					var dataLayerGroup = L.layerGroup({
 						zIndexOffset: 3
-					}).addTo(map);
+					});
+
+					setTimeout(function() {
+						baseLayerGroup.addTo(map);
+						dataLayerGroup.addTo(map);
+					}, 2000);
 
 					baseLayers(baseLayerGroup, $http);
 
@@ -99,7 +101,7 @@ module.exports = function(app) {
 											100
 										],
 										paddingBottomRight: [
-											window.innerWidth / 3,
+											window.innerWidth * .4,
 											0
 										]
 									});
@@ -111,11 +113,11 @@ module.exports = function(app) {
 										scope.gridItem = e.data;
 									});
 								});
-								grid.on('mouseout', _.debounce(function(e) {
+								grid.on('mouseout', function(e) {
 									scope.$apply(function() {
 										scope.gridItem = false;
 									});
-								}, 100));
+								})
 							}
 						});
 					}
@@ -129,12 +131,12 @@ module.exports = function(app) {
 function getCartoCSS(column, quantiles) {
 
 	var cartocss = [
-		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #000; }',
+		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: .5; line-opacity: 0.5; line-color: #fff; }',
 		'#layer[ ' + column + ' <= 0 ] { polygon-fill: transparent; }'
 	];
 
 	quantiles.forEach(function(qt, i) {
-		cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(0, 0, 0, ' + ((i+1)/8) + ');	}');
+		cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(255, 255, 255, ' + ((i+1)/10) + ');	}');
 	});
 
 	return cartocss.join(' ');

@@ -10,6 +10,9 @@ block content
 		.map-container
 			#map(map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem")
 		#dashboard
+			nav#dashboard-nav
+				a.active Dashboard
+				a Stories
 			.grid-item(ng-show="gridItem")
 				h2 {{gridItem.departamento}}
 				p

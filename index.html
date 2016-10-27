@@ -26,6 +26,7 @@
         <div id="map" map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem"></div>
       </div>
       <div id="dashboard">
+        <nav id="dashboard-nav"><a class="active">Dashboard</a><a>Stories</a></nav>
         <div class="grid-item" ng-show="gridItem">
           <h2>{{gridItem.departamento}}</h2>
           <p><strong>2014</strong><br>{{gridItem.deforestacion_2014}} ha</p>
@@ -37,7 +38,6 @@
   </body>
   <script type="text/javascript" src="lib/underscore/underscore-min.js"></script>
   <script type="text/javascript" src="lib/leaflet/dist/leaflet.js"></script>
-  <script type="text/javascript" src="lib/leaflet-bing-layer/leaflet-bing-layer.js"></script>
   <script type="text/javascript" src="lib/Leaflet.utfgrid/dist/leaflet.utfgrid.js"></script>
   <script type="text/javascript" src="lib/angular/angular.min.js"></script>
   <script type="text/javascript" src="lib/cartodb.js/cartodb.core.uncompressed.js"></script>

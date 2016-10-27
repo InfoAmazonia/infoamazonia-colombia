@@ -11,7 +11,7 @@
 	left: 0;
 	right: 0;
 	padding: 2rem 0;
-	z-index: 3;
+	z-index: 1;
 	h1 {
 		color: #fff;
 		font-size: 2.5em;
@@ -23,6 +23,12 @@
 			color: inherit;
 		}
 	}
+}
+
+.container {
+	width: auto;
+	max-width: 100%;
+	margin: 0 2rem;
 }
 
 .map-container {
@@ -41,17 +47,51 @@
 	.leaflet-top {
 		top: 35%;
 	}
+	.leaflet-left {
+		left: 0;
+		.leaflet-control {
+			margin-left: 2rem;
+		}
+	}
+}
+
+#dashboard-nav {
+	border-radius: 4px;
+	border: 1px solid rgba(255,255,255,0.8);
+	display: table;
+	width: 100%;
+	margin: 0 0 2rem;
+	.box-shadow(0 0 1rem rgba(0,0,0,1));
+	a {
+		line-height: 36px;
+		display: table-cell;
+		width: 1%;
+		text-align: center;
+		color: #fff;
+		text-transform: uppercase;
+		border-right: 1px solid rgba(255,255,255,0.8);
+		&:last-child {
+			border: 0;
+		}
+		&:hover {
+			background: rgba(255,255,255,0.1)
+		}
+		&.active {
+			background: rgba(255,255,255,0.2);
+		}
+	}
 }
 
 #dashboard {
 	position: fixed;
 	top: 0;
 	right: 0;
-	width: 33.3333%;
+	width: 40%;
 	bottom: 0;
 	color: #f0f0f0;
 	padding: 2rem;
 	overflow: auto;
+	z-index: 2;
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,222222+100&0+0,1+100 */
 	background: -moz-linear-gradient(left,  rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%); /* FF3.6-15 */
 	background: -webkit-linear-gradient(left,  rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%); /* Chrome10-25,Safari5.1-6 */
