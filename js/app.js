@@ -229,7 +229,7 @@ var app = angular.module('ia-colombia', [
 		$scope.user = 'infoamazonia';
 		$scope.dataTable = 'ideam_deforestacion_anual';
 		$scope.geomTable = 'depto_amzideam';
-		$scope.queryWhere = 'data.departamentos = geom.nom_depto';
+		$scope.queryWhere = 'data.departamento = geom.nom_depto';
 
 		$scope.sql = new cartodb.SQL({user: $scope.user});
 		$scope.dataQuery = 'SELECT * FROM ' + $scope.dataTable;
@@ -256,7 +256,7 @@ var app = angular.module('ia-colombia', [
 		$scope.$watch('gridItem', function() {
 			$scope.chartConfig = angular.extend({
 				series: [{
-					data: [$scope.gridItem._2014_deforestacion, $scope.gridItem._2015_deforestacion]
+					data: [$scope.gridItem.deforestacion_2014, $scope.gridItem.deforestacion_2015]
 				}]
 			}, highchartsDefaults);
 			console.log($scope.chartConfig);
