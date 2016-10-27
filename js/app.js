@@ -1,1 +1,274 @@
-!function a(b,c,d){function e(g,h){if(!c[g]){if(!b[g]){var i="function"==typeof require&&require;if(!h&&i)return i(g,!0);if(f)return f(g,!0);var j=new Error("Cannot find module '"+g+"'");throw j.code="MODULE_NOT_FOUND",j}var k=c[g]={exports:{}};b[g][0].call(k.exports,function(a){var c=b[g][1][a];return e(c?c:a)},k,k.exports,a,b,c,d)}return c[g].exports}for(var f="function"==typeof require&&require,g=0;g<d.length;g++)e(d[g]);return e}({1:[function(a,b,c){"use strict";function d(a,b){var c=["#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #f26969; }","#layer[ "+a+" <= 0 ] { polygon-fill: transparent; }"];return b.forEach(function(b,d){c.push("#layer[ "+a+" >= "+b+" ] { polygon-fill: rgba(242, 105, 105, "+(d+1)/5+");\t}")}),c.join(" ")}function e(a,b,c,d){a.execute("SELECT CDB_HeadsTailsBins(array_agg(cast("+c+" as numeric)), 7) FROM "+b).done(function(a){var b=a.rows[0].cdb_headstailsbins;console.log(a),d(b)})}b.exports=function(a){a.directive("map",["$rootScope",function(a){return{restrict:"EAC",scope:{username:"=",sql:"=",query:"=",columns:"=",table:"=",gridItem:"="},link:function(a,b,c){function f(b){var c={user_name:a.username,sublayers:[{sql:a.query,cartocss:b,interactivity:a.columns}]};cartodb.Tiles.getTiles(c,function(b,c){null==b?console.log("error: ",c.errors.join("\n")):(i=L.tileLayer(b.tiles[0]),g.addLayer(i),a.sql.getBounds(a.query).done(function(a){g.fitBounds(a)}),j=new L.UtfGrid(b.grids[0][0]+"&callback={cb}"),g.addLayer(j),j.on("mouseover",function(b){a.$apply(function(){a.gridItem=b.data})}))})}var g=L.map(b[0],{center:[0,0],zoom:1,scrollWheelZoom:!0}),h="AqcPFocZWfHGkBoBjZ0e3NlBbKqN9t_lRuRyjVg7xHlc7JXWrGvupqLFYWRVqfv4";g.addLayer(L.tileLayer.bing({bingMapsKey:h,opacity:.5}));var i,j;a.$watchGroup(["username","query","sql","columns","dataTable"],function(){"undefined"!=typeof i&&g.removeLayer(i),"undefined"!=typeof j&&g.removeLayer(j),a.username&&a.query&&a.sql&&a.columns&&(a.column=a.columns[2],e(a.sql,a.table,a.column,function(b){var c=d(a.column,b);f(c)}))})}}}])}},{}],2:[function(a,b,c){b.exports={options:{chart:{type:"spline",backgroundColor:null,plotBackgroundColor:null,style:{fontFamily:"Open Sans",color:"#ffffff"}},tooltip:{style:{padding:10,fontWeight:"bold"}},title:!1,subtitle:!1,legend:{enabled:!1},plotOptions:{series:{color:"#f26969"}},yAxis:{labels:{style:{color:"#fff"}},gridLineColor:"rgba(255,255,255,0.1)"},xAxis:{labels:{style:{color:"#fff"}}},credits:{enabled:!1}}}},{}],3:[function(a,b,c){var d=a("./highcharts-defaults"),e=angular.module("ia-colombia",["highcharts-ng"]).controller("SiteCtrl",["$rootScope","$scope","$timeout",function(a,b,c){b.user="infoamazonia",b.dataTable="ideam_deforestacion_anual",b.geomTable="depto_amzideam",b.queryWhere="data.departamentos = geom.nom_depto",b.sql=new cartodb.SQL({user:b.user}),b.dataQuery="SELECT * FROM "+b.dataTable,b.gridItem=!1,b.sql.execute(b.dataQuery).done(function(c){var d=[];for(var e in c.fields)"the_geom"!==e&&"the_geom_webmercator"!==e&&"cartodb_id"!==e&&d.push(e);a.$apply(function(){b.columns=d,b.query="SELECT geom.cartodb_id, geom.the_geom, geom.the_geom_webmercator, data."+b.columns.join(", data.")+" FROM "+b.dataTable+" as data, "+b.geomTable+" as geom WHERE "+b.queryWhere+" GROUP BY data.cartodb_id, geom.cartodb_id"})}),b.$watch("gridItem",function(){b.chartConfig=angular.extend({series:[{data:[b.gridItem._2014_deforestacion,b.gridItem._2015_deforestacion]}]},d),console.log(b.chartConfig)})}]);a("./directives")(e),angular.element(document).ready(function(){angular.bootstrap(document,["ia-colombia"])})},{"./directives":1,"./highcharts-defaults":2}]},{},[3]);
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+module.exports = function(app) {
+
+	app.directive('map', [
+		'$rootScope',
+		'$http',
+		function($rootScope, $http) {
+			return {
+				restrict: 'EAC',
+				scope: {
+					username: '=',
+					sql: '=',
+					query: '=',
+					columns: '=',
+					table: '=',
+					gridItem: '='
+				},
+				link: function(scope, element, attrs) {
+
+					var map = L.map(element[0], {
+						center: [0,0],
+						zoom: 1,
+						scrollWheelZoom: true
+					});
+
+					var BING_KEY = 'AqcPFocZWfHGkBoBjZ0e3NlBbKqN9t_lRuRyjVg7xHlc7JXWrGvupqLFYWRVqfv4';
+
+					map.addLayer(L.tileLayer.bing({
+						bingMapsKey: BING_KEY,
+						opacity: .5
+					}));
+
+					$http.get('css/bnb_2013_amzideam_ha.cartocss').then(function(res) {
+						console.log(res);
+						cartodb.Tiles.getTiles({
+							user_name: scope.username,
+							sublayers: [{
+								sql: 'select * from bnb_2013_amzideam_ha',
+								cartocss: res.data
+							}]
+						}, function(tilesUrl, err) {
+							if(tilesUrl == null) {
+								console.log("error: ", err.errors.join('\n'));
+							} else {
+								map.addLayer(L.tileLayer(tilesUrl.tiles[0]), {
+									zIndexOffset: 2
+								});
+							}
+						});
+					});
+					$http.get('css/bnb_1990_ideamamz.cartocss').then(function(res) {
+						console.log(res);
+						cartodb.Tiles.getTiles({
+							user_name: scope.username,
+							sublayers: [{
+								sql: 'select * from bnb_1990_ideamamz',
+								cartocss: res.data
+							}]
+						}, function(tilesUrl, err) {
+							if(tilesUrl == null) {
+								console.log("error: ", err.errors.join('\n'));
+							} else {
+								map.addLayer(L.tileLayer(tilesUrl.tiles[0], {
+									zIndexOffset: 1
+								}));
+							}
+						});
+					});
+
+					var layer;
+					var grid;
+
+					scope.$watchGroup([
+						'username',
+						'query',
+						'sql',
+						'columns',
+						'dataTable'
+					], function() {
+						if(typeof layer !== 'undefined') {
+							map.removeLayer(layer);
+						}
+						if(typeof grid !== 'undefined') {
+							map.removeLayer(grid);
+						}
+						if(scope.username && scope.query && scope.sql && scope.columns) {
+
+							scope.column = scope.columns[2];
+
+							getCartoDBQuantiles(scope.sql, scope.table, scope.column, function(bins) {
+
+								var cartocss = getCartoCSS(scope.column, bins);
+
+								addLayers(cartocss);
+
+							});
+
+						}
+					});
+
+					function addLayers(cartocss) {
+						var layerData = {
+							user_name: scope.username,
+							sublayers: [{
+								sql: scope.query,
+								cartocss: cartocss,
+								interactivity: scope.columns
+							}]
+						};
+						cartodb.Tiles.getTiles(layerData, function(tilesUrl, err) {
+							if(tilesUrl == null) {
+								console.log("error: ", err.errors.join('\n'));
+							} else {
+								layer = L.tileLayer(tilesUrl.tiles[0], {
+									zIndexOffset: 3
+								});
+								map.addLayer(layer);
+								scope.sql.getBounds(scope.query).done(function(bounds) {
+									map.fitBounds(bounds, {
+										paddingBottomRight: [
+											window.innerWidth / 3,
+											0
+										]
+									});
+								});
+								grid = new L.UtfGrid(tilesUrl.grids[0][0] + '&callback={cb}');
+								map.addLayer(grid);
+								grid.on('mouseover', function(e) {
+									scope.$apply(function() {
+										scope.gridItem = e.data;
+									})
+								});
+							}
+						});
+					}
+				}
+			}
+		}
+	]);
+
+};
+
+function getCartoCSS(column, quantiles) {
+
+	var cartocss = [
+		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #000; }',
+		'#layer[ ' + column + ' <= 0 ] { polygon-fill: transparent; }'
+	];
+
+	quantiles.forEach(function(qt, i) {
+		cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(0, 0, 0, ' + ((i+1)/10) + ');	}');
+	});
+
+	return cartocss.join(' ');
+
+}
+
+function getCartoDBQuantiles(sql, table, column, cb) {
+	sql.execute('SELECT CDB_HeadsTailsBins(array_agg(cast(' + column + ' as numeric)), 7) FROM ' + table).done(function(data) {
+		var bins = data.rows[0].cdb_headstailsbins;
+		console.log(data);
+		cb(bins);
+	});
+}
+
+},{}],2:[function(require,module,exports){
+module.exports = {
+	options: {
+		chart: {
+			type: 'spline',
+			backgroundColor: null,
+			plotBackgroundColor: null,
+			style: {
+				fontFamily: 'Open Sans',
+				color: '#ffffff'
+			}
+		},
+		tooltip: {
+			style: {
+				padding: 10,
+				fontWeight: 'bold'
+			}
+		},
+		title: false,
+		subtitle: false,
+		legend: {
+			enabled: false
+		},
+		plotOptions: {
+			series: {
+				color: '#f26969'
+			}
+		},
+		yAxis: {
+			labels: {
+				style: {
+					color: '#fff'
+				}
+			},
+			gridLineColor: 'rgba(255,255,255,0.1)'
+		},
+		xAxis: {
+			labels: {
+				style: {
+					color: '#fff'
+				}
+			}
+		},
+		credits: {
+			enabled: false
+		}
+	}
+};
+
+},{}],3:[function(require,module,exports){
+var highchartsDefaults = require('./highcharts-defaults');
+
+var app = angular.module('ia-colombia', [
+	'highcharts-ng'
+])
+.controller('SiteCtrl', [
+	'$rootScope',
+	'$scope',
+	'$timeout',
+	function($rootScope, $scope, $timeout) {
+
+		$scope.user = 'infoamazonia';
+		$scope.dataTable = 'ideam_deforestacion_anual';
+		$scope.geomTable = 'depto_amzideam';
+		$scope.queryWhere = 'data.departamentos = geom.nom_depto';
+
+		$scope.sql = new cartodb.SQL({user: $scope.user});
+		$scope.dataQuery = 'SELECT * FROM ' + $scope.dataTable;
+
+		$scope.gridItem = false;
+
+		$scope.sql.execute($scope.dataQuery).done(function(data) {
+
+			var fields = [];
+			for(var key in data.fields) {
+				if(key !== 'the_geom' && key !== 'the_geom_webmercator' && key !== 'cartodb_id')
+				fields.push(key);
+			}
+			$rootScope.$apply(function() {
+
+				$scope.columns = fields;
+
+				$scope.query = 'SELECT geom.cartodb_id, geom.the_geom, geom.the_geom_webmercator, data.' + $scope.columns.join(', data.') + ' FROM ' + $scope.dataTable + ' as data, ' + $scope.geomTable + ' as geom WHERE ' + $scope.queryWhere + ' GROUP BY data.cartodb_id, geom.cartodb_id';
+
+			});
+
+		});
+
+		$scope.$watch('gridItem', function() {
+			$scope.chartConfig = angular.extend({
+				series: [{
+					data: [$scope.gridItem._2014_deforestacion, $scope.gridItem._2015_deforestacion]
+				}]
+			}, highchartsDefaults);
+			console.log($scope.chartConfig);
+		})
+
+	}
+]);
+
+require('./directives')(app);
+
+angular.element(document).ready(function() {
+	angular.bootstrap(document, ['ia-colombia']);
+});
+
+},{"./directives":1,"./highcharts-defaults":2}]},{},[3]);

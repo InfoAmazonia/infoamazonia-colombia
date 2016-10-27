@@ -4,7 +4,8 @@ module.exports = function(app) {
 
 	app.directive('map', [
 		'$rootScope',
-		function($rootScope) {
+		'$http',
+		function($rootScope, $http) {
 			return {
 				restrict: 'EAC',
 				scope: {
@@ -29,6 +30,23 @@ module.exports = function(app) {
 						bingMapsKey: BING_KEY,
 						opacity: .5
 					}));
+
+					$http.get('css/bnb_2013_amzideam_ha.cartocss').then(function(res) {
+						console.log(res);
+						cartodb.Tiles.getTiles({
+							user_name: scope.username,
+							sublayers: [{
+								sql: 'select * from bnb_2013_amzideam_ha',
+								cartocss: res.data
+							}]
+						}, function(tilesUrl, err) {
+							if(tilesUrl == null) {
+								console.log("error: ", err.errors.join('\n'));
+							} else {
+								map.addLayer(L.tileLayer(tilesUrl.tiles[0]));
+							}
+						});
+					});
 
 					var layer;
 					var grid;
