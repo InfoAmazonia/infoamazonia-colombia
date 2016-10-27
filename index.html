@@ -17,29 +17,25 @@
     <header id="masthead">
       <div class="container">
         <div class="twelve columns">
-          <h1><a href="http://infoamazonia.org/" title="InfoAmazonia" rel="external" target="_blank">InfoAmazonia<img src="img/infoamazonia.png"></a></h1>
+          <h1><a href="http://infoamazonia.org/" title="InfoAmazonia" rel="external" target="_blank">InfoAmazonia<img src="img/infoamazonia.png">Colombia</a></h1>
         </div>
       </div>
     </header>
-    <header id="apphead">
-      <div class="container">
-        <div class="twelve columns">
-          <h1>Colombia</h1>
+    <div ng-controller="MapCtrl">
+      <div class="map-container">
+        <div id="map" map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem"></div>
+      </div>
+      <div id="dashboard">
+        <div class="grid-item" ng-show="gridItem">
+          <h2>{{gridItem.departamento}}</h2>
+          <p><strong>2014</strong><br>{{gridItem.deforestacion_2014}} ha</p>
+          <p><strong>2015</strong><br>{{gridItem.deforestacion_2015}} ha</p>
         </div>
+        <highchart id="chart1" config="chartConfig"></highchart>
       </div>
-    </header>
-    <div class="map-container">
-      <div id="map" map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem"></div>
-    </div>
-    <div id="dashboard">
-      <div class="grid-item" ng-show="gridItem">
-        <h2>{{gridItem.departamento}}</h2>
-        <p><strong>2014</strong><br>{{gridItem.deforestacion_2014}} ha</p>
-        <p><strong>2015</strong><br>{{gridItem.deforestacion_2015}} ha</p>
-      </div>
-      <highchart id="chart1" config="chartConfig"></highchart>
     </div>
   </body>
+  <script type="text/javascript" src="lib/underscore/underscore-min.js"></script>
   <script type="text/javascript" src="lib/leaflet/dist/leaflet.js"></script>
   <script type="text/javascript" src="lib/leaflet-bing-layer/leaflet-bing-layer.js"></script>
   <script type="text/javascript" src="lib/Leaflet.utfgrid/dist/leaflet.utfgrid.js"></script>

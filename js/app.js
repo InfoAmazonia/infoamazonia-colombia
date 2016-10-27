@@ -1,5 +1,47 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = function(map, $http) {
+
+  $http.get('css/bnb_2013_amzideam_ha.cartocss').then(function(res) {
+    cartodb.Tiles.getTiles({
+      user_name: 'infoamazonia',
+      sublayers: [{
+        sql: 'select * from bnb_2013_amzideam_ha',
+        cartocss: res.data
+      }]
+    }, function(tilesUrl, err) {
+      if(tilesUrl == null) {
+        console.log("error: ", err.errors.join('\n'));
+      } else {
+        map.addLayer(L.tileLayer(tilesUrl.tiles[0]), {
+          zIndexOffset: 2
+        });
+      }
+    });
+  });
+  $http.get('css/bnb_1990_ideamamz.cartocss').then(function(res) {
+    cartodb.Tiles.getTiles({
+      user_name: 'infoamazonia',
+      sublayers: [{
+        sql: 'select * from bnb_1990_ideamamz',
+        cartocss: res.data
+      }]
+    }, function(tilesUrl, err) {
+      if(tilesUrl == null) {
+        console.log("error: ", err.errors.join('\n'));
+      } else {
+        map.addLayer(L.tileLayer(tilesUrl.tiles[0], {
+          zIndexOffset: 1
+        }));
+      }
+    });
+  });
+
+}
+
+},{}],2:[function(require,module,exports){
 'use strict';
+
+var baseLayers = require('./base-layers');
 
 module.exports = function(app) {
 
@@ -25,49 +67,27 @@ module.exports = function(app) {
 						scrollWheelZoom: true
 					});
 
-					var BING_KEY = 'AqcPFocZWfHGkBoBjZ0e3NlBbKqN9t_lRuRyjVg7xHlc7JXWrGvupqLFYWRVqfv4';
+					// var BING_KEY = 'AqcPFocZWfHGkBoBjZ0e3NlBbKqN9t_lRuRyjVg7xHlc7JXWrGvupqLFYWRVqfv4';
 
-					map.addLayer(L.tileLayer.bing({
-						bingMapsKey: BING_KEY,
-						opacity: .5
+					// map.addLayer(L.tileLayer.bing({
+					// 	bingMapsKey: BING_KEY,
+					// 	opacity: .5,
+					// 	zIndexOffset: 1
+					// }));
+
+					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/cirgitmlm0010gdm9cd48fmlz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+						zIndexOffset: 1
 					}));
 
-					$http.get('css/bnb_2013_amzideam_ha.cartocss').then(function(res) {
-						console.log(res);
-						cartodb.Tiles.getTiles({
-							user_name: scope.username,
-							sublayers: [{
-								sql: 'select * from bnb_2013_amzideam_ha',
-								cartocss: res.data
-							}]
-						}, function(tilesUrl, err) {
-							if(tilesUrl == null) {
-								console.log("error: ", err.errors.join('\n'));
-							} else {
-								map.addLayer(L.tileLayer(tilesUrl.tiles[0]), {
-									zIndexOffset: 2
-								});
-							}
-						});
-					});
-					$http.get('css/bnb_1990_ideamamz.cartocss').then(function(res) {
-						console.log(res);
-						cartodb.Tiles.getTiles({
-							user_name: scope.username,
-							sublayers: [{
-								sql: 'select * from bnb_1990_ideamamz',
-								cartocss: res.data
-							}]
-						}, function(tilesUrl, err) {
-							if(tilesUrl == null) {
-								console.log("error: ", err.errors.join('\n'));
-							} else {
-								map.addLayer(L.tileLayer(tilesUrl.tiles[0], {
-									zIndexOffset: 1
-								}));
-							}
-						});
-					});
+					var baseLayerGroup = L.layerGroup({
+						zIndexOffset: 2
+					}).addTo(map);
+
+					var dataLayerGroup = L.layerGroup({
+						zIndexOffset: 3
+					}).addTo(map);
+
+					baseLayers(baseLayerGroup, $http);
 
 					var layer;
 					var grid;
@@ -80,10 +100,10 @@ module.exports = function(app) {
 						'dataTable'
 					], function() {
 						if(typeof layer !== 'undefined') {
-							map.removeLayer(layer);
+							dataLayerGroup.removeLayer(layer);
 						}
 						if(typeof grid !== 'undefined') {
-							map.removeLayer(grid);
+							dataLayerGroup.removeLayer(grid);
 						}
 						if(scope.username && scope.query && scope.sql && scope.columns) {
 
@@ -116,9 +136,13 @@ module.exports = function(app) {
 								layer = L.tileLayer(tilesUrl.tiles[0], {
 									zIndexOffset: 3
 								});
-								map.addLayer(layer);
+								dataLayerGroup.addLayer(layer);
 								scope.sql.getBounds(scope.query).done(function(bounds) {
 									map.fitBounds(bounds, {
+										paddingTopLeft: [
+											0,
+											100
+										],
 										paddingBottomRight: [
 											window.innerWidth / 3,
 											0
@@ -126,12 +150,17 @@ module.exports = function(app) {
 									});
 								});
 								grid = new L.UtfGrid(tilesUrl.grids[0][0] + '&callback={cb}');
-								map.addLayer(grid);
+								dataLayerGroup.addLayer(grid);
 								grid.on('mouseover', function(e) {
 									scope.$apply(function() {
 										scope.gridItem = e.data;
-									})
+									});
 								});
+								grid.on('mouseout', function(e) {
+									scope.$apply(function() {
+										scope.gridItem = false;
+									});
+								})
 							}
 						});
 					}
@@ -145,12 +174,12 @@ module.exports = function(app) {
 function getCartoCSS(column, quantiles) {
 
 	var cartocss = [
-		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #000; }',
+		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: .5; line-opacity: 0.5; line-color: #fff; }',
 		'#layer[ ' + column + ' <= 0 ] { polygon-fill: transparent; }'
 	];
 
 	quantiles.forEach(function(qt, i) {
-		cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(0, 0, 0, ' + ((i+1)/10) + ');	}');
+		cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(255, 255, 255, ' + ((i+1)/10) + ');	}');
 	});
 
 	return cartocss.join(' ');
@@ -165,7 +194,7 @@ function getCartoDBQuantiles(sql, table, column, cb) {
 	});
 }
 
-},{}],2:[function(require,module,exports){
+},{"./base-layers":1}],3:[function(require,module,exports){
 module.exports = {
 	options: {
 		chart: {
@@ -214,13 +243,20 @@ module.exports = {
 	}
 };
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var highchartsDefaults = require('./highcharts-defaults');
 
 var app = angular.module('ia-colombia', [
 	'highcharts-ng'
 ])
+
 .controller('SiteCtrl', [
+	function() {
+		
+	}
+])
+
+.controller('MapCtrl', [
 	'$rootScope',
 	'$scope',
 	'$timeout',
@@ -271,4 +307,4 @@ angular.element(document).ready(function() {
 	angular.bootstrap(document, ['ia-colombia']);
 });
 
-},{"./directives":1,"./highcharts-defaults":2}]},{},[3]);
+},{"./directives":2,"./highcharts-defaults":3}]},{},[4]);

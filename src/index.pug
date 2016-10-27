@@ -6,17 +6,18 @@ block title
 block head
 
 block content
-	.map-container
-		#map(map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem")
-	#dashboard
-		.grid-item(ng-show="gridItem")
-			h2 {{gridItem.departamentos}}
-			p
-				strong 2014
-				br
-				| {{gridItem._2014_deforestacion}} ha
-			p
-				strong 2015
-				br
-				| {{gridItem._2015_deforestacion}} ha
-		highchart#chart1(config="chartConfig")
+	div(ng-controller="MapCtrl")
+		.map-container
+			#map(map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem")
+		#dashboard
+			.grid-item(ng-show="gridItem")
+				h2 {{gridItem.departamento}}
+				p
+					strong 2014
+					br
+					| {{gridItem.deforestacion_2014}} ha
+				p
+					strong 2015
+					br
+					| {{gridItem.deforestacion_2015}} ha
+			highchart#chart1(config="chartConfig")

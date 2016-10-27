@@ -1,5 +1,7 @@
 'use strict';
 
+var baseLayers = require('./base-layers');
+
 module.exports = function(app) {
 
 	app.directive('map', [
@@ -28,25 +30,19 @@ module.exports = function(app) {
 
 					map.addLayer(L.tileLayer.bing({
 						bingMapsKey: BING_KEY,
-						opacity: .5
+						opacity: .5,
+						zIndexOffset: 1
 					}));
 
-					$http.get('css/bnb_2013_amzideam_ha.cartocss').then(function(res) {
-						console.log(res);
-						cartodb.Tiles.getTiles({
-							user_name: scope.username,
-							sublayers: [{
-								sql: 'select * from bnb_2013_amzideam_ha',
-								cartocss: res.data
-							}]
-						}, function(tilesUrl, err) {
-							if(tilesUrl == null) {
-								console.log("error: ", err.errors.join('\n'));
-							} else {
-								map.addLayer(L.tileLayer(tilesUrl.tiles[0]));
-							}
-						});
-					});
+					var baseLayerGroup = L.layerGroup({
+						zIndexOffset: 2
+					}).addTo(map);
+
+					var dataLayerGroup = L.layerGroup({
+						zIndexOffset: 3
+					}).addTo(map);
+
+					baseLayers(baseLayerGroup, $http);
 
 					var layer;
 					var grid;
@@ -59,10 +55,10 @@ module.exports = function(app) {
 						'dataTable'
 					], function() {
 						if(typeof layer !== 'undefined') {
-							map.removeLayer(layer);
+							dataLayerGroup.removeLayer(layer);
 						}
 						if(typeof grid !== 'undefined') {
-							map.removeLayer(grid);
+							dataLayerGroup.removeLayer(grid);
 						}
 						if(scope.username && scope.query && scope.sql && scope.columns) {
 
@@ -92,18 +88,34 @@ module.exports = function(app) {
 							if(tilesUrl == null) {
 								console.log("error: ", err.errors.join('\n'));
 							} else {
-								layer = L.tileLayer(tilesUrl.tiles[0]);
-								map.addLayer(layer);
+								layer = L.tileLayer(tilesUrl.tiles[0], {
+									zIndexOffset: 3
+								});
+								dataLayerGroup.addLayer(layer);
 								scope.sql.getBounds(scope.query).done(function(bounds) {
-									map.fitBounds(bounds);
+									map.fitBounds(bounds, {
+										paddingTopLeft: [
+											0,
+											100
+										],
+										paddingBottomRight: [
+											window.innerWidth / 3,
+											0
+										]
+									});
 								});
 								grid = new L.UtfGrid(tilesUrl.grids[0][0] + '&callback={cb}');
-								map.addLayer(grid);
+								dataLayerGroup.addLayer(grid);
 								grid.on('mouseover', function(e) {
 									scope.$apply(function() {
 										scope.gridItem = e.data;
-									})
+									});
 								});
+								grid.on('mouseout', _.debounce(function(e) {
+									scope.$apply(function() {
+										scope.gridItem = false;
+									});
+								}, 100));
 							}
 						});
 					}
@@ -117,12 +129,12 @@ module.exports = function(app) {
 function getCartoCSS(column, quantiles) {
 
 	var cartocss = [
-		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #f26969; }',
+		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #000; }',
 		'#layer[ ' + column + ' <= 0 ] { polygon-fill: transparent; }'
 	];
 
 	quantiles.forEach(function(qt, i) {
-		cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(242, 105, 105, ' + ((i+1)/5) + ');	}');
+		cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(0, 0, 0, ' + ((i+1)/8) + ');	}');
 	});
 
 	return cartocss.join(' ');
