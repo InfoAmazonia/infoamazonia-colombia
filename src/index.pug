@@ -12,34 +12,35 @@ block content
 		section#sidebar
 			header
 				nav#sidebar-nav
-					a.active Dashboard
-					a Stories
-			section#dashboard
-				.grid-item(ng-show="gridItem")
-					h2 {{gridItem.departamento}}
-					p
-						strong 2014
-						br
-						| {{gridItem.deforestacion_2014}} ha
-					p
-						strong 2015
-						br
-						| {{gridItem.deforestacion_2015}} ha
-				highchart#chart1(config="chartConfig")
-			section#stories
-				.timeline-items
-					.timeline-item.clearfix(ng-repeat="story in stories")
-						article
-							.post-box
-								header.post-header
-									h2
-										a(ng-href="{{story.properties.url}}") {{story.properties.title}}
-									//- p.meta.clearfix
-									//- 	span.publisher
-									//- 		span.lsf clip
-									//- 		span.publisher-content
-								section.post-content
-									p {{story.properties.excerpt}}
-							aside.post-date
-								p.date 09/28/2016
-								p.time 02:08 PM
+					a(ng-class="{active: viewing == 'dashboard'}" ng-click="setView('dashboard')") Dashboard
+					a(ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')") Stories
+			.sidebar-sections
+				section#dashboard.sidebar-section(ng-show="viewing == 'dashboard'")
+					.grid-item(ng-show="gridItem")
+						h2 {{gridItem.departamento}}
+						p
+							strong 2014
+							br
+							| {{gridItem.deforestacion_2014}} ha
+						p
+							strong 2015
+							br
+							| {{gridItem.deforestacion_2015}} ha
+					highchart#chart1(config="chartConfig")
+				section#stories.sidebar-section(ng-show="viewing == 'stories'")
+					.timeline-items
+						.timeline-item.clearfix(ng-repeat="story in stories")
+							article
+								.post-box
+									header.post-header
+										h2
+											a(ng-href="{{story.properties.url}}") {{story.properties.title}}
+										//- p.meta.clearfix
+										//- 	span.publisher
+										//- 		span.lsf clip
+										//- 		span.publisher-content
+									section.post-content
+										p {{story.properties.excerpt}}
+								aside.post-date
+									p.date 09/28/2016
+									p.time 02:08 PM

@@ -70,6 +70,7 @@
 		color: #fff;
 		text-transform: uppercase;
 		border-right: 1px solid rgba(255,255,255,0.8);
+		cursor: pointer;
 		&:last-child {
 			border: 0;
 		}
@@ -100,11 +101,31 @@
 	.container {
 		margin: 0;
 	}
+	.sidebar-sections {
+		position: relative;
+	}
+	.sidebar-section {
+		.transform(translate(0, 0));
+		transition: all linear .2s;
+		&.ng-hide-add,
+		&.ng-hide-remove {
+		}
+		&.ng-hide-add {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		&.ng-hide {
+			.transform(translate(0, -5rem));
+			opacity: 0;
+		}
+	}
 }
 
 .timeline-items {
 	position: relative;
-	padding: 60px 0;
+	padding: 2rem 0;
+	border-top: 1px solid rgba(255,255,255,0.2);
 	&:before {
 		content: '';
 		position: absolute;
@@ -112,45 +133,34 @@
 		margin-left: -2px;
 		top: 0;
 		bottom: 0;
-		left: 50%;
-		background: #000;
+		left: 10%;
+		background: rgba(255,255,255,0.2);
 	}
 	.timeline-item {
 		position: relative;
-		margin-top: -60px;
+		margin-bottom: 2rem;
 		&:first-child {
 			margin-top: 0;
 		}
-		&:nth-child(odd) {
-			.post-box {
-				float: left;
-			}
-			&:before {
-				left: 40%;
-				right: 50%;
-			}
+		.post-box {
+			float: right;
 		}
-		&:nth-child(even) {
-			.post-box {
-				float: right;
-			}
-			&:before {
-				left: 50%;
-				right: 40%;
-			}
+		&:before {
+			left: 10%;
+			right: 80%;
 		}
 		&:before {
 			content: '';
 			position: absolute;
 			width: auto;
 			height: 1px;
-			background: #000;
-			top: 50px;
+			background: rgba(255,255,255,0.2);
+			top: 52px;
 			visibility: visible;
 		}
 		.post-box {
 			background: #111;
-			width: 43%;
+			width: 80%;
 			box-shadow: 0 0 10px rgba(0,0,0,0.2);
 			img {
 				width: 100%;
@@ -160,6 +170,9 @@
 				padding: 20px 20px 0;
 				margin: 0;
 				color: #fff;
+				a {
+					color: #fff;
+				}
 			}
 			p.meta {
 				padding: 10px 20px 0;
@@ -167,6 +180,7 @@
 			}
 			.post-content {
 				padding: 20px;
+				color: #666;
 				p {
 					margin: 0;
 				}
@@ -183,7 +197,7 @@
 		}
 		.post-date {
 			position: absolute;
-			left: 50%;
+			left: 10%;
 			top: 40px;
 			width: 60px;
 			margin-left: -30px;
@@ -196,15 +210,14 @@
 				font-size: 1em;
 				font-family: 'Open Sans Condensed';
 				// font-weight: 700;
-				margin: 0 0 .5rem;
+				margin: 0 0 .2rem;
 			}
 			p.time {
 				color: #666;
 				width: 70%;
 				margin: 5px auto;
 				padding: 2px 5px;
-				background: rgba(0,0,0,0.5);
-				border: 1px solid #000;
+				background: #111;
 				font-size: .8em;
 			}
 		}

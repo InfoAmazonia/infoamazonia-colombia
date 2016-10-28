@@ -1,11 +1,18 @@
 var highchartsDefaults = require('./highcharts-defaults');
 
 var app = angular.module('ia-colombia', [
+	'ngAnimate',
 	'highcharts-ng'
 ])
 
 .controller('SiteCtrl', [
-	function() {
+	'$scope',
+	function($scope) {
+
+		$scope.viewing = 'dashboard';
+		$scope.setView = function(view) {
+			$scope.viewing = view;
+		};
 
 	}
 ])
@@ -24,6 +31,7 @@ var app = angular.module('ia-colombia', [
 
 		$http.get('https://infoamazonia.org/en/tag/colombia?geojson=1').then(function(res) {
 			$scope.stories = res.data.features;
+			console.log($scope.stories);
 		});
 
 		$scope.user = 'infoamazonia';
