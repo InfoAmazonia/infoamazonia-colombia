@@ -118,19 +118,29 @@ module.exports = function(app) {
 						var stopAuto;
 						scope.toggleAuto = function() {
 							if(angular.isDefined(stopAuto)) {
-								scope.auto = false;
-								$interval.cancel(stopAuto);
-								stopAuto = undefined;
+								scope.stopAuto();
 							} else {
 								scope.auto = true;
 								stopAuto = $interval(function() {
+									scope.activeItem._played = true;
 									var activeIdx = getIdx(scope.activeItem, scope.items);
 									var i = activeIdx + 1;
 									if(i == scope.items.length) {
+										scope.items.forEach(function(item) {
+											item._played = false;
+										});
 										i = 0;
 									}
 									scope.displayLayer(scope.items[i]);
 								}, 2000);
+							}
+						};
+
+						scope.stopAuto = function() {
+							if(angular.isDefined(stopAuto)) {
+								scope.auto = false;
+								$interval.cancel(stopAuto);
+								stopAuto = undefined;
 							}
 						};
 
