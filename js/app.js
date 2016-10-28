@@ -74,9 +74,7 @@ module.exports = function(app) {
 					var map = L.map(element[0], {
 						center: [0,0],
 						zoom: 1,
-						scrollWheelZoom: true,
-						fadeAnimation: true,
-						zoomAnimation: true
+						scrollWheelZoom: true
 					});
 
 					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/cirgitmlm0010gdm9cd48fmlz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
@@ -93,10 +91,17 @@ module.exports = function(app) {
 						zIndexOffset: 4
 					});
 
+					$rootScope.$on('toggleStories', function(ev, active) {
+						if(active) {
+							map.addLayer(storiesLayerGroup);
+						} else {
+							map.removeLayer(storiesLayerGroup);
+						}
+					});
+
 					setTimeout(function() {
 						baseLayerGroup.addTo(map);
 						dataLayerGroup.addTo(map);
-						storiesLayerGroup.addTo(map);
 					}, 2000);
 
 					baseLayers(baseLayerGroup, $http);
@@ -280,13 +285,22 @@ var app = angular.module('ia-colombia', [
 ])
 
 .controller('SiteCtrl', [
+	'$rootScope',
 	'$scope',
-	function($scope) {
+	function($rootScope, $scope) {
 
 		$scope.viewing = 'dashboard';
 		$scope.setView = function(view) {
 			$scope.viewing = view;
 		};
+
+		$scope.$watch('viewing', function() {
+			if($scope.viewing == 'stories') {
+				$rootScope.$broadcast('toggleStories', true);
+			} else {
+				$rootScope.$broadcast('toggleStories', false);
+			}
+		})
 
 	}
 ])
