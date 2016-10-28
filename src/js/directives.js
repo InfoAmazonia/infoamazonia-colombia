@@ -25,7 +25,8 @@ module.exports = function(app) {
 					query: '=',
 					columns: '=',
 					table: '=',
-					gridItem: '='
+					gridItem: '=',
+					geojson: '='
 				},
 				link: function(scope, element, attrs) {
 
@@ -47,16 +48,21 @@ module.exports = function(app) {
 					var dataLayerGroup = L.layerGroup({
 						zIndexOffset: 3
 					});
+					var storiesLayerGroup = L.layerGroup({
+						zIndexOffset: 4
+					});
 
 					setTimeout(function() {
 						baseLayerGroup.addTo(map);
 						dataLayerGroup.addTo(map);
+						storiesLayerGroup.addTo(map);
 					}, 2000);
 
 					baseLayers(baseLayerGroup, $http);
 
 					var layer;
 					var grid;
+					var stories;
 
 					scope.$watchGroup([
 						'username',
@@ -77,6 +83,15 @@ module.exports = function(app) {
 								var cartocss = getCartoCSS(scope.column, bins);
 								addLayers(cartocss);
 							});
+						}
+					});
+
+					scope.$watch('geojson', function() {
+						if(typeof stories !== 'undefined')
+							storiesLayerGroup.removeLayer(stories);
+						if(scope.geojson) {
+							stories = L.geoJSON(scope.geojson);
+							storiesLayerGroup.addLayer(stories);
 						}
 					});
 

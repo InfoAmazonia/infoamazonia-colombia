@@ -29,9 +29,10 @@ var app = angular.module('ia-colombia', [
 		// 	console.log(res);
 		// });
 
-		$http.get('https://infoamazonia.org/es/tag/colombia?geojson=1').then(function(res) {
+		// $http.get('https://infoamazonia.org/es/tag/colombia?geojson=1').then(function(res) {
+		$http.get('https://infoamazonia.org/es/?s=colombia&geojson=1').then(function(res) {
 			$scope.stories = res.data.features;
-			console.log($scope.stories);
+			console.log(res, res.headers('x-total-count'));
 		});
 
 		$scope.user = 'infoamazonia';
