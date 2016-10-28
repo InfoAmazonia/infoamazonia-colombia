@@ -25,21 +25,48 @@
       <div class="map-container">
         <div id="map" map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem"></div>
       </div>
-      <div id="dashboard">
-        <nav id="dashboard-nav"><a class="active">Dashboard</a><a>Stories</a></nav>
-        <div class="grid-item" ng-show="gridItem">
-          <h2>{{gridItem.departamento}}</h2>
-          <p><strong>2014</strong><br>{{gridItem.deforestacion_2014}} ha</p>
-          <p><strong>2015</strong><br>{{gridItem.deforestacion_2015}} ha</p>
+      <section id="sidebar">
+        <header>
+          <nav id="sidebar-nav"><a ng-class="{active: viewing == 'dashboard'}" ng-click="setView('dashboard')">Dashboard</a><a ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')">Stories</a></nav>
+        </header>
+        <div class="sidebar-sections">
+          <section class="sidebar-section" id="dashboard" ng-show="viewing == 'dashboard'">
+            <div class="grid-item" ng-show="gridItem">
+              <h2>{{gridItem.departamento}}</h2>
+              <p><strong>2014</strong><br>{{gridItem.deforestacion_2014}} ha</p>
+              <p><strong>2015</strong><br>{{gridItem.deforestacion_2015}} ha</p>
+            </div>
+            <highchart id="chart1" config="chartConfig"></highchart>
+          </section>
+          <section class="sidebar-section" id="stories" ng-show="viewing == 'stories'">
+            <div class="timeline-items">
+              <div class="timeline-item clearfix" ng-repeat="story in stories">
+                <article>
+                  <div class="post-box">
+                    <header class="post-header">
+                      <h2><a ng-href="{{story.properties.url}}">{{story.properties.title}}</a></h2>
+                    </header>
+                    <section class="post-content">
+                      <p>{{story.properties.excerpt}}</p>
+                    </section>
+                  </div>
+                  <aside class="post-date">
+                    <p class="date">09/28/2016</p>
+                    <p class="time">02:08 PM</p>
+                  </aside>
+                </article>
+              </div>
+            </div>
+          </section>
         </div>
-        <highchart id="chart1" config="chartConfig"></highchart>
-      </div>
+      </section>
     </div>
   </body>
   <script type="text/javascript" src="lib/underscore/underscore-min.js"></script>
   <script type="text/javascript" src="lib/leaflet/dist/leaflet.js"></script>
   <script type="text/javascript" src="lib/Leaflet.utfgrid/dist/leaflet.utfgrid.js"></script>
   <script type="text/javascript" src="lib/angular/angular.min.js"></script>
+  <script type="text/javascript" src="lib/angular-animate/angular-animate.min.js"></script>
   <script type="text/javascript" src="lib/cartodb.js/cartodb.core.uncompressed.js"></script>
   <script type="text/javascript" src="lib/highcharts/highcharts.js"></script>
   <script type="text/javascript" src="lib/highcharts-ng/dist/highcharts-ng.min.js"></script>

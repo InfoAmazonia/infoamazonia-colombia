@@ -63,17 +63,11 @@ module.exports = function(app) {
 							dataLayerGroup.removeLayer(grid);
 						}
 						if(scope.username && scope.query && scope.sql && scope.columns) {
-
 							scope.column = scope.columns[2];
-
 							getCartoDBQuantiles(scope.sql, scope.table, scope.column, function(bins) {
-
 								var cartocss = getCartoCSS(scope.column, bins);
-
 								addLayers(cartocss);
-
 							});
-
 						}
 					});
 
@@ -146,7 +140,6 @@ function getCartoCSS(column, quantiles) {
 function getCartoDBQuantiles(sql, table, column, cb) {
 	sql.execute('SELECT CDB_HeadsTailsBins(array_agg(cast(' + column + ' as numeric)), 7) FROM ' + table).done(function(data) {
 		var bins = data.rows[0].cdb_headstailsbins;
-		console.log(data);
 		cb(bins);
 	});
 }

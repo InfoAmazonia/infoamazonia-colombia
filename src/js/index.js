@@ -5,8 +5,14 @@ var app = angular.module('ia-colombia', [
 ])
 
 .controller('SiteCtrl', [
-	function() {
-		
+	'$scope',
+	function($scope) {
+
+		$scope.viewing = 'dashboard';
+		$scope.setView = function(view) {
+			$scope.viewing = view;
+		};
+
 	}
 ])
 
@@ -14,7 +20,18 @@ var app = angular.module('ia-colombia', [
 	'$rootScope',
 	'$scope',
 	'$timeout',
-	function($rootScope, $scope, $timeout) {
+	'$http',
+	function($rootScope, $scope, $timeout, $http) {
+
+		// var indexId = '1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4';
+		// $http.jsonp(indexUrl).then(function(res) {
+		// 	console.log(res);
+		// });
+
+		$http.get('https://infoamazonia.org/en/tag/colombia?geojson=1').then(function(res) {
+			$scope.stories = res.data.features;
+			console.log($scope.stories);
+		});
 
 		$scope.user = 'infoamazonia';
 		$scope.dataTable = 'ideam_deforestacion_anual';
@@ -34,13 +51,9 @@ var app = angular.module('ia-colombia', [
 				fields.push(key);
 			}
 			$rootScope.$apply(function() {
-
 				$scope.columns = fields;
-
 				$scope.query = 'SELECT geom.cartodb_id, geom.the_geom, geom.the_geom_webmercator, data.' + $scope.columns.join(', data.') + ' FROM ' + $scope.dataTable + ' as data, ' + $scope.geomTable + ' as geom WHERE ' + $scope.queryWhere + ' GROUP BY data.cartodb_id, geom.cartodb_id';
-
 			});
-
 		});
 
 		$scope.$watch('gridItem', function() {
@@ -49,7 +62,7 @@ var app = angular.module('ia-colombia', [
 					data: [$scope.gridItem.deforestacion_2014, $scope.gridItem.deforestacion_2015]
 				}]
 			}, highchartsDefaults);
-			console.log($scope.chartConfig);
+			// console.log($scope.chartConfig);
 		})
 
 	}
