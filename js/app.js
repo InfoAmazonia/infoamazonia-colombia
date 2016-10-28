@@ -139,13 +139,27 @@ module.exports = function(app) {
 						popupAnchor: [0, -25],
 					});
 
+					var storyIcon2 = L.icon({
+						iconUrl: 'img/marker_.png',
+						iconSize: [12, 16],
+						iconAnchor: [6, 16],
+						popupAnchor: [0, -20],
+					});
+
 					scope.$watch('geojson', function() {
 						if(typeof stories !== 'undefined')
 							storiesLayerGroup.removeLayer(stories);
 						if(scope.geojson) {
 							stories = L.geoJSON(scope.geojson, {
 								pointToLayer: function(feature, latlng) {
-									return L.marker(latlng, {icon: storyIcon});
+									return L.marker(latlng, {
+										icon: storyIcon2,
+										bounceOnAdd: true,
+										bounceOnAddOptions: {
+											duration: 500,
+											height: 100
+										}
+									});
 								},
 								onEachFeature: function(feature, layer) {
 								}

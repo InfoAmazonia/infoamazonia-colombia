@@ -30,7 +30,7 @@ block content
 				section#stories.sidebar-section(ng-show="viewing == 'stories'")
 					p InfoAmazonia stories on Colombia
 					.timeline-items
-						.timeline-item.clearfix(ng-repeat="story in stories")
+						.timeline-item.clearfix(ng-repeat="(i,story) in stories")
 							article
 								.post-box
 									header.post-header
@@ -44,5 +44,5 @@ block content
 									section.post-content
 										p {{story.properties.excerpt}}
 								aside.post-date
-									p.date 09/28/2016
-									p.time 02:08 PM
+									p.date(ng-show="isDifferentDate(stories, i-1, story.properties.date)") {{story.properties.date | formatDate:'DD/MM/YYYY'}}
+									p.time {{story.properties.date | formatDate:'hh:mm A'}}

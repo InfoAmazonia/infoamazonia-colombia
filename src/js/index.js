@@ -21,7 +21,15 @@ var app = angular.module('ia-colombia', [
 			} else {
 				$rootScope.$broadcast('toggleStories', false);
 			}
-		})
+		});
+
+		$scope.isDifferentDate = function(stories, i, date) {
+			if(stories[i]) {
+				return !moment(stories[i].properties.date).isSame(moment(date), 'day');
+			} else {
+				return true;
+			}
+		}
 
 	}
 ])
@@ -80,6 +88,7 @@ var app = angular.module('ia-colombia', [
 ]);
 
 require('./directives')(app);
+require('./filters')(app);
 
 angular.element(document).ready(function() {
 	angular.bootstrap(document, ['ia-colombia']);
