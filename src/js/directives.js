@@ -4,6 +4,15 @@ var baseLayers = require('./base-layers');
 
 module.exports = function(app) {
 
+	app.directive('backImg', function() {
+		return function(scope, element, attrs) {
+				var url = attrs.backImg;
+				element.css({
+						'background-image': 'url(' + url + ')'
+				});
+		};
+	});
+
 	app.directive('map', [
 		'$rootScope',
 		'$http',

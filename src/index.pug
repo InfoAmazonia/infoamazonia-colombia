@@ -33,6 +33,7 @@ block content
 							article
 								.post-box
 									header.post-header
+										.thumbnail(ng-show="story.properties.thumbnail.full" back-img="{{story.properties.thumbnail.full}}")
 										h2
 											a(ng-href="{{story.properties.url}}") {{story.properties.title}}
 										//- p.meta.clearfix
