@@ -228,6 +228,24 @@ function getCartoDBQuantiles(sql, table, column, cb) {
 }
 
 },{"./base-layers":1}],3:[function(require,module,exports){
+'use strict';
+
+module.exports = function(app) {
+
+	app.filter('formatDate', [
+		function() {
+			return function(input, format) {
+				if(input) {
+					input = moment(input).format(format || 'LLLL');
+				}
+				return input;
+			}
+		}
+	]);
+
+};
+
+},{}],4:[function(require,module,exports){
 module.exports = {
 	options: {
 		chart: {
@@ -276,7 +294,7 @@ module.exports = {
 	}
 };
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var highchartsDefaults = require('./highcharts-defaults');
 
 var app = angular.module('ia-colombia', [
@@ -300,7 +318,15 @@ var app = angular.module('ia-colombia', [
 			} else {
 				$rootScope.$broadcast('toggleStories', false);
 			}
-		})
+		});
+
+		$scope.isDifferentDate = function(stories, i, date) {
+			if(stories[i]) {
+				return !moment(stories[i].properties.date).isSame(moment(date), 'day');
+			} else {
+				return true;
+			}
+		}
 
 	}
 ])
@@ -359,9 +385,10 @@ var app = angular.module('ia-colombia', [
 ]);
 
 require('./directives')(app);
+require('./filters')(app);
 
 angular.element(document).ready(function() {
 	angular.bootstrap(document, ['ia-colombia']);
 });
 
-},{"./directives":2,"./highcharts-defaults":3}]},{},[4]);
+},{"./directives":2,"./filters":3,"./highcharts-defaults":4}]},{},[5]);

@@ -41,7 +41,7 @@
           <section class="sidebar-section" id="stories" ng-show="viewing == 'stories'">
             <p>InfoAmazonia stories on Colombia</p>
             <div class="timeline-items">
-              <div class="timeline-item clearfix" ng-repeat="story in stories">
+              <div class="timeline-item clearfix" ng-repeat="(i,story) in stories">
                 <article>
                   <div class="post-box">
                     <header class="post-header">
@@ -53,8 +53,8 @@
                     </section>
                   </div>
                   <aside class="post-date">
-                    <p class="date">09/28/2016</p>
-                    <p class="time">02:08 PM</p>
+                    <p class="date" ng-show="isDifferentDate(stories, i-1, story.properties.date)">{{story.properties.date | formatDate:'DD/MM/YYYY'}}</p>
+                    <p class="time">{{story.properties.date | formatDate:'hh:mm A'}}</p>
                   </aside>
                 </article>
               </div>
@@ -65,6 +65,7 @@
     </div>
   </body>
   <script type="text/javascript" src="lib/underscore/underscore-min.js"></script>
+  <script type="text/javascript" src="lib/moment/moment.js"></script>
   <script type="text/javascript" src="lib/leaflet/dist/leaflet.js"></script>
   <script type="text/javascript" src="lib/Leaflet.utfgrid/dist/leaflet.utfgrid.js"></script>
   <script type="text/javascript" src="lib/angular/angular.min.js"></script>

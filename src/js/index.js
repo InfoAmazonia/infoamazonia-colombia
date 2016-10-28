@@ -6,13 +6,22 @@ var app = angular.module('ia-colombia', [
 ])
 
 .controller('SiteCtrl', [
+	'$rootScope',
 	'$scope',
-	function($scope) {
+	function($rootScope, $scope) {
 
 		$scope.viewing = 'dashboard';
 		$scope.setView = function(view) {
 			$scope.viewing = view;
 		};
+
+		$scope.$watch('viewing', function() {
+			if($scope.viewing == 'stories') {
+				$rootScope.$broadcast('toggleStories', true);
+			} else {
+				$rootScope.$broadcast('toggleStories', false);
+			}
+		})
 
 	}
 ])
