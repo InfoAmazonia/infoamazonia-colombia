@@ -12,6 +12,7 @@ block content
 	div(ng-controller="MapCtrl")
 		.map-container
 			#map(map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem" geojson="stories")
+		map-timeline(items="timeline.items")
 		section#sidebar
 			header
 				nav#sidebar-nav

@@ -85,8 +85,8 @@ module.exports = function(grunt) {
 				files: 'src/css/**/*.less',
 				tasks: ['less']
 			},
-			pug: {
-				files: 'src/**/*.pug',
+			views: {
+				files: ['src/**/*.pug', 'src/views/**/*.pug'],
 				tasks: ['pug']
 			},
 			scripts: {

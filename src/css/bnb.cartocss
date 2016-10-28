@@ -1,7 +1,5 @@
-#bnb_1990_ideamamz{
- //comp-op:overlay; //contrast; //xor; //lighten; //hue;//
-
-
+#layer {
+  //comp-op:overlay; //contrast; //xor; //lighten; //hue;//
   polygon-opacity: 1;
   polygon-gamma-method: multiply;
   line-opacity: 0.25;

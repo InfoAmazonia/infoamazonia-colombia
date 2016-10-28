@@ -49,6 +49,27 @@ var app = angular.module('ia-colombia', [
 	'$http',
 	function($rootScope, $scope, $timeout, $http) {
 
+		// Map timeline config
+		$scope.timeline = {
+			items: [
+				{
+					title: '1990',
+					username: 'infoamazonia',
+					sql: 'select * from bnb_1990_ideamamz'
+				},
+				{
+					title: '2000',
+					username: 'infoamazonia',
+					sql: 'select * from bnb_ideamz_2000_ha'
+				},
+				{
+					title: '2013',
+					username: 'infoamazonia',
+					sql: 'select * from bnb_2013_amzideam_ha'
+				}
+			]
+		};
+
 		var indexId = '1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4';
 		var indexJsonp = 'https://spreadsheets.google.com/feeds/list/' + indexId + '/2/public/values?alt=json-in-script&callback=JSON_CALLBACK';
 
@@ -69,7 +90,7 @@ var app = angular.module('ia-colombia', [
 				parsed.push(newEntry);
 			});
 			return parsed;
-		}
+		};
 
 		$scope.user = 'infoamazonia';
 		$scope.dataTable = 'ideam_deforestacion_anual';

@@ -1,6 +1,6 @@
 module.exports = function(map, $http) {
 
-  $http.get('css/bnb_2013_amzideam_ha.cartocss').then(function(res) {
+  $http.get('css/bnb.cartocss').then(function(res) {
     cartodb.Tiles.getTiles({
       user_name: 'infoamazonia',
       sublayers: [{
@@ -12,12 +12,29 @@ module.exports = function(map, $http) {
         console.log("error: ", err.errors.join('\n'));
       } else {
         map.addLayer(L.tileLayer(tilesUrl.tiles[0]), {
-          zIndexOffset: 2
+          zIndexOffset: 3
         });
       }
     });
   });
-  $http.get('css/bnb_1990_ideamamz.cartocss').then(function(res) {
+  $http.get('css/bnb.cartocss').then(function(res) {
+    cartodb.Tiles.getTiles({
+      user_name: 'infoamazonia',
+      sublayers: [{
+        sql: 'select * from bnb_ideamz_2000_ha',
+        cartocss: res.data
+      }]
+    }, function(tilesUrl, err) {
+      if(tilesUrl == null) {
+        console.log("error: ", err.errors.join('\n'));
+      } else {
+        map.addLayer(L.tileLayer(tilesUrl.tiles[0], {
+          zIndexOffset: 2
+        }));
+      }
+    });
+  });
+  $http.get('css/bnb.cartocss').then(function(res) {
     cartodb.Tiles.getTiles({
       user_name: 'infoamazonia',
       sublayers: [{
