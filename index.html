@@ -22,7 +22,7 @@
         </div>
       </div>
     </header>
-    <nav id="main-nav" ng-class="{active: showNav}"><a class="fa fa-bars" title="Menu" aria-hidden="true" href="javascript:void(0);" ng-click="toggleNav()"></a>
+    <nav id="main-nav" ng-class="{active: showNav}"><a class="fa fa-bars" title="Menu" aria-hidden="true" href="javascript:void(0);" ng-click="toggleNav()" ng-hide="showNav"></a><a class="fa fa-close" title="Menu" aria-hidden="true" href="javascript:void(0);" ng-click="toggleNav()" ng-show="showNav"></a>
       <div class="nav-content"><a href="http://infoamazonia.org/datasets" rel="external" target="_blank">Dados</a>
       </div>
     </nav>
@@ -30,6 +30,7 @@
       <div class="map-container">
         <div id="map" map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem" geojson="stories"></div>
       </div>
+      <map-timeline items="timeline.items"></map-timeline>
       <section id="sidebar">
         <header>
           <nav id="sidebar-nav"><a ng-class="{active: viewing == 'dashboard'}" ng-click="setView('dashboard')">Dashboard</a><a ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')">Stories</a></nav>

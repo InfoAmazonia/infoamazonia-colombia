@@ -1,7 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 module.exports = function(map, $http) {
 
-  $http.get('css/bnb_2013_amzideam_ha.cartocss').then(function(res) {
+  $http.get('css/bnb.cartocss').then(function(res) {
     cartodb.Tiles.getTiles({
       user_name: 'infoamazonia',
       sublayers: [{
@@ -13,12 +13,29 @@ module.exports = function(map, $http) {
         console.log("error: ", err.errors.join('\n'));
       } else {
         map.addLayer(L.tileLayer(tilesUrl.tiles[0]), {
-          zIndexOffset: 2
+          zIndexOffset: 3
         });
       }
     });
   });
-  $http.get('css/bnb_1990_ideamamz.cartocss').then(function(res) {
+  $http.get('css/bnb.cartocss').then(function(res) {
+    cartodb.Tiles.getTiles({
+      user_name: 'infoamazonia',
+      sublayers: [{
+        sql: 'select * from bnb_ideamz_2000_ha',
+        cartocss: res.data
+      }]
+    }, function(tilesUrl, err) {
+      if(tilesUrl == null) {
+        console.log("error: ", err.errors.join('\n'));
+      } else {
+        map.addLayer(L.tileLayer(tilesUrl.tiles[0], {
+          zIndexOffset: 2
+        }));
+      }
+    });
+  });
+  $http.get('css/bnb.cartocss').then(function(res) {
     cartodb.Tiles.getTiles({
       user_name: 'infoamazonia',
       sublayers: [{
@@ -54,10 +71,125 @@ module.exports = function(app) {
 		};
 	});
 
-	app.directive('map', [
+	app.directive('mapTimeline', [
+		'$q',
+		'$interval',
 		'$rootScope',
 		'$http',
-		function($rootScope, $http) {
+		function($q, $interval, $rootScope, $http) {
+			return {
+				restrict: 'E',
+				scope: {
+					items: '='
+				},
+				templateUrl: 'views/timeline.html',
+				link: function(scope, element, attrs) {
+
+					var layerGroup;
+
+					$rootScope.$on('timelineLayerGroup', function(ev, lG) {
+						layerGroup = lG;
+					});
+
+					$http.get('css/bnb.cartocss').then(function(res) {
+
+						var cartocss = res.data;
+
+						scope.$watchGroup([
+							'layerGroup',
+							'items'
+						], function() {
+							if(scope.items) {
+								var promises = [];
+								scope.items.forEach(function(item, i) {
+									promises.push(getCartoDBLayer(item, i+1))
+								});
+								$q.all(promises).then(function(layers) {
+									scope.layers = layers;
+									scope.layers.forEach(function(layer) {
+										layerGroup.addLayer(layer);
+									});
+									scope.displayLayer(scope.items[0]);
+									scope.toggleAuto();
+								});
+							}
+						});
+
+						var stopAuto;
+						scope.toggleAuto = function() {
+							if(angular.isDefined(stopAuto)) {
+								scope.auto = false;
+								$interval.cancel(stopAuto);
+								stopAuto = undefined;
+							} else {
+								scope.auto = true;
+								stopAuto = $interval(function() {
+									var activeIdx = getIdx(scope.activeItem, scope.items);
+									var i = activeIdx + 1;
+									if(i == scope.items.length) {
+										i = 0;
+									}
+									scope.displayLayer(scope.items[i]);
+								}, 2000);
+							}
+						};
+
+						var getIdx = function(item, arr) {
+							var idx = -1;
+							arr.forEach(function(it, i) {
+								if(it.title == item.title)
+									idx = i;
+							});
+							return idx;
+						};
+
+						scope.displayLayer = function(item) {
+							scope.activeItem = item;
+							scope.layers.forEach(function(layer) {
+								angular.element(layer.getContainer()).removeClass('active');
+								layer.setZIndex(1);
+							});
+							var layer = _.find(scope.layers, function(l) {
+								return l._item.title == item.title;
+							});
+							angular.element(layer.getContainer()).addClass('active');
+							layer.setZIndex(2);
+						}
+
+						var getCartoDBLayer = function(item, index) {
+							var deferred = $q.defer();
+							cartodb.Tiles.getTiles({
+								user_name: item.username,
+								sublayers: [{
+									sql: item.sql,
+									cartocss: cartocss
+								}]
+							}, function(tilesUrl, err) {
+								if(tilesUrl == null) {
+									deferred.reject(err);
+								} else {
+									var layer = L.tileLayer(tilesUrl.tiles[0], {
+										zIndexOffset: index
+									});
+									layer._item = item;
+									deferred.resolve(layer);
+								}
+							});
+							return deferred.promise;
+						}
+
+					});
+
+				}
+			}
+		}
+	]);
+
+	app.directive('map', [
+		'$rootScope',
+		'$timeout',
+		'$http',
+		function($rootScope, $timeout, $http) {
 			return {
 				restrict: 'EAC',
 				scope: {
@@ -74,14 +206,15 @@ module.exports = function(app) {
 					var map = L.map(element[0], {
 						center: [0,0],
 						zoom: 1,
-						scrollWheelZoom: true
+						scrollWheelZoom: true,
+						fadeAnimation: false
 					});
 
 					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/cirgitmlm0010gdm9cd48fmlz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
 						zIndexOffset: 1
 					}));
 
-					var baseLayerGroup = L.layerGroup({
+					var timelineLayerGroup = L.layerGroup({
 						zIndexOffset: 2
 					});
 					var dataLayerGroup = L.layerGroup({
@@ -99,12 +232,14 @@ module.exports = function(app) {
 						}
 					});
 
+					$timeout(function() {
+						$rootScope.$broadcast('timelineLayerGroup', timelineLayerGroup);
+					}, 100);
+
 					setTimeout(function() {
-						baseLayerGroup.addTo(map);
+						timelineLayerGroup.addTo(map);
 						dataLayerGroup.addTo(map);
 					}, 2000);
-
-					baseLayers(baseLayerGroup, $http);
 
 					var layer;
 					var grid;
@@ -181,15 +316,13 @@ module.exports = function(app) {
 							if(tilesUrl == null) {
 								console.log("error: ", err.errors.join('\n'));
 							} else {
-								layer = L.tileLayer(tilesUrl.tiles[0], {
-									zIndexOffset: 3
-								});
+								layer = L.tileLayer(tilesUrl.tiles[0]);
 								dataLayerGroup.addLayer(layer);
 								scope.sql.getBounds(scope.query).done(function(bounds) {
 									map.fitBounds(bounds, {
 										paddingTopLeft: [
 											0,
-											100
+											0
 										],
 										paddingBottomRight: [
 											window.innerWidth * .4,
@@ -222,13 +355,13 @@ module.exports = function(app) {
 function getCartoCSS(column, quantiles) {
 
 	var cartocss = [
-		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: .5; line-opacity: 0.5; line-color: #fff; }',
+		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #fff; }',
 		'#layer[ ' + column + ' <= 0 ] { polygon-fill: transparent; }'
 	];
 
-	quantiles.forEach(function(qt, i) {
-		cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(255, 255, 255, ' + ((i+1)/10) + ');	}');
-	});
+	// quantiles.forEach(function(qt, i) {
+	// 	cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(255, 255, 255, ' + ((i+1)/10) + ');	}');
+	// });
 
 	return cartocss.join(' ');
 
@@ -360,6 +493,27 @@ var app = angular.module('ia-colombia', [
 	'$http',
 	function($rootScope, $scope, $timeout, $http) {
 
+		// Map timeline config
+		$scope.timeline = {
+			items: [
+				{
+					title: '1990',
+					username: 'infoamazonia',
+					sql: 'select * from bnb_1990_ideamamz'
+				},
+				{
+					title: '2000',
+					username: 'infoamazonia',
+					sql: 'select * from bnb_ideamz_2000_ha'
+				},
+				{
+					title: '2013',
+					username: 'infoamazonia',
+					sql: 'select * from bnb_2013_amzideam_ha'
+				}
+			]
+		};
+
 		var indexId = '1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4';
 		var indexJsonp = 'https://spreadsheets.google.com/feeds/list/' + indexId + '/2/public/values?alt=json-in-script&callback=JSON_CALLBACK';
 
@@ -380,7 +534,7 @@ var app = angular.module('ia-colombia', [
 				parsed.push(newEntry);
 			});
 			return parsed;
-		}
+		};
 
 		$scope.user = 'infoamazonia';
 		$scope.dataTable = 'ideam_deforestacion_anual';

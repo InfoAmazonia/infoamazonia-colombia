@@ -1,0 +1,5 @@
+section#map-timeline
+	.map-timeline-controller
+		a.fa.fa-play
+	.map-timeline-layer(ng-repeat="item in items" ng-click="displayLayer(item)")
+		h2 {{item.title}}

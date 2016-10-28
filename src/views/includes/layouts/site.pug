@@ -24,9 +24,12 @@ html
 							| InfoAmazonia
 							img(src="img/infoamazonia.png")
 							| Colombia
-					nav#main-nav
-						a.fa.fa-menu(title="Menu")
-						.nav-content
+
+		nav#main-nav(ng-class="{active: showNav}")
+			a.fa.fa-bars(title="Menu" aria-hidden="true" href="javascript:void(0);" ng-click="toggleNav()" ng-hide="showNav")
+			a.fa.fa-close(title="Menu" aria-hidden="true" href="javascript:void(0);" ng-click="toggleNav()" ng-show="showNav")
+			.nav-content
+				block nav-content
 
 		block content
 	script(type="text/javascript" src="lib/underscore/underscore-min.js")

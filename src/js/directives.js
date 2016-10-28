@@ -13,6 +13,82 @@ module.exports = function(app) {
 		};
 	});
 
+	app.directive('mapTimeline', [
+		'$q',
+		'$rootScope',
+		'$http',
+		function($q, $rootScope, $http) {
+			return {
+				restrict: 'E',
+				scope: {
+					items: '='
+				},
+				templateUrl: 'views/timeline.html',
+				link: function(scope, element, attrs) {
+
+					var layerGroup;
+
+					$rootScope.$on('timelineLayerGroup', function(ev, lG) {
+						layerGroup = lG;
+					});
+
+					$http.get('css/bnb.cartocss').then(function(res) {
+
+						var cartocss = res.data;
+
+						scope.$watchGroup([
+							'layerGroup',
+							'items'
+						], function() {
+							if(scope.items) {
+								var promises = [];
+								scope.items.forEach(function(item, i) {
+									promises.push(getCartoDBLayer(item, i+1))
+								});
+								$q.all(promises).then(function(layers) {
+									$scope.layers = layers;
+									setupItems(layers);
+								});
+							}
+						});
+
+						$scope.displayLayer = function(item) {
+							layerGroup.clearLayers();
+							var layer = _.filter(layers, function(l) {
+								return l._item.title == item.title;
+							});
+							layerGroup.addLayer(layer);
+						}
+
+						var getCartoDBLayer = function(item, index) {
+							var deferred = $q.defer();
+							cartodb.Tiles.getTiles({
+								user_name: item.username,
+								sublayers: [{
+									sql: item.sql,
+									cartocss: cartocss
+								}]
+							}, function(tilesUrl, err) {
+								if(tilesUrl == null) {
+									deferred.reject(err);
+								} else {
+									var layer = L.tileLayer(tilesUrl.tiles[0], {
+										zIndexOffset: index
+									});
+									layer._item = item;
+									deferred.resolve(layer);
+								}
+							});
+							return deferred.promise;
+						}
+
+					});
+
+				}
+			}
+		}
+	]);
+
 	app.directive('map', [
 		'$rootScope',
 		'$http',
@@ -40,7 +116,7 @@ module.exports = function(app) {
 						zIndexOffset: 1
 					}));
 
-					var baseLayerGroup = L.layerGroup({
+					var timelineLayerGroup = L.layerGroup({
 						zIndexOffset: 2
 					});
 					var dataLayerGroup = L.layerGroup({
@@ -58,12 +134,12 @@ module.exports = function(app) {
 						}
 					});
 
+					$rootScope.$broadcast('timelineLayerGroup', timelineLayerGroup);
+
 					setTimeout(function() {
-						baseLayerGroup.addTo(map);
+						timelineLayerGroup.addTo(map);
 						dataLayerGroup.addTo(map);
 					}, 2000);
-
-					baseLayers(baseLayerGroup, $http);
 
 					var layer;
 					var grid;
@@ -140,15 +216,15 @@ module.exports = function(app) {
 							if(tilesUrl == null) {
 								console.log("error: ", err.errors.join('\n'));
 							} else {
-								layer = L.tileLayer(tilesUrl.tiles[0], {
-									zIndexOffset: 3
-								});
-								dataLayerGroup.addLayer(layer);
+								// layer = L.tileLayer(tilesUrl.tiles[0], {
+								// 	zIndexOffset: 3
+								// });
+								// dataLayerGroup.addLayer(layer);
 								scope.sql.getBounds(scope.query).done(function(bounds) {
 									map.fitBounds(bounds, {
 										paddingTopLeft: [
 											0,
-											100
+											0
 										],
 										paddingBottomRight: [
 											window.innerWidth * .4,
