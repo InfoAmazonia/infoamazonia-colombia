@@ -5,6 +5,9 @@ block title
 
 block head
 
+block nav-content
+	a(href="http://infoamazonia.org/datasets" rel="external" target="_blank") Dados
+
 block content
 	div(ng-controller="MapCtrl")
 		.map-container
@@ -16,6 +19,7 @@ block content
 					a(ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')") Stories
 			.sidebar-sections
 				section#dashboard.sidebar-section(ng-show="viewing == 'dashboard'")
+					p.main Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum hendrerit elit, quis sagittis mi laoreet nec. Aenean malesuada pellentesque luctus. Nunc dignissim, eros quis pellentesque sagittis, arcu magna scelerisque justo, sed interdum ligula mi sit amet enim.
 					.grid-item(ng-show="gridItem")
 						h2 {{gridItem.departamento}}
 						p
