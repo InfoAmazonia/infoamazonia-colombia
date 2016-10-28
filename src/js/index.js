@@ -41,16 +41,27 @@ var app = angular.module('ia-colombia', [
 	'$http',
 	function($rootScope, $scope, $timeout, $http) {
 
-		// var indexId = '1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4';
-		// $http.jsonp(indexUrl).then(function(res) {
-		// 	console.log(res);
-		// });
+		var indexId = '1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4';
+		var indexJsonp = 'https://spreadsheets.google.com/feeds/list/' + indexId + '/2/public/values?alt=json-in-script&callback=JSON_CALLBACK';
 
-		// $http.get('https://infoamazonia.org/es/tag/colombia?geojson=1').then(function(res) {
-		$http.get('https://infoamazonia.org/es/?s=colombia&geojson=1').then(function(res) {
-			$scope.stories = res.data.features;
-			console.log(res, res.headers('x-total-count'));
+		$http.jsonp(indexJsonp).then(function(res) {
+			$scope.dataIndex = parseSheet(res.data.feed.entry);
+			console.log($scope.dataIndex);
 		});
+
+		var parseSheet = function(entries) {
+			var parsed = [];
+			entries.forEach(function(entry) {
+				var newEntry = {};
+				for(var key in entry) {
+					if(key.indexOf('gsx$') == 0) {
+						newEntry[key.replace('gsx$', '')] = entry[key]['$t'];
+					}
+				}
+				parsed.push(newEntry);
+			});
+			return parsed;
+		}
 
 		$scope.user = 'infoamazonia';
 		$scope.dataTable = 'ideam_deforestacion_anual';
@@ -82,7 +93,13 @@ var app = angular.module('ia-colombia', [
 				}]
 			}, highchartsDefaults);
 			// console.log($scope.chartConfig);
-		})
+		});
+
+		// $http.get('https://infoamazonia.org/es/tag/colombia?geojson=1').then(function(res) {
+		$http.get('https://infoamazonia.org/es/?s=colombia&geojson=1').then(function(res) {
+			$scope.stories = res.data.features;
+			console.log(res, res.headers('x-total-count'));
+		});
 
 	}
 ]);

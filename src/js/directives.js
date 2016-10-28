@@ -111,7 +111,14 @@ module.exports = function(app) {
 						if(scope.geojson) {
 							stories = L.geoJSON(scope.geojson, {
 								pointToLayer: function(feature, latlng) {
-									return L.marker(latlng, {icon: storyIcon2});
+									return L.marker(latlng, {
+										icon: storyIcon2,
+										bounceOnAdd: true,
+										bounceOnAddOptions: {
+											duration: 500,
+											height: 100
+										}
+									});
 								},
 								onEachFeature: function(feature, layer) {
 								}

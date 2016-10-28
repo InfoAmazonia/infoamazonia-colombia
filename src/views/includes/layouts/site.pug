@@ -10,6 +10,7 @@ html
 		link(href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:300,300i,400,400i,600,700,800" rel="stylesheet")
 		link(rel="stylesheet" href="lib/skeleton/css/normalize.css")
 		link(rel="stylesheet" href="lib/skeleton/css/skeleton.css")
+		link(rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css")
 		link(rel="stylesheet" href="lib/leaflet/dist/leaflet.css")
 		link(rel="stylesheet" href="lib/highcharts/css/highcharts.css")
 		link(rel="stylesheet" href="css/app.css")
@@ -23,11 +24,16 @@ html
 							| InfoAmazonia
 							img(src="img/infoamazonia.png")
 							| Colombia
+					nav#main-nav
+						a.fa.fa-menu(title="Menu")
+						.nav-content
+
 		block content
 	script(type="text/javascript" src="lib/underscore/underscore-min.js")
 	script(type="text/javascript" src="lib/moment/moment.js")
 	script(type="text/javascript" src="lib/leaflet/dist/leaflet.js")
 	script(type="text/javascript" src="lib/Leaflet.utfgrid/dist/leaflet.utfgrid.js")
+	script(type="text/javascript" src="lib/leaflet-bouncemarker/bouncemarker.js")
 	script(type="text/javascript" src="lib/angular/angular.min.js")
 	script(type="text/javascript" src="lib/angular-animate/angular-animate.min.js")
 	script(type="text/javascript" src="lib/cartodb.js/cartodb.core.uncompressed.js")

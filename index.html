@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:300,300i,400,400i,600,700,800" rel="stylesheet">
     <link rel="stylesheet" href="lib/skeleton/css/normalize.css">
     <link rel="stylesheet" href="lib/skeleton/css/skeleton.css">
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="lib/leaflet/dist/leaflet.css">
     <link rel="stylesheet" href="lib/highcharts/css/highcharts.css">
     <link rel="stylesheet" href="css/app.css">
@@ -21,6 +22,10 @@
         </div>
       </div>
     </header>
+    <nav id="main-nav" ng-class="{active: showNav}"><a class="fa fa-bars" title="Menu" aria-hidden="true" href="javascript:void(0);" ng-click="toggleNav()"></a>
+      <div class="nav-content"><a href="http://infoamazonia.org/datasets" rel="external" target="_blank">Dados</a>
+      </div>
+    </nav>
     <div ng-controller="MapCtrl">
       <div class="map-container">
         <div id="map" map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem" geojson="stories"></div>
@@ -31,6 +36,7 @@
         </header>
         <div class="sidebar-sections">
           <section class="sidebar-section" id="dashboard" ng-show="viewing == 'dashboard'">
+            <p class="main">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum hendrerit elit, quis sagittis mi laoreet nec. Aenean malesuada pellentesque luctus. Nunc dignissim, eros quis pellentesque sagittis, arcu magna scelerisque justo, sed interdum ligula mi sit amet enim.</p>
             <div class="grid-item" ng-show="gridItem">
               <h2>{{gridItem.departamento}}</h2>
               <p><strong>2014</strong><br>{{gridItem.deforestacion_2014}} ha</p>
