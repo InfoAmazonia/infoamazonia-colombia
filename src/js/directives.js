@@ -86,11 +86,24 @@ module.exports = function(app) {
 						}
 					});
 
+					var storyIcon = L.icon({
+						iconUrl: 'img/marker.png',
+						iconSize: [16, 20],
+						iconAnchor: [8, 20],
+						popupAnchor: [0, -25],
+					});
+
 					scope.$watch('geojson', function() {
 						if(typeof stories !== 'undefined')
 							storiesLayerGroup.removeLayer(stories);
 						if(scope.geojson) {
-							stories = L.geoJSON(scope.geojson);
+							stories = L.geoJSON(scope.geojson, {
+								pointToLayer: function(feature, latlng) {
+									return L.marker(latlng, {icon: storyIcon});
+								},
+								onEachFeature: function(feature, layer) {
+								}
+							});
 							storiesLayerGroup.addLayer(stories);
 						}
 					});
