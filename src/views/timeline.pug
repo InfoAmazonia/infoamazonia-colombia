@@ -1,5 +1,6 @@
-section#map-timeline
-	.map-timeline-controller
-		a.fa.fa-play
-	.map-timeline-layer(ng-repeat="item in items" ng-click="displayLayer(item)")
+section#map-timeline(ng-class="{playing: auto}")
+	.map-timeline-controller(ng-click="toggleAuto()")
+		a.fa.fa-play(ng-hide="auto")
+		a.fa.fa-stop(ng-show="auto")
+	.map-timeline-layer(ng-repeat="item in items" ng-click="stopAuto(); displayLayer(item)" ng-class="{active: activeItem.title == item.title, played: item._played}")
 		h2 {{item.title}}

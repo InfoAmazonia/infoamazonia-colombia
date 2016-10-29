@@ -74,9 +74,10 @@ module.exports = function(app) {
 	app.directive('mapTimeline', [
 		'$q',
 		'$interval',
+		'$timeout',
 		'$rootScope',
 		'$http',
-		function($q, $interval, $rootScope, $http) {
+		function($q, $interval, $timeout, $rootScope, $http) {
 			return {
 				restrict: 'E',
 				scope: {
@@ -110,7 +111,9 @@ module.exports = function(app) {
 										layerGroup.addLayer(layer);
 									});
 									scope.displayLayer(scope.items[0]);
-									scope.toggleAuto();
+									$timeout(function() {
+										scope.toggleAuto();
+									}, 2000);
 								});
 							}
 						});
@@ -131,7 +134,9 @@ module.exports = function(app) {
 										});
 										i = 0;
 									}
-									scope.displayLayer(scope.items[i]);
+									$timeout(function() {
+										scope.displayLayer(scope.items[i]);
+									}, 5);
 								}, 2000);
 							}
 						};
@@ -153,17 +158,31 @@ module.exports = function(app) {
 							return idx;
 						};
 
+						var displayInProgress = false;
+
 						scope.displayLayer = function(item) {
-							scope.activeItem = item;
-							scope.layers.forEach(function(layer) {
-								angular.element(layer.getContainer()).removeClass('active');
-								layer.setZIndex(1);
-							});
-							var layer = _.find(scope.layers, function(l) {
-								return l._item.title == item.title;
-							});
-							angular.element(layer.getContainer()).addClass('active');
-							layer.setZIndex(2);
+							if(!displayInProgress) {
+								displayInProgress = true;
+								scope.activeItem = item;
+								var newLayer = _.find(scope.layers, function(l) {
+									return l._item.title == item.title;
+								});
+								var newLayerEl = angular.element(newLayer.getContainer());
+								scope.layers.forEach(function(layer) {
+									var el = angular.element(layer.getContainer());
+									if(newLayer._leaflet_id !== layer._leaflet_id) {
+										el.removeClass('active');
+										// layer.setZIndex(1);
+										setTimeout(function() {
+											layer.setOpacity(0);
+											displayInProgress = false;
+										}, 350);
+									}
+								});
+								angular.element(newLayer.getContainer()).addClass('active');
+								// layer.setZIndex(2);
+								newLayer.setOpacity(1);
+							}
 						}
 
 						var getCartoDBLayer = function(item, index) {
