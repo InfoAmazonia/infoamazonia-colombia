@@ -384,9 +384,12 @@ module.exports = function(app) {
 function getCartoCSS(column, quantiles) {
 
 	var cartocss = [
-		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #fff; }',
-		'#layer[ ' + column + ' <= 0 ] { polygon-fill: transparent; }'
+		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #fff; }'
 	];
+
+	// quantiles.forEach(function(qt, i) {
+	// 	cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { line-color: ' + colors[i] + ';	}');
+	// })
 
 	// quantiles.forEach(function(qt, i) {
 	// 	cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(255, 255, 255, ' + ((i+1)/10) + ');	}');
