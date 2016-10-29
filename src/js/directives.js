@@ -16,9 +16,10 @@ module.exports = function(app) {
 	app.directive('mapTimeline', [
 		'$q',
 		'$interval',
+		'$timeout',
 		'$rootScope',
 		'$http',
-		function($q, $interval, $rootScope, $http) {
+		function($q, $interval, $timeout, $rootScope, $http) {
 			return {
 				restrict: 'E',
 				scope: {
@@ -73,7 +74,9 @@ module.exports = function(app) {
 										});
 										i = 0;
 									}
-									scope.displayLayer(scope.items[i]);
+									$timeout(function() {
+										scope.displayLayer(scope.items[i]);
+									}, 10);
 								}, 2000);
 							}
 						};
