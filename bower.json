@@ -26,6 +26,7 @@
     "angular-animate": "^1.5.8",
     "moment": "^2.15.2",
     "leaflet-bouncemarker": "maximeh/leaflet.bouncemarker",
-    "font-awesome": "fontawesome#^4.7.0"
+    "font-awesome": "fontawesome#^4.7.0",
+    "chroma-js": "^1.1.1"
   }
 }
