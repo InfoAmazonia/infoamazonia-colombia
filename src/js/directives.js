@@ -76,7 +76,7 @@ module.exports = function(app) {
 									}
 									$timeout(function() {
 										scope.displayLayer(scope.items[i]);
-									}, 10);
+									}, 5);
 								}, 2000);
 							}
 						};
