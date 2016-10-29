@@ -53,7 +53,9 @@ module.exports = function(app) {
 										layerGroup.addLayer(layer);
 									});
 									scope.displayLayer(scope.items[0]);
-									scope.toggleAuto();
+									$timeout(function() {
+										scope.toggleAuto();
+									}, 2000);
 								});
 							}
 						});
