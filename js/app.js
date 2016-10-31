@@ -90,7 +90,6 @@ module.exports = function(app) {
 							}, 1500);
 						}
 					});
-					// console.log('focused', element);
 				}
 			}
 		}
