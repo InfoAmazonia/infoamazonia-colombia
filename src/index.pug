@@ -11,7 +11,7 @@ block nav-content
 block content
 	div(ng-controller="MapCtrl")
 		.map-container
-			#map(map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem" geojson="stories")
+			#map(map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem" geojson="filteredStories | memoize")
 		map-timeline(items="timeline.items")
 		section#sidebar
 			header
@@ -34,8 +34,10 @@ block content
 					highchart#chart1(config="chartConfig")
 				section#stories.sidebar-section(ng-show="viewing == 'stories'")
 					p InfoAmazonia stories on Colombia
+					p
+						input(type="text" ng-model="searchStories" placeholder="Search inside stories...")
 					.timeline-items
-						.timeline-item.clearfix(ng-repeat="(i,story) in stories")
+						.timeline-item.clearfix(ng-repeat="(i,story) in filteredStories = (stories | filter:searchStories)")
 							article
 								.post-box
 									header.post-header

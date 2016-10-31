@@ -28,10 +28,10 @@ module.exports = function(app) {
 				templateUrl: 'views/timeline.html',
 				link: function(scope, element, attrs) {
 
-					var layerGroup;
+					scope.layerGroup = false;
 
 					$rootScope.$on('timelineLayerGroup', function(ev, lG) {
-						layerGroup = lG;
+						scope.layerGroup = lG;
 					});
 
 					$http.get('css/bnb.cartocss').then(function(res) {
@@ -42,7 +42,7 @@ module.exports = function(app) {
 							'layerGroup',
 							'items'
 						], function() {
-							if(scope.items) {
+							if(scope.items && scope.layerGroup) {
 								var promises = [];
 								scope.items.forEach(function(item, i) {
 									promises.push(getCartoDBLayer(item, i+1))
@@ -50,7 +50,7 @@ module.exports = function(app) {
 								$q.all(promises).then(function(layers) {
 									scope.layers = layers;
 									scope.layers.forEach(function(layer) {
-										layerGroup.addLayer(layer);
+										scope.layerGroup.addLayer(layer);
 									});
 									scope.displayLayer(scope.items[0]);
 									$timeout(function() {
@@ -160,7 +160,8 @@ module.exports = function(app) {
 		'$rootScope',
 		'$timeout',
 		'$http',
-		function($rootScope, $timeout, $http) {
+		'LoadingService',
+		function($rootScope, $timeout, $http, Loading) {
 			return {
 				restrict: 'EAC',
 				scope: {
@@ -182,17 +183,21 @@ module.exports = function(app) {
 					});
 
 					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/cirgitmlm0010gdm9cd48fmlz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
-						zIndexOffset: 1
+						zIndex: 1
+					}));
+
+					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/ciuu7vi3k00dj2js5rt68bm9t/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+						zIndex: 3
 					}));
 
 					var timelineLayerGroup = L.layerGroup({
-						zIndexOffset: 2
+						zIndex: 2
 					});
 					var dataLayerGroup = L.layerGroup({
-						zIndexOffset: 3
+						zIndex: 4
 					});
 					var storiesLayerGroup = L.layerGroup({
-						zIndexOffset: 4
+						zIndex: 5
 					});
 
 					$rootScope.$on('toggleStories', function(ev, active) {
@@ -202,7 +207,6 @@ module.exports = function(app) {
 							map.removeLayer(storiesLayerGroup);
 						}
 					});
-
 					$timeout(function() {
 						$rootScope.$broadcast('timelineLayerGroup', timelineLayerGroup);
 					}, 100);
@@ -252,10 +256,12 @@ module.exports = function(app) {
 						popupAnchor: [0, -20],
 					});
 
-					scope.$watch('geojson', function() {
+					var loadingGeojson = false;
+
+					var updateGeojson = _.debounce(function() {
 						if(typeof stories !== 'undefined')
 							storiesLayerGroup.removeLayer(stories);
-						if(scope.geojson) {
+						if(scope.geojson && scope.geojson.length) {
 							stories = L.geoJSON(scope.geojson, {
 								pointToLayer: function(feature, latlng) {
 									return L.marker(latlng, {
@@ -271,6 +277,15 @@ module.exports = function(app) {
 								}
 							});
 							storiesLayerGroup.addLayer(stories);
+						}
+						Loading.remove(loadingGeojson);
+						loadingGeojson = false;
+					}, 800);
+
+					scope.$watch('geojson', function() {
+						if(!loadingGeojson) {
+							loadingGeojson = Loading.add('Loading stories');
+							updateGeojson();
 						}
 					});
 

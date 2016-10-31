@@ -47,7 +47,8 @@ var app = angular.module('ia-colombia', [
 	'$scope',
 	'$timeout',
 	'$http',
-	function($rootScope, $scope, $timeout, $http) {
+	'LoadingService',
+	function($rootScope, $scope, $timeout, $http, Loading) {
 
 		// Map timeline config
 		$scope.timeline = {
@@ -125,9 +126,12 @@ var app = angular.module('ia-colombia', [
 		});
 
 		// $http.get('https://infoamazonia.org/es/tag/colombia?geojson=1').then(function(res) {
+
+		$scope.searchStories = '';
 		$http.get('https://infoamazonia.org/es/?s=colombia&geojson=1').then(function(res) {
 			$scope.stories = res.data.features;
-			console.log(res, res.headers('x-total-count'));
+			// $scope.filteredStories = $scope.stories.slice(0);
+			console.log(res, res.headers(['X-Total-Count']));
 		});
 
 	}
@@ -135,6 +139,7 @@ var app = angular.module('ia-colombia', [
 
 require('./directives')(app);
 require('./filters')(app);
+require('./loading')(app);
 
 angular.element(document).ready(function() {
 	angular.bootstrap(document, ['ia-colombia']);
