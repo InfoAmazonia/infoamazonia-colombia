@@ -13,6 +13,30 @@ module.exports = function(app) {
 		};
 	});
 
+	app.directive('story', [
+		function() {
+			return {
+				restrict: 'EA',
+				scope: {
+					'story': '=',
+					'focused': '=focusedStory'
+				},
+				link: function(scope, element, attrs) {
+					scope.$watch('focused', function() {
+						if(scope.story.properties.id == scope.focused) {
+							$('#sidebar').animate({
+								scrollTop: $(element).position().top -50
+							}, 200);
+							setTimeout(function() {
+								$(element).removeClass('focused-story');
+							}, 1500);
+						}
+					});
+				}
+			}
+		}
+	]);
+
 	app.directive('mapTimeline', [
 		'$q',
 		'$interval',
@@ -207,9 +231,10 @@ module.exports = function(app) {
 							map.removeLayer(storiesLayerGroup);
 						}
 					});
+
 					$timeout(function() {
 						$rootScope.$broadcast('timelineLayerGroup', timelineLayerGroup);
-					}, 100);
+					}, 200);
 
 					setTimeout(function() {
 						timelineLayerGroup.addTo(map);
@@ -264,7 +289,7 @@ module.exports = function(app) {
 						if(scope.geojson && scope.geojson.length) {
 							stories = L.geoJSON(scope.geojson, {
 								pointToLayer: function(feature, latlng) {
-									return L.marker(latlng, {
+									var marker = L.marker(latlng, {
 										icon: storyIcon2,
 										bounceOnAdd: true,
 										bounceOnAddOptions: {
@@ -272,8 +297,23 @@ module.exports = function(app) {
 											height: 100
 										}
 									});
+									return marker;
 								},
 								onEachFeature: function(feature, layer) {
+									if(feature.properties) {
+										layer.bindPopup('<h2>' + feature.properties.title + '</h2>');
+										layer.on('mouseover', function(e) {
+											e.target.openPopup();
+											e.target.setZIndexOffset(10);
+										});
+										layer.on('mouseout', function(e) {
+											e.target.closePopup();
+											e.target.setZIndexOffset(0);
+										});
+										layer.on('click', function(e) {
+											$rootScope.$broadcast('storyFocus', e.target.feature.properties.id);
+										});
+									}
 								}
 							});
 							storiesLayerGroup.addLayer(stories);

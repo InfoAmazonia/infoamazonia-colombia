@@ -130,8 +130,12 @@ var app = angular.module('ia-colombia', [
 		$scope.searchStories = '';
 		$http.get('https://infoamazonia.org/es/?s=colombia&geojson=1').then(function(res) {
 			$scope.stories = res.data.features;
-			// $scope.filteredStories = $scope.stories.slice(0);
 			console.log(res, res.headers(['X-Total-Count']));
+		});
+
+		$scope.focusedStory = false;
+		$scope.$on('storyFocus', function(ev, storyId) {
+			$scope.focusedStory = storyId;
 		});
 
 	}

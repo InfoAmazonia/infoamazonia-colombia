@@ -27,6 +27,7 @@
     "moment": "^2.15.2",
     "leaflet-bouncemarker": "maximeh/leaflet.bouncemarker",
     "font-awesome": "fontawesome#^4.7.0",
-    "chroma-js": "^1.1.1"
+    "chroma-js": "^1.1.1",
+    "jquery": "^3.1.1"
   }
 }
