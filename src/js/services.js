@@ -10,7 +10,7 @@ module.exports = function(app) {
 					globals[name] = v;
 				},
 				get: function(name) {
-					return globals[v];
+					return globals[name];
 				}
 			}
 		}

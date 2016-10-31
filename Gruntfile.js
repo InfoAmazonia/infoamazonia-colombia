@@ -94,7 +94,7 @@ module.exports = function(grunt) {
 				tasks: ['browserify']
 			},
 			copy: {
-				files: ['src/**', '!src/**/*.less', '!src/**/*.pug', '!src/**/*.js'],
+				files: ['src/**/*', '!src/**/*.less', '!src/**/*.pug', '!src/**/*.js'],
 				tasks: ['copy']
 			}
 		},

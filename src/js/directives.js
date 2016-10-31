@@ -56,7 +56,7 @@ module.exports = function(app) {
 					scope.layerGroup = false;
 
 					scope.$watch(function() {
-						Globals.get('timelineLayerGroup');
+						return Globals.get('timelineLayerGroup');
 					}, function(layerGroup) {
 						scope.layerGroup = layerGroup;
 					});
