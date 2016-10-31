@@ -28,7 +28,7 @@
     </nav>
     <div ng-controller="MapCtrl">
       <div class="map-container">
-        <div id="map" map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem" geojson="stories"></div>
+        <div id="map" map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem" geojson="filteredStories | memoize"></div>
       </div>
       <map-timeline items="timeline.items"></map-timeline>
       <section id="sidebar">
@@ -47,8 +47,11 @@
           </section>
           <section class="sidebar-section" id="stories" ng-show="viewing == 'stories'">
             <p>InfoAmazonia stories on Colombia</p>
+            <p>
+              <input type="text" ng-model="searchStories" placeholder="Search inside stories...">
+            </p>
             <div class="timeline-items">
-              <div class="timeline-item clearfix" ng-repeat="(i,story) in stories">
+              <div class="timeline-item clearfix" ng-repeat="(i,story) in filteredStories = (stories | filter:searchStories)">
                 <article>
                   <div class="post-box">
                     <header class="post-header">
@@ -70,6 +73,7 @@
         </div>
       </section>
     </div>
+    <div id="loading" loading-status-message ng-class="{active: loads.length}"></div>
   </body>
   <script type="text/javascript" src="lib/underscore/underscore-min.js"></script>
   <script type="text/javascript" src="lib/moment/moment.js"></script>

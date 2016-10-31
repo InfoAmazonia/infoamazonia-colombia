@@ -86,10 +86,10 @@ module.exports = function(app) {
 				templateUrl: 'views/timeline.html',
 				link: function(scope, element, attrs) {
 
-					var layerGroup;
+					scope.layerGroup = false;
 
 					$rootScope.$on('timelineLayerGroup', function(ev, lG) {
-						layerGroup = lG;
+						scope.layerGroup = lG;
 					});
 
 					$http.get('css/bnb.cartocss').then(function(res) {
@@ -100,7 +100,7 @@ module.exports = function(app) {
 							'layerGroup',
 							'items'
 						], function() {
-							if(scope.items) {
+							if(scope.items && scope.layerGroup) {
 								var promises = [];
 								scope.items.forEach(function(item, i) {
 									promises.push(getCartoDBLayer(item, i+1))
@@ -108,7 +108,7 @@ module.exports = function(app) {
 								$q.all(promises).then(function(layers) {
 									scope.layers = layers;
 									scope.layers.forEach(function(layer) {
-										layerGroup.addLayer(layer);
+										scope.layerGroup.addLayer(layer);
 									});
 									scope.displayLayer(scope.items[0]);
 									$timeout(function() {
@@ -218,7 +218,8 @@ module.exports = function(app) {
 		'$rootScope',
 		'$timeout',
 		'$http',
-		function($rootScope, $timeout, $http) {
+		'LoadingService',
+		function($rootScope, $timeout, $http, Loading) {
 			return {
 				restrict: 'EAC',
 				scope: {
@@ -240,17 +241,21 @@ module.exports = function(app) {
 					});
 
 					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/cirgitmlm0010gdm9cd48fmlz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
-						zIndexOffset: 1
+						zIndex: 1
+					}));
+
+					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/ciuu7vi3k00dj2js5rt68bm9t/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+						zIndex: 3
 					}));
 
 					var timelineLayerGroup = L.layerGroup({
-						zIndexOffset: 2
+						zIndex: 2
 					});
 					var dataLayerGroup = L.layerGroup({
-						zIndexOffset: 3
+						zIndex: 4
 					});
 					var storiesLayerGroup = L.layerGroup({
-						zIndexOffset: 4
+						zIndex: 5
 					});
 
 					$rootScope.$on('toggleStories', function(ev, active) {
@@ -260,7 +265,6 @@ module.exports = function(app) {
 							map.removeLayer(storiesLayerGroup);
 						}
 					});
-
 					$timeout(function() {
 						$rootScope.$broadcast('timelineLayerGroup', timelineLayerGroup);
 					}, 100);
@@ -310,10 +314,12 @@ module.exports = function(app) {
 						popupAnchor: [0, -20],
 					});
 
-					scope.$watch('geojson', function() {
+					var loadingGeojson = false;
+
+					var updateGeojson = _.debounce(function() {
 						if(typeof stories !== 'undefined')
 							storiesLayerGroup.removeLayer(stories);
-						if(scope.geojson) {
+						if(scope.geojson && scope.geojson.length) {
 							stories = L.geoJSON(scope.geojson, {
 								pointToLayer: function(feature, latlng) {
 									return L.marker(latlng, {
@@ -329,6 +335,15 @@ module.exports = function(app) {
 								}
 							});
 							storiesLayerGroup.addLayer(stories);
+						}
+						Loading.remove(loadingGeojson);
+						loadingGeojson = false;
+					}, 800);
+
+					scope.$watch('geojson', function() {
+						if(!loadingGeojson) {
+							loadingGeojson = Loading.add('Loading stories');
+							updateGeojson();
 						}
 					});
 
@@ -419,6 +434,16 @@ module.exports = function(app) {
 				}
 				return input;
 			}
+		}
+	]);
+
+	app.filter('memoize', [
+		function() {
+			return _.memoize(function(input) {
+				return input;
+			}, function() {
+				return JSON.stringify(arguments);
+			})
 		}
 	]);
 
@@ -523,7 +548,8 @@ var app = angular.module('ia-colombia', [
 	'$scope',
 	'$timeout',
 	'$http',
-	function($rootScope, $scope, $timeout, $http) {
+	'LoadingService',
+	function($rootScope, $scope, $timeout, $http, Loading) {
 
 		// Map timeline config
 		$scope.timeline = {
@@ -601,9 +627,12 @@ var app = angular.module('ia-colombia', [
 		});
 
 		// $http.get('https://infoamazonia.org/es/tag/colombia?geojson=1').then(function(res) {
+
+		$scope.searchStories = '';
 		$http.get('https://infoamazonia.org/es/?s=colombia&geojson=1').then(function(res) {
 			$scope.stories = res.data.features;
-			console.log(res, res.headers('x-total-count'));
+			// $scope.filteredStories = $scope.stories.slice(0);
+			console.log(res, res.headers(['X-Total-Count']));
 		});
 
 	}
@@ -611,9 +640,148 @@ var app = angular.module('ia-colombia', [
 
 require('./directives')(app);
 require('./filters')(app);
+require('./loading')(app);
 
 angular.element(document).ready(function() {
 	angular.bootstrap(document, ['ia-colombia']);
 });
 
-},{"./directives":2,"./filters":3,"./highcharts-defaults":4}]},{},[5]);
+},{"./directives":2,"./filters":3,"./highcharts-defaults":4,"./loading":6}],6:[function(require,module,exports){
+'use strict';
+
+module.exports = function(app) {
+
+	app.run([
+		'$rootScope',
+		'LoadingService',
+		function($rootScope,service) {
+
+			if(typeof jQuery !== 'undefined') {
+
+				jQuery(document).ajaxSend(function(ev, jqXHR, options) {
+					if(options.loadingMsg !== false) {
+						options.loadingId = service.add(options.loadingMessage);
+					}
+				});
+
+				jQuery(document).ajaxComplete(function(ev, jqXHR, options) {
+					if(options.loadingMsg !== false) {
+						$rootScope.$apply(function() {
+							service.remove(options.loadingId);
+						});
+					}
+				});
+
+				jQuery(document).ajaxError(function(ev, jqXHR, options) {
+					if(options.loadingMsg !== false) {
+						$rootScope.$apply(function() {
+							service.remove(options.loadingId);
+						});
+					}
+				});
+
+				jQuery(document).ajaxSuccess(function(ev, jqXHR, options) {
+					if(options.loadingMsg !== false) {
+						$rootScope.$apply(function() {
+							service.remove(options.loadingId);
+						});
+					}
+				});
+
+			}
+
+		}
+	])
+
+	.config([
+		'$httpProvider',
+		function($httpProvider) {
+			$httpProvider.interceptors.push('loadingStatusInterceptor');
+		}
+	])
+
+	.service('LoadingService', [
+		function() {
+
+			var loads = [];
+
+			return {
+				get: function() {
+					return loads;
+				},
+				add: function(text, id) {
+					if(typeof id == 'undefined')
+						id = Math.random();
+
+					var load = {
+						_id: id,
+						msg: text
+					};
+
+					loads.push(load);
+					loads = loads; // trigger digest?
+					return load._id;
+				},
+				remove: function(id) {
+					loads = loads.filter(function(load) { return load._id !== id; });
+					loads = loads;
+					return loads;
+				}
+			}
+
+		}
+	])
+
+	.directive('loadingStatusMessage', [
+		'$timeout',
+		'LoadingService',
+		function($timeout, service) {
+			return {
+				template: '<div class="loading-message"><span class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></span><span ng-repeat="load in loads" ng-show="load.msg">{{load.msg}}<br/></span></div>',
+				link: function(scope, element, attrs) {
+					scope.$watch(function() {
+						return service.get();
+					}, function(loads) {
+						scope.loads = loads;
+					});
+				}
+			};
+		}
+	])
+
+	.factory('loadingStatusInterceptor', [
+		'$q',
+		'$rootScope',
+		'$timeout',
+		'LoadingService',
+		function($q, $rootScope, $timeout, service) {
+			return {
+				request: function(config) {
+
+					if(config.loadingMessage)
+						config.loadingId = service.add(config.loadingMessage);
+
+					return config || $q.when(config);
+				},
+				response: function(response) {
+
+					if(response.config.loadingId)
+						service.remove(response.config.loadingId);
+
+					return response || $q.when(response);
+				},
+				responseError: function(rejection) {
+
+
+					if(rejection.config.loadingId)
+						service.remove(rejection.config.loadingId);
+
+					return $q.reject(rejection);
+				}
+			};
+		}
+	]);
+
+};
+
+},{}]},{},[5]);

@@ -252,27 +252,28 @@ module.exports = function(app) {
 						popupAnchor: [0, -20],
 					});
 
-					scope.$watch('geojson', function() {
-						if(typeof stories !== 'undefined')
-							storiesLayerGroup.removeLayer(stories);
-						if(scope.geojson) {
-							stories = L.geoJSON(scope.geojson, {
-								pointToLayer: function(feature, latlng) {
-									return L.marker(latlng, {
-										icon: storyIcon2,
-										bounceOnAdd: true,
-										bounceOnAddOptions: {
-											duration: 500,
-											height: 100
-										}
-									});
-								},
-								onEachFeature: function(feature, layer) {
-								}
-							});
-							storiesLayerGroup.addLayer(stories);
-						}
-					});
+					scope.$watch('geojson', _.debounce(function() {
+						console.log('new stories', scope.stories);
+						// if(typeof stories !== 'undefined')
+						// 	storiesLayerGroup.removeLayer(stories);
+						// if(scope.geojson && scope.geojson.length) {
+						// 	stories = L.geoJSON(scope.geojson, {
+						// 		pointToLayer: function(feature, latlng) {
+						// 			return L.marker(latlng, {
+						// 				icon: storyIcon2,
+						// 				bounceOnAdd: true,
+						// 				bounceOnAddOptions: {
+						// 					duration: 500,
+						// 					height: 100
+						// 				}
+						// 			});
+						// 		},
+						// 		onEachFeature: function(feature, layer) {
+						// 		}
+						// 	});
+						// 	storiesLayerGroup.addLayer(stories);
+						// }
+					}), 300);
 
 					function addLayers(cartocss) {
 						var layerData = {
@@ -326,9 +327,12 @@ module.exports = function(app) {
 function getCartoCSS(column, quantiles) {
 
 	var cartocss = [
-		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #fff; }',
-		'#layer[ ' + column + ' <= 0 ] { polygon-fill: transparent; }'
+		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #fff; }'
 	];
+
+	// quantiles.forEach(function(qt, i) {
+	// 	cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { line-color: ' + colors[i] + ';	}');
+	// })
 
 	// quantiles.forEach(function(qt, i) {
 	// 	cartocss.push('#layer[ ' + column + ' >= ' + qt + ' ] { polygon-fill: rgba(255, 255, 255, ' + ((i+1)/10) + ');	}');

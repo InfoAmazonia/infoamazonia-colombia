@@ -125,6 +125,9 @@ var app = angular.module('ia-colombia', [
 		});
 
 		// $http.get('https://infoamazonia.org/es/tag/colombia?geojson=1').then(function(res) {
+
+		$scope.searchStories = '';
+		$scope.filteredStories = [];
 		$http.get('https://infoamazonia.org/es/?s=colombia&geojson=1').then(function(res) {
 			$scope.stories = res.data.features;
 			console.log(res, res.headers('x-total-count'));
