@@ -293,8 +293,15 @@
 	.timeline-item {
 		position: relative;
 		margin-bottom: 2rem;
+		.transition(all .2s linear);
 		&.focused-story {
-			.transform(scale(1.15));
+			.transform(scale(1.1));
+			.thumbnail {
+				// .box-shadow(0 0 20px white);
+			}
+			.post-box {
+				.box-shadow(0 0 10px #009966);
+			}
 		}
 		&:first-child {
 			margin-top: 0;
@@ -364,7 +371,7 @@
 			text-align: center;
 			p.date {
 				display: block;
-				background: @green;
+				background: #009966;
 				color: #fff;
 				line-height: 2;
 				font-size: 1em;

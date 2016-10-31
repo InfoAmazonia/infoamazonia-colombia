@@ -37,11 +37,13 @@
         </header>
         <div class="sidebar-sections">
           <section class="sidebar-section" id="dashboard" ng-show="viewing == 'dashboard'">
-            <p class="main">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum hendrerit elit, quis sagittis mi laoreet nec. Aenean malesuada pellentesque luctus. Nunc dignissim, eros quis pellentesque sagittis, arcu magna scelerisque justo, sed interdum ligula mi sit amet enim.</p>
+            <p class="main" ng-hide="gridItem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum hendrerit elit, quis sagittis mi laoreet nec. Aenean malesuada pellentesque luctus. Nunc dignissim, eros quis pellentesque sagittis, arcu magna scelerisque justo, sed interdum ligula mi sit amet enim.</p>
             <div class="grid-item" ng-show="gridItem">
-              <h2>{{gridItem.departamento}}</h2>
-              <p><strong>2014</strong><br>{{gridItem.deforestacion_2014}} ha</p>
-              <p><strong>2015</strong><br>{{gridItem.deforestacion_2015}} ha</p>
+              <h2>{{gridItem[dataColumn('reference', 'title').column]}}</h2>
+              <div class="series" ng-repeat="series in dataUniqKeys('series')">
+                <h3>{{series}}</h3>
+                <p ng-repeat="item in matchColumns('series', series)"><strong>{{item.reference}}</strong><br>{{gridItem[item.column]}} ha</p>
+              </div>
             </div>
             <highchart id="chart1" config="chartConfig"></highchart>
           </section>

@@ -22,13 +22,16 @@ module.exports = function(app) {
 					'focused': '=focusedStory'
 				},
 				link: function(scope, element, attrs) {
-					console.log(element);
 					scope.$watch('focused', function() {
 						if(scope.story.properties.id == scope.focused) {
-							angular.element('#sidebar')[0].scrollTop = angular.element(element).offset().top;
+							$('#sidebar').animate({
+								scrollTop: $(element).position().top -50
+							}, 200);
+							setTimeout(function() {
+								$(element).removeClass('focused-story');
+							}, 1500);
 						}
 					});
-					// console.log('focused', element);
 				}
 			}
 		}
@@ -40,7 +43,8 @@ module.exports = function(app) {
 		'$timeout',
 		'$rootScope',
 		'$http',
-		function($q, $interval, $timeout, $rootScope, $http) {
+		'Globals',
+		function($q, $interval, $timeout, $rootScope, $http, Globals) {
 			return {
 				restrict: 'E',
 				scope: {
@@ -51,8 +55,10 @@ module.exports = function(app) {
 
 					scope.layerGroup = false;
 
-					$rootScope.$on('timelineLayerGroup', function(ev, lG) {
-						scope.layerGroup = lG;
+					scope.$watch(function() {
+						return Globals.get('timelineLayerGroup');
+					}, function(layerGroup) {
+						scope.layerGroup = layerGroup;
 					});
 
 					$http.get('css/bnb.cartocss').then(function(res) {
@@ -182,7 +188,8 @@ module.exports = function(app) {
 		'$timeout',
 		'$http',
 		'LoadingService',
-		function($rootScope, $timeout, $http, Loading) {
+		'Globals',
+		function($rootScope, $timeout, $http, Loading, Globals) {
 			return {
 				restrict: 'EAC',
 				scope: {
@@ -229,9 +236,7 @@ module.exports = function(app) {
 						}
 					});
 
-					$timeout(function() {
-						$rootScope.$broadcast('timelineLayerGroup', timelineLayerGroup);
-					}, 200);
+					Globals.set('timelineLayerGroup', timelineLayerGroup);
 
 					setTimeout(function() {
 						timelineLayerGroup.addTo(map);
