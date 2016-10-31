@@ -43,7 +43,8 @@ module.exports = function(app) {
 		'$timeout',
 		'$rootScope',
 		'$http',
-		function($q, $interval, $timeout, $rootScope, $http) {
+		'Globals',
+		function($q, $interval, $timeout, $rootScope, $http, Globals) {
 			return {
 				restrict: 'E',
 				scope: {
@@ -54,8 +55,10 @@ module.exports = function(app) {
 
 					scope.layerGroup = false;
 
-					$rootScope.$on('timelineLayerGroup', function(ev, lG) {
-						scope.layerGroup = lG;
+					scope.$watch(function() {
+						Globals.get('timelineLayerGroup');
+					}, function(layerGroup) {
+						scope.layerGroup = layerGroup;
 					});
 
 					$http.get('css/bnb.cartocss').then(function(res) {
@@ -185,7 +188,8 @@ module.exports = function(app) {
 		'$timeout',
 		'$http',
 		'LoadingService',
-		function($rootScope, $timeout, $http, Loading) {
+		'Globals',
+		function($rootScope, $timeout, $http, Loading, Globals) {
 			return {
 				restrict: 'EAC',
 				scope: {
@@ -232,9 +236,7 @@ module.exports = function(app) {
 						}
 					});
 
-					$timeout(function() {
-						$rootScope.$broadcast('timelineLayerGroup', timelineLayerGroup);
-					}, 200);
+					Globals.set('timelineLayerGroup', timelineLayerGroup);
 
 					setTimeout(function() {
 						timelineLayerGroup.addTo(map);

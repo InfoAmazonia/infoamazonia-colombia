@@ -141,6 +141,7 @@ var app = angular.module('ia-colombia', [
 	}
 ]);
 
+require('./services')(app);
 require('./directives')(app);
 require('./filters')(app);
 require('./loading')(app);
