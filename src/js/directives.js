@@ -13,6 +13,27 @@ module.exports = function(app) {
 		};
 	});
 
+	app.directive('story', [
+		function() {
+			return {
+				restrict: 'EA',
+				scope: {
+					'story': '=',
+					'focused': '=focusedStory'
+				},
+				link: function(scope, element, attrs) {
+					console.log(element);
+					scope.$watch('focused', function() {
+						if(scope.story.properties.id == scope.focused) {
+							angular.element('#sidebar')[0].scrollTop = angular.element(element).offset().top;
+						}
+					});
+					// console.log('focused', element);
+				}
+			}
+		}
+	]);
+
 	app.directive('mapTimeline', [
 		'$q',
 		'$interval',
@@ -28,10 +49,10 @@ module.exports = function(app) {
 				templateUrl: 'views/timeline.html',
 				link: function(scope, element, attrs) {
 
-					var layerGroup;
+					scope.layerGroup = false;
 
 					$rootScope.$on('timelineLayerGroup', function(ev, lG) {
-						layerGroup = lG;
+						scope.layerGroup = lG;
 					});
 
 					$http.get('css/bnb.cartocss').then(function(res) {
@@ -42,7 +63,7 @@ module.exports = function(app) {
 							'layerGroup',
 							'items'
 						], function() {
-							if(scope.items) {
+							if(scope.items && scope.layerGroup) {
 								var promises = [];
 								scope.items.forEach(function(item, i) {
 									promises.push(getCartoDBLayer(item, i+1))
@@ -50,7 +71,7 @@ module.exports = function(app) {
 								$q.all(promises).then(function(layers) {
 									scope.layers = layers;
 									scope.layers.forEach(function(layer) {
-										layerGroup.addLayer(layer);
+										scope.layerGroup.addLayer(layer);
 									});
 									scope.displayLayer(scope.items[0]);
 									$timeout(function() {
@@ -160,7 +181,8 @@ module.exports = function(app) {
 		'$rootScope',
 		'$timeout',
 		'$http',
-		function($rootScope, $timeout, $http) {
+		'LoadingService',
+		function($rootScope, $timeout, $http, Loading) {
 			return {
 				restrict: 'EAC',
 				scope: {
@@ -182,17 +204,21 @@ module.exports = function(app) {
 					});
 
 					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/cirgitmlm0010gdm9cd48fmlz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
-						zIndexOffset: 1
+						zIndex: 1
+					}));
+
+					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/ciuu7vi3k00dj2js5rt68bm9t/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+						zIndex: 3
 					}));
 
 					var timelineLayerGroup = L.layerGroup({
-						zIndexOffset: 2
+						zIndex: 2
 					});
 					var dataLayerGroup = L.layerGroup({
-						zIndexOffset: 3
+						zIndex: 4
 					});
 					var storiesLayerGroup = L.layerGroup({
-						zIndexOffset: 4
+						zIndex: 5
 					});
 
 					$rootScope.$on('toggleStories', function(ev, active) {
@@ -205,7 +231,7 @@ module.exports = function(app) {
 
 					$timeout(function() {
 						$rootScope.$broadcast('timelineLayerGroup', timelineLayerGroup);
-					}, 100);
+					}, 200);
 
 					setTimeout(function() {
 						timelineLayerGroup.addTo(map);
@@ -252,28 +278,53 @@ module.exports = function(app) {
 						popupAnchor: [0, -20],
 					});
 
-					scope.$watch('geojson', _.debounce(function() {
-						console.log('new stories', scope.stories);
-						// if(typeof stories !== 'undefined')
-						// 	storiesLayerGroup.removeLayer(stories);
-						// if(scope.geojson && scope.geojson.length) {
-						// 	stories = L.geoJSON(scope.geojson, {
-						// 		pointToLayer: function(feature, latlng) {
-						// 			return L.marker(latlng, {
-						// 				icon: storyIcon2,
-						// 				bounceOnAdd: true,
-						// 				bounceOnAddOptions: {
-						// 					duration: 500,
-						// 					height: 100
-						// 				}
-						// 			});
-						// 		},
-						// 		onEachFeature: function(feature, layer) {
-						// 		}
-						// 	});
-						// 	storiesLayerGroup.addLayer(stories);
-						// }
-					}), 300);
+					var loadingGeojson = false;
+
+					var updateGeojson = _.debounce(function() {
+						if(typeof stories !== 'undefined')
+							storiesLayerGroup.removeLayer(stories);
+						if(scope.geojson && scope.geojson.length) {
+							stories = L.geoJSON(scope.geojson, {
+								pointToLayer: function(feature, latlng) {
+									var marker = L.marker(latlng, {
+										icon: storyIcon2,
+										bounceOnAdd: true,
+										bounceOnAddOptions: {
+											duration: 500,
+											height: 100
+										}
+									});
+									return marker;
+								},
+								onEachFeature: function(feature, layer) {
+									if(feature.properties) {
+										layer.bindPopup('<h2>' + feature.properties.title + '</h2>');
+										layer.on('mouseover', function(e) {
+											e.target.openPopup();
+											e.target.setZIndexOffset(10);
+										});
+										layer.on('mouseout', function(e) {
+											e.target.closePopup();
+											e.target.setZIndexOffset(0);
+										});
+										layer.on('click', function(e) {
+											$rootScope.$broadcast('storyFocus', e.target.feature.properties.id);
+										});
+									}
+								}
+							});
+							storiesLayerGroup.addLayer(stories);
+						}
+						Loading.remove(loadingGeojson);
+						loadingGeojson = false;
+					}, 800);
+
+					scope.$watch('geojson', function() {
+						if(!loadingGeojson) {
+							loadingGeojson = Loading.add('Loading stories');
+							updateGeojson();
+						}
+					});
 
 					function addLayers(cartocss) {
 						var layerData = {

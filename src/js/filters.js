@@ -13,4 +13,14 @@ module.exports = function(app) {
 		}
 	]);
 
+	app.filter('memoize', [
+		function() {
+			return _.memoize(function(input) {
+				return input;
+			}, function() {
+				return JSON.stringify(arguments);
+			})
+		}
+	]);
+
 };

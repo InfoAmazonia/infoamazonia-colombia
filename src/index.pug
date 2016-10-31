@@ -11,7 +11,7 @@ block nav-content
 block content
 	div(ng-controller="MapCtrl")
 		.map-container
-			#map(map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem" geojson="filteredStories")
+			#map(map sql="sql" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem" geojson="filteredStories | memoize")
 		map-timeline(items="timeline.items")
 		section#sidebar
 			header
@@ -37,7 +37,7 @@ block content
 					p
 						input(type="text" ng-model="searchStories" placeholder="Search inside stories...")
 					.timeline-items
-						.timeline-item.clearfix(ng-repeat="(i,story) in filteredStories = (stories | filter:searchStories)")
+						.timeline-item.clearfix(ng-repeat="(i,story) in filteredStories = (stories | filter:searchStories)" ng-class="{'focused-story': focusedStory == story.properties.id}" story="story" focused-story="focused-story")
 							article
 								.post-box
 									header.post-header

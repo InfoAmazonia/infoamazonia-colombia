@@ -51,7 +51,7 @@
               <input type="text" ng-model="searchStories" placeholder="Search inside stories...">
             </p>
             <div class="timeline-items">
-              <div class="timeline-item clearfix" ng-repeat="(i,story) in filteredStories = (stories | filter:searchStories)">
+              <div class="timeline-item clearfix" ng-repeat="(i,story) in filteredStories = (stories | filter:searchStories)" ng-class="{'focused-story': focusedStory == story.properties.id}" story="story" focused-story="focusedStory">
                 <article>
                   <div class="post-box">
                     <header class="post-header">
@@ -76,6 +76,7 @@
     <div id="loading" loading-status-message ng-class="{active: loads.length}"></div>
   </body>
   <script type="text/javascript" src="lib/underscore/underscore-min.js"></script>
+  <script type="text/javascript" src="lib/jquery/dist/jquery.min.js"></script>
   <script type="text/javascript" src="lib/moment/moment.js"></script>
   <script type="text/javascript" src="lib/chroma-js/chroma.min.js"></script>
   <script type="text/javascript" src="lib/leaflet/dist/leaflet.js"></script>

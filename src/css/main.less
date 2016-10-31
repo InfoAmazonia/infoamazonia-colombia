@@ -112,6 +112,14 @@
 	.leaflet-layer {
 		.transition(opacity .3s linear);
 	}
+	.leaflet-popup-content-wrapper {
+		border-radius: 4px;
+	}
+	.leaflet-popup-content-wrapper,
+	.leaflet-popup-tip {
+		background: #000;
+		color: #fff;
+	}
 }
 
 #map-timeline {
@@ -285,6 +293,9 @@
 	.timeline-item {
 		position: relative;
 		margin-bottom: 2rem;
+		&.focused-story {
+			.transform(scale(1.15));
+		}
 		&:first-child {
 			margin-top: 0;
 		}
@@ -372,5 +383,29 @@
 				.box-shadow(0 0 10px rgba(0,0,0,.5));
 			}
 		}
+	}
+}
+
+#loading {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0,0,0,0.5);
+	z-index: 1;
+	display: none;
+	opacity: 0;
+	.transition(all .2s linear);
+	&.active {
+		opacity: 1;
+		display: block;
+	}
+	.fa {
+		position: absolute;
+		left: 25%;
+		top: 45%;
+		color: #fff;
+		font-size: 4em;
 	}
 }
