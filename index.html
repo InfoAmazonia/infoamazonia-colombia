@@ -36,7 +36,7 @@
           <nav id="sidebar-nav"><a ng-class="{active: viewing == 'dashboard'}" ng-click="setView('dashboard')">Dashboard</a><a ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')">Stories</a></nav>
         </header>
         <div class="sidebar-sections">
-          <section class="sidebar-section" id="dashboard" ng-show="viewing == 'dashboard'">
+          <section class="sidebar-section" id="dashboard" ng-controller="DashboardCtrl" ng-show="viewing == 'dashboard'">
             <p class="main" ng-hide="gridItem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum hendrerit elit, quis sagittis mi laoreet nec. Aenean malesuada pellentesque luctus. Nunc dignissim, eros quis pellentesque sagittis, arcu magna scelerisque justo, sed interdum ligula mi sit amet enim.</p>
             <div class="grid-item" ng-show="gridItem">
               <h2>{{gridItem[dataColumn('reference', 'title').column]}}</h2>

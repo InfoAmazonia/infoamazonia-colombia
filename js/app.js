@@ -57,41 +57,15 @@ module.exports = function(app) {
 		}
 	])
 
-	.controller('MapCtrl', [
-		'$rootScope',
+	.controller('DashboardCtrl', [
 		'$scope',
-		'$timeout',
 		'$http',
-		'LoadingService',
-		function($rootScope, $scope, $timeout, $http, Loading) {
-
-			// Map timeline config
-			$scope.timeline = {
-				items: [
-					{
-						title: '1990',
-						username: 'infoamazonia',
-						sql: 'select * from bnb_1990_ideamamz'
-					},
-					{
-						title: '2000',
-						username: 'infoamazonia',
-						sql: 'select * from bnb_ideamz_2000_ha'
-					},
-					{
-						title: '2013',
-						username: 'infoamazonia',
-						sql: 'select * from bnb_2013_amzideam_ha'
-					}
-				]
-			};
-
+		function($scope, $http) {
 			var indexId = '1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4';
 			var indexJsonp = 'https://spreadsheets.google.com/feeds/list/' + indexId + '/2/public/values?alt=json-in-script&callback=JSON_CALLBACK';
 
 			$http.jsonp(indexJsonp).then(function(res) {
 				$scope.dataIndex = parseSheet(res.data.feed.entry);
-				console.log($scope.dataIndex);
 			});
 
 			$scope.dataColumn = function(key, val) {
@@ -119,6 +93,37 @@ module.exports = function(app) {
 					}
 				});
 				return _.uniq(keys);
+			};
+		}
+	])
+
+	.controller('MapCtrl', [
+		'$rootScope',
+		'$scope',
+		'$timeout',
+		'$http',
+		'LoadingService',
+		function($rootScope, $scope, $timeout, $http, Loading) {
+
+			// Map timeline config
+			$scope.timeline = {
+				items: [
+					{
+						title: '1990',
+						username: 'infoamazonia',
+						sql: 'select * from bnb_1990_ideamamz'
+					},
+					{
+						title: '2000',
+						username: 'infoamazonia',
+						sql: 'select * from bnb_ideamz_2000_ha'
+					},
+					{
+						title: '2013',
+						username: 'infoamazonia',
+						sql: 'select * from bnb_2013_amzideam_ha'
+					}
+				]
 			};
 
 			$scope.user = 'infoamazonia';
@@ -152,13 +157,14 @@ module.exports = function(app) {
 				// console.log($scope.chartConfig);
 			});
 
-			// $http.get('https://infoamazonia.org/es/tag/colombia?geojson=1').then(function(res) {
-
 			$scope.searchStories = '';
-			$http.get('https://infoamazonia.org/es/?s=colombia&geojson=1').then(function(res) {
-				$scope.stories = res.data.features;
-				console.log(res, res.headers(['X-Total-Count']));
-			});
+			$http
+				// .get('https://infoamazonia.org/es/tag/colombia?geojson=1')
+				.get('https://infoamazonia.org/es/?s=colombia&geojson=1')
+				.then(function(res) {
+					$scope.stories = res.data.features;
+					// console.log(res, res.headers(['X-Total-Count']));
+				});
 
 			$scope.focusedStory = false;
 			$scope.$on('storyFocus', function(ev, storyId) {
