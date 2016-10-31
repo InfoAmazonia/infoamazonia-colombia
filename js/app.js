@@ -265,9 +265,10 @@ module.exports = function(app) {
 							map.removeLayer(storiesLayerGroup);
 						}
 					});
+
 					$timeout(function() {
 						$rootScope.$broadcast('timelineLayerGroup', timelineLayerGroup);
-					}, 100);
+					}, 200);
 
 					setTimeout(function() {
 						timelineLayerGroup.addTo(map);
