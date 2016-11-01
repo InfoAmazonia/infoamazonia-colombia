@@ -2,6 +2,7 @@ module.exports = {
 	options: {
 		chart: {
 			type: 'bar',
+			animation: false,
 			backgroundColor: null,
 			plotBackgroundColor: null,
 			style: {
@@ -23,8 +24,8 @@ module.exports = {
 		},
 		plotOptions: {
 			series: {
-				color: '#009966',
 				animation: false,
+				color: '#009966',
 				borderWidth: 0,
 				dataLabels: {
 					format: '{y} ha',

@@ -131,7 +131,9 @@ module.exports = function(app) {
 				} else {
 					$scope.chartConfig.series = [];
 				}
-				window.dispatchEvent(new Event('resize'));
+				setTimeout(function() {
+					window.dispatchEvent(new Event('resize'));
+				}, 100);
 			});
 
 		}
