@@ -22,7 +22,11 @@ module.exports = {
 		},
 		plotOptions: {
 			series: {
-				color: '#f26969'
+				color: '#f26969',
+				dataLabels: {
+					enabled: true,
+					color: '#ffffff'
+				}
 			}
 		},
 		yAxis: {
@@ -31,14 +35,16 @@ module.exports = {
 					color: '#fff'
 				}
 			},
-			gridLineColor: 'rgba(255,255,255,0.1)'
+			gridLineColor: 'rgba(255,255,255,0.1)',
+			visible: false
 		},
 		xAxis: {
 			labels: {
 				style: {
 					color: '#fff'
 				}
-			}
+			},
+			visible: false
 		},
 		credits: {
 			enabled: false

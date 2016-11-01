@@ -42,10 +42,9 @@
               <h2>{{gridItem[dataColumn('reference', 'title').column]}}</h2>
               <div class="series" ng-repeat="series in dataUniqKeys('series')">
                 <h3>{{series}}</h3>
-                <p ng-repeat="item in matchColumns('series', series)"><strong>{{item.reference}}</strong><br>{{gridItem[item.column]}} ha</p>
+                <highchart config="chartConfig"></highchart>
               </div>
             </div>
-            <highchart id="chart1" config="chartConfig"></highchart>
           </section>
           <section class="sidebar-section" id="stories" ng-show="viewing == 'stories'">
             <p>InfoAmazonia stories on Colombia</p>

@@ -22,7 +22,8 @@ module.exports = function(app) {
 	app.controller('SiteCtrl', [
 		'$rootScope',
 		'$scope',
-		function($rootScope, $scope) {
+		'$http',
+		function($rootScope, $scope, $http) {
 
 			$scope.showNav = false;
 			$scope.toggleNav = function() {
@@ -51,7 +52,34 @@ module.exports = function(app) {
 				} else {
 					return true;
 				}
-			}
+			};
+
+			$scope.chartConfig = angular.extend({}, highchartsDefaults);
+
+			$rootScope.$on('mapGridItem', function(ev, item) {
+				$scope.gridItem = item;
+				if(item) {
+					$scope.chartConfig.series = [{
+						data: [item.deforestacion_2014, item.deforestacion_2015]
+					}];
+				} else {
+					$scope.chartConfig.series = [];
+				}
+			});
+
+			$scope.searchStories = '';
+			$http
+				// .get('https://infoamazonia.org/es/tag/colombia?geojson=1')
+				.get('https://infoamazonia.org/es/?s=colombia&geojson=1')
+				.then(function(res) {
+					$scope.stories = res.data.features;
+					// console.log(res, res.headers(['X-Total-Count']));
+				});
+
+			$scope.focusedStory = false;
+			$scope.$on('storyFocus', function(ev, storyId) {
+				$scope.focusedStory = storyId;
+			});
 
 		}
 	])
@@ -143,8 +171,6 @@ module.exports = function(app) {
 			$scope.sql = new cartodb.SQL({user: $scope.user});
 			$scope.dataQuery = 'SELECT * FROM ' + $scope.dataTable;
 
-			$scope.gridItem = false;
-
 			$scope.sql.execute($scope.dataQuery).done(function(data) {
 				var fields = [];
 				for(var key in data.fields) {
@@ -155,29 +181,6 @@ module.exports = function(app) {
 					$scope.columns = fields;
 					$scope.query = 'SELECT geom.cartodb_id, geom.the_geom, geom.the_geom_webmercator, data.' + $scope.columns.join(', data.') + ' FROM ' + $scope.dataTable + ' as data, ' + $scope.geomTable + ' as geom WHERE ' + $scope.queryWhere + ' GROUP BY data.cartodb_id, geom.cartodb_id';
 				});
-			});
-
-			$scope.$watch('gridItem', function() {
-				$scope.chartConfig = angular.extend({
-					series: [{
-						data: [$scope.gridItem.deforestacion_2014, $scope.gridItem.deforestacion_2015]
-					}]
-				}, highchartsDefaults);
-				// console.log($scope.chartConfig);
-			});
-
-			$scope.searchStories = '';
-			$http
-				// .get('https://infoamazonia.org/es/tag/colombia?geojson=1')
-				.get('https://infoamazonia.org/es/?s=colombia&geojson=1')
-				.then(function(res) {
-					$scope.stories = res.data.features;
-					// console.log(res, res.headers(['X-Total-Count']));
-				});
-
-			$scope.focusedStory = false;
-			$scope.$on('storyFocus', function(ev, storyId) {
-				$scope.focusedStory = storyId;
 			});
 
 		}

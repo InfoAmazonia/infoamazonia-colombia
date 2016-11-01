@@ -360,12 +360,12 @@ module.exports = function(app) {
 								dataLayerGroup.addLayer(grid);
 								grid.on('mouseover', function(e) {
 									scope.$apply(function() {
-										scope.gridItem = e.data;
+										$rootScope.$broadcast('mapGridItem', e.data);
 									});
 								});
 								grid.on('mouseout', function(e) {
 									scope.$apply(function() {
-										scope.gridItem = false;
+										$rootScope.$broadcast('mapGridItem', false);
 									});
 								})
 							}
