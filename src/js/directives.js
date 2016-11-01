@@ -358,15 +358,26 @@ module.exports = function(app) {
 								});
 								grid = new L.UtfGrid(tilesUrl.grids[0][0] + '&callback={cb}');
 								dataLayerGroup.addLayer(grid);
-								grid.on('mouseover', function(e) {
+								var clicked = false;
+								grid.on('click', function(e) {
+									clicked = true;
 									scope.$apply(function() {
 										$rootScope.$broadcast('mapGridItem', e.data);
 									});
 								});
+								grid.on('mouseover', function(e) {
+									if(!clicked) {
+										scope.$apply(function() {
+											$rootScope.$broadcast('mapGridItem', e.data);
+										});
+									}
+								});
 								grid.on('mouseout', function(e) {
-									scope.$apply(function() {
-										$rootScope.$broadcast('mapGridItem', false);
-									});
+									if(!clicked) {
+										scope.$apply(function() {
+											$rootScope.$broadcast('mapGridItem', false);
+										});
+									}
 								})
 							}
 						});

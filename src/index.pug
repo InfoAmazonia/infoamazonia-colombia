@@ -25,11 +25,11 @@ block content
 						h2 {{gridItem[dataColumn('reference', 'title').column]}}
 						.series(ng-repeat="series in dataUniqKeys('series')")
 							h3 {{series}}
-							p(ng-repeat="item in matchColumns('series', series)")
-								strong {{item.reference}}
-								br
-								| {{gridItem[item.column]}} ha
-							highchart#chart1(config="chartConfig")
+							//- p(ng-repeat="item in matchColumns('series', series)")
+							//- 	strong {{item.reference}}
+							//- 	br
+							//- 	| {{gridItem[item.column]}} ha
+							highchart(config="chartConfig")
 				section#stories.sidebar-section(ng-show="viewing == 'stories'")
 					p InfoAmazonia stories on Colombia
 					p

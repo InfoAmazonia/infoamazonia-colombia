@@ -1,7 +1,7 @@
 module.exports = {
 	options: {
 		chart: {
-			type: 'spline',
+			type: 'bar',
 			backgroundColor: null,
 			plotBackgroundColor: null,
 			style: {
@@ -10,6 +10,7 @@ module.exports = {
 			}
 		},
 		tooltip: {
+			enabled: false,
 			style: {
 				padding: 10,
 				fontWeight: 'bold'
@@ -22,10 +23,15 @@ module.exports = {
 		},
 		plotOptions: {
 			series: {
-				color: '#f26969',
+				color: '#009966',
+				animation: false,
 				dataLabels: {
+					format: '{y} ha',
 					enabled: true,
 					color: '#ffffff'
+				},
+				marker: {
+					symbol: 'circle'
 				}
 			}
 		},
@@ -39,12 +45,14 @@ module.exports = {
 			visible: false
 		},
 		xAxis: {
+			type: 'category',
 			labels: {
+				format: '{value}',
 				style: {
 					color: '#fff'
 				}
 			},
-			visible: false
+			visible: true
 		},
 		credits: {
 			enabled: false

@@ -54,19 +54,6 @@ module.exports = function(app) {
 				}
 			};
 
-			$scope.chartConfig = angular.extend({}, highchartsDefaults);
-
-			$rootScope.$on('mapGridItem', function(ev, item) {
-				$scope.gridItem = item;
-				if(item) {
-					$scope.chartConfig.series = [{
-						data: [item.deforestacion_2014, item.deforestacion_2015]
-					}];
-				} else {
-					$scope.chartConfig.series = [];
-				}
-			});
-
 			$scope.searchStories = '';
 			$http
 				// .get('https://infoamazonia.org/es/tag/colombia?geojson=1')
@@ -87,7 +74,8 @@ module.exports = function(app) {
 	.controller('DashboardCtrl', [
 		'$scope',
 		'$http',
-		function($scope, $http) {
+		'$rootScope',
+		function($scope, $http, $rootScope) {
 			var indexId = '1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4';
 			var indexJsonp = 'https://spreadsheets.google.com/feeds/list/' + indexId + '/2/public/values?alt=json-in-script&callback=JSON_CALLBACK';
 
@@ -121,6 +109,32 @@ module.exports = function(app) {
 				});
 				return _.uniq(keys);
 			};
+
+			$scope.chartConfig = angular.extend({}, highchartsDefaults);
+
+			$rootScope.$on('mapGridItem', function(ev, item) {
+				$scope.gridItem = item;
+				if(item) {
+					var series = $scope.dataUniqKeys('series');
+					var chartSeries = [];
+					series.forEach(function(s) {
+						var sData = {
+							data: []
+						};
+						var items = $scope.matchColumns('series', s);
+						items.forEach(function(seriesItem) {
+							sData.data.push([seriesItem.reference, item[seriesItem.column]]);
+						});
+						chartSeries.push(sData);
+					});
+					$scope.chartConfig.series = chartSeries;
+				} else {
+					$scope.chartConfig.series = [];
+				}
+				console.log($scope.chartConfig);
+				window.dispatchEvent(new Event('resize'));
+			});
+
 		}
 	])
 
