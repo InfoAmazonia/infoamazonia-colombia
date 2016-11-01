@@ -132,7 +132,9 @@ module.exports = function(app) {
 				} else {
 					$scope.chartConfig.series = [];
 				}
-				window.dispatchEvent(new Event('resize'));
+				setTimeout(function() {
+					window.dispatchEvent(new Event('resize'));
+				}, 100);
 			});
 
 		}
@@ -652,6 +654,7 @@ module.exports = {
 	options: {
 		chart: {
 			type: 'bar',
+			animation: false,
 			backgroundColor: null,
 			plotBackgroundColor: null,
 			style: {
@@ -673,8 +676,8 @@ module.exports = {
 		},
 		plotOptions: {
 			series: {
-				color: '#009966',
 				animation: false,
+				color: '#009966',
 				borderWidth: 0,
 				dataLabels: {
 					format: '{y} ha',
