@@ -119,6 +119,16 @@ module.exports = function(app) {
 						sql: 'select * from bnb_ideamz_2000_ha'
 					},
 					{
+						title: '2005',
+						username: 'infoamazonia',
+						sql: 'select * from bnb_amzideam_2005_ha'
+					},
+					{
+						title: '2010',
+						username: 'infoamazonia',
+						sql: 'select * from bnb_amzideam_2010_ha'
+					},
+					{
 						title: '2013',
 						username: 'infoamazonia',
 						sql: 'select * from bnb_2013_amzideam_ha'

@@ -1,7 +1,5 @@
 'use strict';
 
-var baseLayers = require('./base-layers');
-
 module.exports = function(app) {
 
 	app.directive('backImg', function() {

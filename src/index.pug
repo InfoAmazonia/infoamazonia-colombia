@@ -19,18 +19,16 @@ block content
 					a(ng-class="{active: viewing == 'dashboard'}" ng-click="setView('dashboard')") Dashboard
 					a(ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')") Stories
 			.sidebar-sections
-				section#dashboard.sidebar-section(ng-show="viewing == 'dashboard'")
-					p.main Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum hendrerit elit, quis sagittis mi laoreet nec. Aenean malesuada pellentesque luctus. Nunc dignissim, eros quis pellentesque sagittis, arcu magna scelerisque justo, sed interdum ligula mi sit amet enim.
+				section#dashboard.sidebar-section(ng-controller="DashboardCtrl" ng-show="viewing == 'dashboard'")
+					p.main(ng-hide="gridItem") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum hendrerit elit, quis sagittis mi laoreet nec. Aenean malesuada pellentesque luctus. Nunc dignissim, eros quis pellentesque sagittis, arcu magna scelerisque justo, sed interdum ligula mi sit amet enim.
 					.grid-item(ng-show="gridItem")
-						h2 {{gridItem.departamento}}
-						p
-							strong 2014
-							br
-							| {{gridItem.deforestacion_2014}} ha
-						p
-							strong 2015
-							br
-							| {{gridItem.deforestacion_2015}} ha
+						h2 {{gridItem[dataColumn('reference', 'title').column]}}
+						.series(ng-repeat="series in dataUniqKeys('series')")
+							h3 {{series}}
+							p(ng-repeat="item in matchColumns('series', series)")
+								strong {{item.reference}}
+								br
+								| {{gridItem[item.column]}} ha
 					highchart#chart1(config="chartConfig")
 				section#stories.sidebar-section(ng-show="viewing == 'stories'")
 					p InfoAmazonia stories on Colombia
