@@ -25,6 +25,7 @@ module.exports = {
 			series: {
 				color: '#009966',
 				animation: false,
+				borderWidth: 0,
 				dataLabels: {
 					format: '{y} ha',
 					enabled: true,
@@ -52,7 +53,9 @@ module.exports = {
 					color: '#fff'
 				}
 			},
-			visible: true
+			gridLineColor: 'rgba(255,255,255,0.2)',
+			visible: true,
+			tickLength: 0
 		},
 		credits: {
 			enabled: false
