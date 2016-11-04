@@ -58,14 +58,10 @@ module.exports = function(map, $http) {
 					var grid = new L.UtfGrid(tilesUrl.grids[0][0] + '&callback={cb}');
 					layerGroup.addLayer(grid);
 					grid.on('mouseover', function(e) {
-						// scope.$apply(function() {
-						//	 $rootScope.$broadcast('mapGridItem', e.data);
-						// });
+
 					});
 					grid.on('mouseout', function(e) {
-						// scope.$apply(function() {
-						//	 $rootScope.$broadcast('mapGridItem', false);
-						// });
+
 					});
 				}
 			});
