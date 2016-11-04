@@ -94,7 +94,7 @@
 	min-height: 400px;
 	background: #000;
 	.leaflet-top {
-		top: 35%;
+		top: 100px;
 	}
 	.leaflet-left {
 		left: 0;
@@ -102,12 +102,34 @@
 			margin-left: 2rem;
 		}
 	}
+	.leaflet-control-layers,
 	.leaflet-bar a, .leaflet-bar a:hover {
 		background: #111;
 		color: #fff;
 		border-bottom: 1px solid #000;
 		&:last-child {
 			border-bottom: 0;
+		}
+	}
+	.leaflet-control-layers {
+		.leaflet-control-layers-toggle {
+			width: 26px;
+			height: 26px;
+			background-size: 70%;
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+		form,
+		p {
+			margin: 0;
+			font-weight: normal;
+		}
+		label {
+			margin: .2rem;
+			font-weight: normal;
+		}
+		input {
+			margin-bottom: 0;
 		}
 	}
 	.leaflet-layer {

@@ -208,13 +208,32 @@ module.exports = function(app) {
 						fadeAnimation: false
 					});
 
-					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/cirgitmlm0010gdm9cd48fmlz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
-						zIndex: 1
-					}));
+					var layers = {
+						base: {
+							title: 'Base layer',
+							layer: L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/cirgitmlm0010gdm9cd48fmlz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+								zIndex: 1
+							})
+						},
+						rivers: {
+							title: 'Rivers',
+							layer: L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/ciuu7vi3k00dj2js5rt68bm9t/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+								zIndex: 3
+							})
+						},
+						labels: {
+							title: 'Labels',
+							layer: L.tileLayer('https://{s}.tiles.mapbox.com/v4/infoamazonia.osm-brasil/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+								zIndex: 6
+							})
+						}
+					};
 
-					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/ciuu7vi3k00dj2js5rt68bm9t/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
-						zIndex: 3
-					}));
+					for(var key in layers) {
+						map.addLayer(layers[key].layer);
+					}
+
+					require('./custom-layers')(map, $http);
 
 					var timelineLayerGroup = L.layerGroup({
 						zIndex: 2
@@ -378,7 +397,7 @@ module.exports = function(app) {
 											$rootScope.$broadcast('mapGridItem', false);
 										});
 									}
-								})
+								});
 							}
 						});
 					}

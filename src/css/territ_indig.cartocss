@@ -1,0 +1,59 @@
+#territ_rios_ind_genas [zoom>=7] {
+  polygon-fill: #c80465;//cobre: #990033;
+  polygon-opacity: 0.15;
+  line-width: 1.5;
+  line-color: #c80465;
+  line-opacity: 1;
+  //line-comp-op: color-dodge;
+}
+
+#territ_rios_ind_genas::labels [zoom>=8]{
+  text-name: [tis_nombre];
+  text-face-name: 'Open Sans Bold';
+  text-size: 11;
+  text-fill:#c80465;// #990033;
+  text-label-position-tolerance: 0;
+  //text-halo-radius: 1;
+  //text-halo-fill: #ffffff;
+  text-dy: 10;
+  text-dx: 0;
+  text-line-spacing:10;
+  text-min-distance:20;
+  text-allow-overlap: false;
+  text-placement: interior;
+  text-placement-type: dummy;
+  //text-comp-op:color-dodge;
+  [tis_objectid=306]{text-dx:0.5;}
+
+  [zoom=9] {text-size:15px;
+    [tis_objectid=258]{text-dx:-1;}
+    [tis_objectid=297]{text-dx:-1;}
+    [tis_objectid=251]{text-dx:20;}
+    [tis_objectid=271]{text-dx:10;}
+    [tis_objectid=275]{text-dx:0.5;}
+    [tis_objectid=358]{text-dx:-0.5;}
+    [tis_objectid=359]{text-dx:5;}
+    [tis_objectid=361]{text-dx:1;}
+    [tis_objectid=384]{text-dx:-0.5;}
+    [tis_objectid=407]{text-dx:10;}
+    }
+  [zoom=10] {text-size:16px;
+      [tis_objectid=266]{text-dx:1;}
+      [tis_objectid=381]{text-dx:-1;}
+      [tis_objectid=239]{text-dx:1;}
+  }
+
+  [zoom>=11] {text-size:17px;
+  [tis_objectid=231]{text-dx:.1;}
+  [tis_objectid=241]{text-dx:.1;}
+  [tis_objectid=243]{text-dx:.1;}
+  [tis_objectid=290]{text-dx:.1;}
+  [tis_objectid=261]{text-dx:1;}
+  [tis_objectid=275]{text-dx:-1;}
+  [tis_objectid=276]{text-dx:1;}
+  [tis_objectid=361]{text-dx:.1;}
+  [tis_objectid=397]{text-dx:10;}
+  [tis_objectid=386]{text-dx:-.05;}
+  }
+
+}
