@@ -1,0 +1,28 @@
+#carreteras{
+  line-opacity:0;
+  [zoom>=7] {line-opacity:1}
+
+  line-color: #660099;
+  //330066;//;//#663399; //#6633cc;//;
+  //comp-op: darken;
+
+  [zoom=7] {line-width: 1;}
+  [zoom=8] {line-width: 1.5;}
+  [zoom=9] {line-width: 3;}
+  [zoom=10] {line-width: 4;}
+  [zoom>=11] {line-width: 7;}
+  [zoom>=13] {line-width: 10;}
+}
+
+/*
+  #carreteras::labels [zoom>=8]{
+      text-name:[nm_sigla];
+      text-face-name: "Open Sans Bold";
+      text-size: 11px;
+      text-halo-fill:#fff;
+      text-fill:#df051b;
+      text-halo-radius:1;
+      text-placement: line;
+      text-min-distance: 100;
+     // text-label-position-tolerance: 0;
+  }*/

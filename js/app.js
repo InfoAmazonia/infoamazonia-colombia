@@ -204,7 +204,84 @@ module.exports = function(app) {
 
 };
 
-},{"./highcharts-defaults":4}],2:[function(require,module,exports){
+},{"./highcharts-defaults":5}],2:[function(require,module,exports){
+'use strict';
+
+module.exports = function(map, $http) {
+
+	var control = L.control.layers({}, {}, {position: 'topleft'}).addTo(map);
+
+	var customLayers = [
+		{
+			name: 'Areas Protegidas',
+			cartocss: 'css/protected_areas.cartocss',
+			user: 'infoamazonia',
+			sql: "select * from anp_nacional where nacionales_pais= 'Colombia'",
+			interactivity: 'nacionales_nombre',
+			zIndex: 7
+		},
+		{
+			name: 'Territorios Indigenas',
+			cartocss: 'css/territ_indig.cartocss',
+			user: 'infoamazonia',
+			sql: "select * from territ_rios_ind_genas where tis_pais='Colombia'",
+			interactivity: 'tis_nombre',
+			zIndex: 7
+		},
+		{
+			name: 'Carreteras',
+			cartocss: 'css/roads.cartocss',
+			user: 'infoamazonia',
+			sql: "select * from carreteras where pais='Colombia'",
+			interactivity: null,
+			zIndex: 7
+		}
+	];
+
+	customLayers.forEach(function(config) {
+		var layerGroup = L.layerGroup({
+			zIndex: config.zIndex
+		});
+		control.addOverlay(layerGroup, config.name);
+		$http.get(config.cartocss).then(function(res) {
+			var cartocss = res.data;
+			var layerData = {
+				user_name: config.user,
+				sublayers: [{
+					sql: config.sql,
+					cartocss: cartocss,
+					interactivity: config.interactivity
+				}]
+			};
+			cartodb.Tiles.getTiles(layerData, function(tilesUrl, err) {
+				if(tilesUrl == null) {
+					console.log("error: ", err.errors.join('\n'));
+				} else {
+					var layer = L.tileLayer(tilesUrl.tiles[0], {
+						zIndex: config.zIndex
+					});
+					layerGroup.addLayer(layer);
+
+					var grid = new L.UtfGrid(tilesUrl.grids[0][0] + '&callback={cb}');
+					layerGroup.addLayer(grid);
+					grid.on('mouseover', function(e) {
+						// scope.$apply(function() {
+						//	 $rootScope.$broadcast('mapGridItem', e.data);
+						// });
+					});
+					grid.on('mouseout', function(e) {
+						// scope.$apply(function() {
+						//	 $rootScope.$broadcast('mapGridItem', false);
+						// });
+					});
+				}
+			});
+		});
+	});
+
+};
+
+},{}],3:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -415,13 +492,32 @@ module.exports = function(app) {
 						fadeAnimation: false
 					});
 
-					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/cirgitmlm0010gdm9cd48fmlz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
-						zIndex: 1
-					}));
+					var layers = {
+						base: {
+							title: 'Base layer',
+							layer: L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/cirgitmlm0010gdm9cd48fmlz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+								zIndex: 1
+							})
+						},
+						rivers: {
+							title: 'Rivers',
+							layer: L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/ciuu7vi3k00dj2js5rt68bm9t/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+								zIndex: 3
+							})
+						},
+						labels: {
+							title: 'Labels',
+							layer: L.tileLayer('https://{s}.tiles.mapbox.com/v4/infoamazonia.osm-brasil/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+								zIndex: 6
+							})
+						}
+					};
 
-					map.addLayer(L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/ciuu7vi3k00dj2js5rt68bm9t/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
-						zIndex: 3
-					}));
+					for(var key in layers) {
+						map.addLayer(layers[key].layer);
+					}
+
+					require('./custom-layers')(map, $http);
 
 					var timelineLayerGroup = L.layerGroup({
 						zIndex: 2
@@ -585,7 +681,7 @@ module.exports = function(app) {
 											$rootScope.$broadcast('mapGridItem', false);
 										});
 									}
-								})
+								});
 							}
 						});
 					}
@@ -621,7 +717,7 @@ function getCartoDBQuantiles(sql, table, column, cb) {
 	});
 }
 
-},{}],3:[function(require,module,exports){
+},{"./custom-layers":2}],4:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -649,7 +745,7 @@ module.exports = function(app) {
 
 };
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 module.exports = {
 	options: {
 		chart: {
@@ -716,7 +812,7 @@ module.exports = {
 	}
 };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var app = angular.module('ia-colombia', [
 	'ngAnimate',
 	'highcharts-ng'
@@ -732,7 +828,7 @@ angular.element(document).ready(function() {
 	angular.bootstrap(document, ['ia-colombia']);
 });
 
-},{"./controllers":1,"./directives":2,"./filters":3,"./loading":6,"./services":7}],6:[function(require,module,exports){
+},{"./controllers":1,"./directives":3,"./filters":4,"./loading":7,"./services":8}],7:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -870,7 +966,7 @@ module.exports = function(app) {
 
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 module.exports = function(app) {
@@ -891,4 +987,4 @@ module.exports = function(app) {
 
 };
 
-},{}]},{},[5]);
+},{}]},{},[6]);

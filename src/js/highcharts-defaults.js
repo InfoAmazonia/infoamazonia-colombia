@@ -1,7 +1,8 @@
 module.exports = {
 	options: {
 		chart: {
-			type: 'spline',
+			type: 'bar',
+			animation: false,
 			backgroundColor: null,
 			plotBackgroundColor: null,
 			style: {
@@ -10,6 +11,7 @@ module.exports = {
 			}
 		},
 		tooltip: {
+			enabled: false,
 			style: {
 				padding: 10,
 				fontWeight: 'bold'
@@ -22,10 +24,16 @@ module.exports = {
 		},
 		plotOptions: {
 			series: {
-				color: '#f26969',
+				animation: false,
+				color: '#009966',
+				borderWidth: 0,
 				dataLabels: {
+					format: '{y} ha',
 					enabled: true,
 					color: '#ffffff'
+				},
+				marker: {
+					symbol: 'circle'
 				}
 			}
 		},
@@ -39,12 +47,16 @@ module.exports = {
 			visible: false
 		},
 		xAxis: {
+			type: 'category',
 			labels: {
+				format: '{value}',
 				style: {
 					color: '#fff'
 				}
 			},
-			visible: false
+			gridLineColor: 'rgba(255,255,255,0.2)',
+			visible: true,
+			tickLength: 0
 		},
 		credits: {
 			enabled: false

@@ -77,6 +77,7 @@
 	width: auto;
 	max-width: 100%;
 	margin: 0 2rem;
+	padding: 0;
 }
 
 .map-container {
@@ -278,9 +279,15 @@
 
 #dashboard {
 	.grid-item {
+		h2 {
+			font-size: 3em;
+			border-bottom: 1px solid rgba(255,255,255,0.5);
+			padding-bottom: 2rem;
+			margin-bottom: 2rem;
+		}
 		.series {
 			.highcharts-container {
-				height: 150px;
+				height: 100px !important;
 			}
 		}
 	}
@@ -426,3 +433,5 @@
 		font-size: 4em;
 	}
 }
+
+@import "responsive";

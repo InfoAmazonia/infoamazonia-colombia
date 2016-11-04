@@ -1,0 +1,38 @@
+#anp_nacional [zoom>=7] {
+  polygon-fill: #00cc99;
+  polygon-opacity: 0.45;//0.15;
+  line-width: 1.7;
+    [zoom>=8] {line-width:2;}
+  line-color: #33cc66;
+  line-opacity: 1;
+  line-comp-op: color-dodge;
+}
+
+#anp_nacional::labels  [zoom>=8] {
+  text-name: [nacionales_nombre];
+  text-face-name: 'Open Sans Bold';//Helvetica Neue Bold
+  text-size: 13;
+  text-fill: #33cc66;
+  text-label-position-tolerance: 0;
+  //text-halo-radius: .2;
+  //text-halo-fill: #000000;//fff;
+  text-dy: 10;
+  text-dx:0;
+  text-allow-overlap: false;
+  text-placement: interior;//point;
+  text-placement-type: dummy;
+  text-line-spacing:30;
+  text-min-distance:10;
+  text-comp-op:color-dodge;
+ [nacionales_objectid = 3293]{text-dx:3; text-dy:25;}//'Serranía de Chiribiquete'
+   [nacionales_objectid = 3287]{text-dx:-1;}//'Alto Fragua Indiwasi'
+
+
+  [zoom=9] {text-size:15px;}
+  [zoom=10] {text-size:16px;text-dx:15;
+     [nacionales_objectid = 3285]{text-dx:-20;}//'Cordillera de los Picachos'
+}
+  [zoom>=11] {text-size:17px; text-dx:-25; }
+
+
+}
