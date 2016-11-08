@@ -208,6 +208,10 @@ module.exports = function(app) {
 						fadeAnimation: false
 					});
 
+					map.on('click', function() {
+						console.log(arguments);
+					});
+
 					var layers = {
 						base: {
 							title: 'Base layer',
@@ -232,6 +236,8 @@ module.exports = function(app) {
 					for(var key in layers) {
 						map.addLayer(layers[key].layer);
 					}
+
+					require('./custom-layers')(map, $http);
 
 					var timelineLayerGroup = L.layerGroup({
 						zIndex: 2
@@ -395,7 +401,7 @@ module.exports = function(app) {
 											$rootScope.$broadcast('mapGridItem', false);
 										});
 									}
-								})
+								});
 							}
 						});
 					}
