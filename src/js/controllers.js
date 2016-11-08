@@ -180,7 +180,7 @@ module.exports = function(app) {
 
 			$scope.user = 'infoamazonia';
 			$scope.dataTable = 'ideam_deforestacion_anual';
-			$scope.geomTable = 'depto_amzideam';
+			$scope.geomTable = 'provincias_area_estudio_amz_wgs84';
 			$scope.queryWhere = 'data.departamento = geom.nom_depto';
 
 			$scope.sql = new cartodb.SQL({user: $scope.user});

@@ -1,8 +1,8 @@
 #territ_rios_ind_genas [zoom>=7] {
-  polygon-fill: #c80465;//cobre: #990033;
+  polygon-fill: #990033;//cobre: #990033;
   polygon-opacity: 0.15;
   line-width: 1.5;
-  line-color: #c80465;
+  line-color: #990033;
   line-opacity: 1;
   //line-comp-op: color-dodge;
 }

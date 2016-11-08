@@ -239,7 +239,7 @@ module.exports = function(app) {
 						zIndex: 2
 					});
 					var dataLayerGroup = L.layerGroup({
-						zIndex: 4
+						zIndex: 10
 					});
 					var storiesLayerGroup = L.layerGroup({
 						zIndex: 5
@@ -361,7 +361,7 @@ module.exports = function(app) {
 							if(tilesUrl == null) {
 								console.log("error: ", err.errors.join('\n'));
 							} else {
-								layer = L.tileLayer(tilesUrl.tiles[0]);
+								layer = L.tileLayer(tilesUrl.tiles[0], {zIndex: 10});
 								dataLayerGroup.addLayer(layer);
 								scope.sql.getBounds(scope.query).done(function(bounds) {
 									map.fitBounds(bounds, {
@@ -411,7 +411,9 @@ module.exports = function(app) {
 function getCartoCSS(column, quantiles) {
 
 	var cartocss = [
-		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #fff; }'
+		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #fff; }',
+		'#layer[zoom>=8] { line-width: 2; }',
+		'#layer[zoom>=10] { line-width: 3; }'
 	];
 
 	// quantiles.forEach(function(qt, i) {
