@@ -50,7 +50,13 @@ module.exports = function(grunt) {
 				files: [
 					{
 						cwd: 'src',
-						src: ['**', '!js/**', '!**/*.less', '!**/*.pug', '!**/*.js'],
+						src: [
+							'**',
+							'!js/**',
+							'!**/*.less',
+							'!**/*.pug',
+							'!**/*.js'
+						],
 						dest: 'public',
 						expand: true
 					},

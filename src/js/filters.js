@@ -23,4 +23,27 @@ module.exports = function(app) {
 		}
 	]);
 
+	app.filter('validate', [
+		function() {
+			return function(input, validation) {
+				var validFn;
+				var bool = true;
+				switch(validation) {
+					case 'number':
+						validFn = isNaN;
+						bool = false;
+				}
+				if(input && input.length) {
+					input = input.filter(function(item) {
+						if(bool)
+							return validFn(item);
+						else
+							return !validFn(item);
+					});
+				}
+				return input;
+			}
+		}
+	]);
+
 };

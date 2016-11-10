@@ -221,12 +221,12 @@ module.exports = function(app) {
 								zIndex: 3
 							})
 						},
-						labels: {
-							title: 'Labels',
-							layer: L.tileLayer('https://{s}.tiles.mapbox.com/v4/infoamazonia.osm-brasil/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
-								zIndex: 6
-							})
-						}
+						// labels: {
+						// 	title: 'Labels',
+						// 	layer: L.tileLayer('https://{s}.tiles.mapbox.com/v4/infoamazonia.osm-brasil/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+						// 		zIndex: 6
+						// 	})
+						// }
 					};
 
 					for(var key in layers) {
@@ -413,7 +413,23 @@ function getCartoCSS(column, quantiles) {
 	var cartocss = [
 		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #fff; }',
 		'#layer[zoom>=8] { line-width: 2; }',
-		'#layer[zoom>=10] { line-width: 3; }'
+		'#layer[zoom>=10] { line-width: 3; }',
+		'#layer::labels[zoom>=7] {',
+		'text-name: [departamento];',
+		'text-face-name: "Open Sans Italic";',
+		'text-size: 12;',
+		'text-fill: #FFFFFF;',
+		'text-label-position-tolerance: 0;',
+		'text-transform: uppercase;',
+		'text-halo-radius: 0;',
+		'text-dy: -10;',
+		'text-allow-overlap: false;',
+		'text-placement: interior;',
+		'text-placement-type: simple;',
+		'[zoom=8]{text-size: 15;}',
+		'[zoom=9]{text-size: 17;}',
+		'[zoom>=10]{text-size: 19;}',
+		'}'
 	];
 
 	// quantiles.forEach(function(qt, i) {
