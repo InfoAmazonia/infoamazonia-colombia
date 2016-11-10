@@ -25,7 +25,7 @@ module.exports = {
 		plotOptions: {
 			series: {
 				animation: false,
-				color: '#009966',
+				color: '#FF9966',
 				borderWidth: 0,
 				dataLabels: {
 					format: '{y} ha',

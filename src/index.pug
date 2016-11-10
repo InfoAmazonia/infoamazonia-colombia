@@ -20,15 +20,20 @@ block content
 					a(ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')") Stories
 			.sidebar-sections
 				section#dashboard.sidebar-section(ng-controller="DashboardCtrl" ng-show="viewing == 'dashboard'")
-					p.main(ng-hide="gridItem") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum hendrerit elit, quis sagittis mi laoreet nec. Aenean malesuada pellentesque luctus. Nunc dignissim, eros quis pellentesque sagittis, arcu magna scelerisque justo, sed interdum ligula mi sit amet enim.
+					.dashboard-main(ng-hide="gridItem")
+						p.main(ng-hide="gridItem") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum hendrerit elit, quis sagittis mi laoreet nec. Aenean malesuada pellentesque luctus. Nunc dignissim, eros quis pellentesque sagittis, arcu magna scelerisque justo, sed interdum ligula mi sit amet enim.
+						.main-chart
+							nav.ref-nav.sub-nav
+								a.ref(ng-repeat="ref in (dataUniqKeys('reference') | validate:'number')" ng-click="selectMainChartRef(ref)" href="javascript:void(0);" ng-class="{active:mainChart.ref == ref}") {{ref}}
+							.main-series
+								.series(ng-repeat="series in mainSeries")
+									h3 {{series}}
+									highchart(config="mainChartConfig[series]")
+
 					.grid-item(ng-show="gridItem")
 						h2 {{gridItem[dataColumn('reference', 'title').column]}}
 						.series(ng-repeat="series in dataUniqKeys('series')")
 							h3 {{series}}
-							//- p(ng-repeat="item in matchColumns('series', series)")
-							//- 	strong {{item.reference}}
-							//- 	br
-							//- 	| {{gridItem[item.column]}} ha
 							highchart(config="chartConfig")
 				section#stories.sidebar-section(ng-show="viewing == 'stories'")
 					p InfoAmazonia stories on Colombia

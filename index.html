@@ -37,7 +37,18 @@
         </header>
         <div class="sidebar-sections">
           <section class="sidebar-section" id="dashboard" ng-controller="DashboardCtrl" ng-show="viewing == 'dashboard'">
-            <p class="main" ng-hide="gridItem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum hendrerit elit, quis sagittis mi laoreet nec. Aenean malesuada pellentesque luctus. Nunc dignissim, eros quis pellentesque sagittis, arcu magna scelerisque justo, sed interdum ligula mi sit amet enim.</p>
+            <div class="dashboard-main" ng-hide="gridItem">
+              <p class="main" ng-hide="gridItem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum hendrerit elit, quis sagittis mi laoreet nec. Aenean malesuada pellentesque luctus. Nunc dignissim, eros quis pellentesque sagittis, arcu magna scelerisque justo, sed interdum ligula mi sit amet enim.</p>
+              <div class="main-chart">
+                <nav class="ref-nav sub-nav"><a class="ref" ng-repeat="ref in (dataUniqKeys('reference') | validate:'number')" ng-click="selectMainChartRef(ref)" href="javascript:void(0);" ng-class="{active:mainChart.ref == ref}">{{ref}}</a></nav>
+                <div class="main-series">
+                  <div class="series" ng-repeat="series in mainSeries">
+                    <h3>{{series}}</h3>
+                    <highchart config="mainChartConfig[series]"></highchart>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="grid-item" ng-show="gridItem">
               <h2>{{gridItem[dataColumn('reference', 'title').column]}}</h2>
               <div class="series" ng-repeat="series in dataUniqKeys('series')">

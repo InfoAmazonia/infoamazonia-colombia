@@ -3,8 +3,15 @@
 
 var highchartsDefaults = require('./highcharts-defaults');
 
-var parseSheet = function(entries) {
-	var parsed = {};
+var getGDriveJsonp = function(id, idx) {
+	idx = idx || 1;
+	return 'https://spreadsheets.google.com/feeds/list/' + id + '/' + idx + '/public/values?alt=json-in-script&callback=JSON_CALLBACK';
+}
+
+var parseSheet = function(entries, column) {
+	var parsed = [];
+	if(typeof column !== 'undefined' && column)
+		parsed = {};
 	entries.forEach(function(entry) {
 		var newEntry = {};
 		for(var k in entry) {
@@ -13,7 +20,10 @@ var parseSheet = function(entries) {
 				newEntry[key] = entry[k]['$t'];
 			}
 		}
-		parsed[newEntry.column] = newEntry;
+		if(typeof column !== 'undefined' && column)
+			parsed[newEntry[column]] = newEntry;
+		else
+			parsed.push(newEntry);
 	});
 	return parsed;
 };
@@ -34,11 +44,11 @@ module.exports = function(app) {
 					$scope.showNav = false;
 			};
 
+			/* sidebar toggling */
 			$scope.viewing = 'dashboard';
 			$scope.setView = function(view) {
 				$scope.viewing = view;
 			};
-
 			$scope.$watch('viewing', function() {
 				if($scope.viewing == 'stories') {
 					$rootScope.$broadcast('toggleStories', true);
@@ -46,7 +56,22 @@ module.exports = function(app) {
 					$rootScope.$broadcast('toggleStories', false);
 				}
 			});
+			/* -- */
 
+			/* stories */
+			$scope.searchStories = '';
+			$http
+				.get('https://infoamazonia.org/es/?s=colombia&geojson=1')
+				.then(function(res) {
+					$scope.stories = res.data.features;
+					// console.log(res, res.headers(['X-Total-Count']));
+				});
+			/* focusing story */
+			$scope.focusedStory = false;
+			$scope.$on('storyFocus', function(ev, storyId) {
+				$scope.focusedStory = storyId;
+			});
+			/* stories methods */
 			$scope.isDifferentDate = function(stories, i, date) {
 				if(stories[i]) {
 					return !moment(stories[i].properties.date).isSame(moment(date), 'day');
@@ -54,20 +79,7 @@ module.exports = function(app) {
 					return true;
 				}
 			};
-
-			$scope.searchStories = '';
-			$http
-				// .get('https://infoamazonia.org/es/tag/colombia?geojson=1')
-				.get('https://infoamazonia.org/es/?s=colombia&geojson=1')
-				.then(function(res) {
-					$scope.stories = res.data.features;
-					// console.log(res, res.headers(['X-Total-Count']));
-				});
-
-			$scope.focusedStory = false;
-			$scope.$on('storyFocus', function(ev, storyId) {
-				$scope.focusedStory = storyId;
-			});
+			/* -- */
 
 		}
 	])
@@ -77,17 +89,19 @@ module.exports = function(app) {
 		'$http',
 		'$rootScope',
 		function($scope, $http, $rootScope) {
-			var indexId = '1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4';
-			var indexJsonp = 'https://spreadsheets.google.com/feeds/list/' + indexId + '/2/public/values?alt=json-in-script&callback=JSON_CALLBACK';
 
-			$http.jsonp(indexJsonp).then(function(res) {
-				$scope.dataIndex = parseSheet(res.data.feed.entry);
+			var tableId = '1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4';
+
+			$http.jsonp(getGDriveJsonp(tableId, 1)).then(function(res) {
+				$scope.dataTable = parseSheet(res.data.feed.entry, 'departamento');
+			});
+			$http.jsonp(getGDriveJsonp(tableId, 2)).then(function(res) {
+				$scope.dataIndex = parseSheet(res.data.feed.entry, 'column');
 			});
 
 			$scope.dataColumn = function(key, val) {
 				return $scope.matchColumns(key, val)[0];
 			};
-
 			$scope.matchColumns = function(key, val) {
 				var columns = [];
 				for(var k1 in $scope.dataIndex) {
@@ -99,7 +113,6 @@ module.exports = function(app) {
 				}
 				return columns;
 			}
-
 			$scope.dataUniqKeys = function(k) {
 				var keys = [];
 				var arr = _.values($scope.dataIndex);
@@ -110,6 +123,55 @@ module.exports = function(app) {
 				});
 				return _.uniq(keys);
 			};
+
+			$scope.mainChart = {};
+			$scope.$watch('dataTable', function() {
+				if($scope.dataTable) {
+					$scope.mainChart = {
+						ref: _.last($scope.dataUniqKeys('reference'))
+					};
+				}
+			});
+			$scope.selectMainChartRef = function(ref) {
+				$scope.mainChart.ref = ref;
+			};
+			$scope.$watch('mainChart.ref', function(ref) {
+				console.log(ref);
+				var series = [];
+				if(ref) {
+					var cols = $scope.matchColumns('reference', ref);
+					cols.forEach(function(col) {
+						series.push(col.series);
+					});
+					$scope.mainSeries = _.uniq(series);
+					$scope.mainChartConfig = {};
+					$scope.mainSeries.forEach(function() {
+
+						if(!$scope.mainChartConfig[series])
+							$scope.mainChartConfig[series] = angular.extend({}, highchartsDefaults);
+
+						var sData = {
+							data: []
+						};
+						for(var k1 in $scope.dataTable) {
+							var iData = [];
+							iData[0] = k1;
+							for(var k2 in $scope.dataTable[k1]) {
+								var match = $scope.dataColumn('column', k2);
+								if(match.reference == $scope.mainChart.ref) {
+									var val = parseFloat($scope.dataTable[k1][k2]);
+									if(!isNaN(val))
+										iData[1] = val;
+									else
+										iData[1] = null
+								}
+							}
+							sData.data.push(iData);
+						}
+						$scope.mainChartConfig[series].series = [sData];
+					});
+				}
+			});
 
 			$scope.chartConfig = angular.extend({}, highchartsDefaults);
 
@@ -132,6 +194,7 @@ module.exports = function(app) {
 				} else {
 					$scope.chartConfig.series = [];
 				}
+				window.dispatchEvent(new Event('resize'));
 				setTimeout(function() {
 					window.dispatchEvent(new Event('resize'));
 				}, 100);
@@ -147,8 +210,7 @@ module.exports = function(app) {
 		'$http',
 		'LoadingService',
 		function($rootScope, $scope, $timeout, $http, Loading) {
-
-			// Map timeline config
+			/* timeline config */
 			$scope.timeline = {
 				items: [
 					{
@@ -178,15 +240,16 @@ module.exports = function(app) {
 					}
 				]
 			};
-
+			/* -- */
+			/* data config */
 			$scope.user = 'infoamazonia';
 			$scope.dataTable = 'ideam_deforestacion_anual';
 			$scope.geomTable = 'provincias_area_estudio_amz_wgs84';
 			$scope.queryWhere = 'data.departamento = geom.nom_depto';
-
+			/* -- */
+			/* data setup */
 			$scope.sql = new cartodb.SQL({user: $scope.user});
 			$scope.dataQuery = 'SELECT * FROM ' + $scope.dataTable;
-
 			$scope.sql.execute($scope.dataQuery).done(function(data) {
 				var fields = [];
 				for(var key in data.fields) {
@@ -198,10 +261,9 @@ module.exports = function(app) {
 					$scope.query = 'SELECT geom.cartodb_id, geom.the_geom, geom.the_geom_webmercator, data.' + $scope.columns.join(', data.') + ' FROM ' + $scope.dataTable + ' as data, ' + $scope.geomTable + ' as geom WHERE ' + $scope.queryWhere + ' GROUP BY data.cartodb_id, geom.cartodb_id';
 				});
 			});
-
+			/* -- */
 		}
 	]);
-
 };
 
 },{"./highcharts-defaults":5}],2:[function(require,module,exports){
@@ -501,12 +563,12 @@ module.exports = function(app) {
 								zIndex: 3
 							})
 						},
-						labels: {
-							title: 'Labels',
-							layer: L.tileLayer('https://{s}.tiles.mapbox.com/v4/infoamazonia.osm-brasil/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
-								zIndex: 6
-							})
-						}
+						// labels: {
+						// 	title: 'Labels',
+						// 	layer: L.tileLayer('https://{s}.tiles.mapbox.com/v4/infoamazonia.osm-brasil/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
+						// 		zIndex: 6
+						// 	})
+						// }
 					};
 
 					for(var key in layers) {
@@ -693,7 +755,23 @@ function getCartoCSS(column, quantiles) {
 	var cartocss = [
 		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #fff; }',
 		'#layer[zoom>=8] { line-width: 2; }',
-		'#layer[zoom>=10] { line-width: 3; }'
+		'#layer[zoom>=10] { line-width: 3; }',
+		'#layer::labels[zoom>=7] {',
+		'text-name: [departamento];',
+		'text-face-name: "Open Sans Italic";',
+		'text-size: 12;',
+		'text-fill: #FFFFFF;',
+		'text-label-position-tolerance: 0;',
+		'text-transform: uppercase;',
+		'text-halo-radius: 0;',
+		'text-dy: -10;',
+		'text-allow-overlap: false;',
+		'text-placement: interior;',
+		'text-placement-type: simple;',
+		'[zoom=8]{text-size: 15;}',
+		'[zoom=9]{text-size: 17;}',
+		'[zoom>=10]{text-size: 19;}',
+		'}'
 	];
 
 	// quantiles.forEach(function(qt, i) {
@@ -738,6 +816,29 @@ module.exports = function(app) {
 			}, function() {
 				return JSON.stringify(arguments);
 			})
+		}
+	]);
+
+	app.filter('validate', [
+		function() {
+			return function(input, validation) {
+				var validFn;
+				var bool = true;
+				switch(validation) {
+					case 'number':
+						validFn = isNaN;
+						bool = false;
+				}
+				if(input && input.length) {
+					input = input.filter(function(item) {
+						if(bool)
+							return validFn(item);
+						else
+							return !validFn(item);
+					});
+				}
+				return input;
+			}
 		}
 	]);
 
