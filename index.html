@@ -33,7 +33,7 @@
       <map-timeline items="timeline.items"></map-timeline>
       <section id="sidebar">
         <header>
-          <nav id="sidebar-nav"><a ng-class="{active: viewing == 'dashboard'}" ng-click="setView('dashboard')">Dashboard</a><a ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')">Stories</a></nav>
+          <nav id="sidebar-nav"><a ng-class="{active: viewing == 'dashboard'}" ng-click="setView('dashboard')">Gráficos</a><a ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')">Artículos</a></nav>
         </header>
         <div class="sidebar-sections">
           <section class="sidebar-section" id="dashboard" ng-controller="DashboardCtrl" ng-show="viewing == 'dashboard'">
@@ -58,9 +58,9 @@
             </div>
           </section>
           <section class="sidebar-section" id="stories" ng-show="viewing == 'stories'">
-            <p>InfoAmazonia stories on Colombia</p>
+            <p>Artículos de InfoAmazonia sobre Colombia</p>
             <p>
-              <input type="text" ng-model="searchStories" placeholder="Search inside stories...">
+              <input type="text" ng-model="searchStories" placeholder="Buscar dentro de artículos">
             </p>
             <div class="timeline-items">
               <div class="timeline-item clearfix" ng-repeat="(i,story) in filteredStories = (stories | filter:searchStories)" ng-class="{'focused-story': focusedStory == story.properties.id}" story="story" focused-story="focusedStory">
