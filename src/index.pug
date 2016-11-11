@@ -16,8 +16,8 @@ block content
 		section#sidebar
 			header
 				nav#sidebar-nav
-					a(ng-class="{active: viewing == 'dashboard'}" ng-click="setView('dashboard')") Dashboard
-					a(ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')") Stories
+					a(ng-class="{active: viewing == 'dashboard'}" ng-click="setView('dashboard')") Gráficos
+					a(ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')") Artículos
 			.sidebar-sections
 				section#dashboard.sidebar-section(ng-controller="DashboardCtrl" ng-show="viewing == 'dashboard'")
 					.dashboard-main(ng-hide="gridItem")
@@ -36,9 +36,9 @@ block content
 							h3 {{series}}
 							highchart(config="chartConfig")
 				section#stories.sidebar-section(ng-show="viewing == 'stories'")
-					p InfoAmazonia stories on Colombia
+					p Artículos de InfoAmazonia sobre Colombia
 					p
-						input(type="text" ng-model="searchStories" placeholder="Search inside stories...")
+						input(type="text" ng-model="searchStories" placeholder="Buscar dentro de artículos")
 					.timeline-items
 						.timeline-item.clearfix(ng-repeat="(i,story) in filteredStories = (stories | filter:searchStories)" ng-class="{'focused-story': focusedStory == story.properties.id}" story="story" focused-story="focusedStory")
 							article
