@@ -92,7 +92,7 @@ module.exports = function(grunt) {
 				tasks: ['less']
 			},
 			views: {
-				files: ['src/**/*.pug', 'src/views/**/*.pug'],
+				files: ['src/**/*.pug', 'src/views/**/*'],
 				tasks: ['pug']
 			},
 			scripts: {
