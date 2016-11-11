@@ -265,5 +265,18 @@ module.exports = function(app) {
 			});
 			/* -- */
 		}
+	])
+	.controller('AboutDataCtrl', [
+		'$scope',
+		function($scope) {
+			$scope.displayContent = false;
+			$scope.toggleContent = function() {
+				if($scope.displayContent) {
+					$scope.displayContent = false;
+				} else {
+					$scope.displayContent = true;
+				}
+			}
+		}
 	]);
 };
