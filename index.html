@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>InfoAmazonia Colombia</title>
+    <h3>"Territorios Indígenas", Amazonía - RAISG</h3>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -27,8 +27,187 @@
         <p>InfoAmazonia Colombia es una iniciativa sin fines de lucro que busca mantener los datos acerca de la deforestación en la Amazonía colombiana siempre actualizados y disponibles al público. El proyecto ha sido creado una alianza de InfoAmazonia con la organización colombiana De Justicia y el grupo periodistico El Espectador.</p>
         <p>A través de la iniciativa Visión Amazonía, Colombia se ha comprometido a reducir la tala de bosques a niveles iguales a cero neta en 2030. Creemos que con este trabajo se contribuye para la transparencia de las políticas públicas voltadas a este objectivo</p>
         <p>La plataforma InfoAmazonia Colombia agrega en su mapa información satelital actualizada junto a histórias generadas por periodistas. Los datos de la cobertura boscosa del territorio amazónico colombiano resultan de las mediciones hechas por el IDEAM. Las gráficas muestran las tasas de deforestación más recientes de acuerdo con el instituto.</p>
-        <h2>Datos</h2>
-        <h3>"Mapas de Bosque/No Bosque", Colombia - IDEAM</h3>
+        <section class="data">
+          <h2>Datos</h2>
+          <article class="data-item" ng-controller="AboutDataCtrl" ng-class="{active: displayContent}">
+            <div class="icon fa fa-database"></div>
+            <header class="data-header" ng-click="toggleContent()">
+              <div class="expand fa fa-chevron-down" ng-hide="displayContent"></div>
+              <div class="expand fa fa-chevron-up" ng-show="displayContent"></div>
+              <h3>"Mapas de Bosque/No Bosque", Colombia - IDEAM</h3>
+            </header>
+            <aside class="data-meta">
+              <div class="source">
+                <h4><span class="fa fa-share"></span>Fuente</h4><a href="http://www.ideam.gov.co/web/ecosistemas/deforestacion-colombia">IDEAM - Colombia</a>
+              </div>
+              <div class="download">
+                <h4><span class="fa fa-download"></span>Descarga</h4><a href="http://www.siac.gov.co/Catalogo_mapas.html">Sistema de Información Ambiental de Colombia (SIAC)</a>
+              </div>
+            </aside>
+            <section class="data-content">
+              <p>Los mapas resultan del monitoreo anual de los bosques naturales por el Instituto de Hidrologia, Metereologia y Estudos Ambientales (IDEAM), órgano del Ministerio de Ambiente y Desarrollo Sostenible de Colombia. La cobertura boscosa representada son de los años 1990, 2000, 2005, 2010 y 2013. Datos obtenidos del procesamiento digital y análisis de imágenes satelitales de alta resolución - Landsat, DMC y SPOT.  Muestran la cobertura boscosa con 30 metros de resolución generando información a escala 1:100.000.</p>
+              <p>Los datos de superficie cubierta consideran bosque natural toda tierra con árboles de densidad mínima del dosel de 30%, altura mínima de 5m y un área mínima de 1,0 ha. Bosques cultivados y vegetación secundaria no se considera bosque.</p>
+              <p>En el mapa, los bosques naturales aparecen en verde e las zonas sin bosque en naranja. En marrón oscuro, las zonas sin información - áreas en que no se tiene certeza de la información satelital debido a alta nubosidad. Por defecto, la visualización está animada en secuencia cronológica. En la línea del tiempo, haga clic en cada un de los años para visualizarlos individualmente.</p>
+            </section>
+          </article>
+          <article class="data-item" ng-controller="AboutDataCtrl" ng-class="{active: displayContent}">
+            <div class="icon fa fa-database"></div>
+            <header class="data-header" ng-click="toggleContent()">
+              <div class="expand fa fa-chevron-down" ng-hide="displayContent"></div>
+              <div class="expand fa fa-chevron-up" ng-show="displayContent"></div>
+              <h3>"Tasa anual de deforestación", Colombia - IDEAM</h3>
+            </header>
+            <aside class="data-meta">
+              <div class="source">
+                <h4><span class="fa fa-share"></span>Fuente</h4><a href="http://www.ideam.gov.co/web/sala-de-prensa/noticias/-/asset_publisher/96oXgZAhHrhJ/content/la-cifra-de-deforestacion-en-colombia-2015-reporta-124-035-hectareas-afectada">IDEAM</a>
+              </div>
+              <div class="download">
+                <h4><span class="fa fa-download"></span>Descarga</h4><a href="https://docs.google.com/spreadsheets/d/1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4/edit?usp=sharing">Hoja de cálculo (InfoAmazonia)</a>
+              </div>
+            </aside>
+            <section class="data-content">
+              <p>Cifras anuales de deforestación calculadas por el IDEAM (Instituto de Hidrologia, Metereologia y Estudos Ambientales) desde de los datos resultantes del monitoreo de la cobertura boscosa y presentados a la prensa por medio de archivos non abiertos (.pdf, .ppt y otros).</p>
+              <p>En el nivel departamental, los datos del IDEAM se refieren a departamentos enteros y no están divididos por regiones - por eso los datos de los departamentos Meta, Vichada y (que tienen límites políticos fuera del Bioma Amazónico) no se refieren solamente a la deforestación amazónica. Las cifras correspondientes al departamento Cauca, que tiene un pequeño porcentaje de su territorio en la región amazónica, no son difundidas por IDEAM como parte de la Amazonía. Nariño tampoco es considerado un departamento amazónico.</p>
+            </section>
+          </article>
+          <article class="data-item" ng-controller="AboutDataCtrl" ng-class="{active: displayContent}">
+            <div class="icon fa fa-database"></div>
+            <header class="data-header" ng-click="toggleContent()">
+              <div class="expand fa fa-chevron-down" ng-hide="displayContent"></div>
+              <div class="expand fa fa-chevron-up" ng-show="displayContent"></div>
+              <h3>"Límite Amazonía", Colombia - IDEAM</h3>
+            </header>
+            <aside class="data-meta">
+              <div class="source">
+                <h4><span class="fa fa-share"></span>Fuente</h4><a href="http://www.ideam.gov.co/">IDEAM</a>
+              </div>
+              <div class="download">
+                <h4><span class="fa fa-download"></span>Descarga</h4>Descarga no disponible
+              </div>
+            </aside>
+            <section class="data-content">
+              <p>El límite de la Amazonía colombiana utilizado por el IDEAM (Instituto de Hidrologia, Metereologia y Estudos Ambientales) considera el Bioma Amazónico como la extensión del bosque tropical. </p>
+            </section>
+          </article>
+          <article class="data-item" ng-controller="AboutDataCtrl" ng-class="{active: displayContent}">
+            <div class="icon fa fa-database"></div>
+            <header class="data-header" ng-click="toggleContent()">
+              <div class="expand fa fa-chevron-down" ng-hide="displayContent"></div>
+              <div class="expand fa fa-chevron-up" ng-show="displayContent"></div>
+              <h3>"Departamentos", Colombia - IDEAM</h3>
+            </header>
+            <aside class="data-meta">
+              <div class="source">
+                <h4><span class="fa fa-share"></span>Fuente</h4><a href="http://www.ideam.gov.co/">IDEAM</a>
+              </div>
+              <div class="download">
+                <h4><span class="fa fa-download"></span>Descarga</h4><a href="http://geoapps.ideam.gov.co:8080/geoserver/indicadores_hidricos/wfs?">IDEAM</a>
+              </div>
+            </aside>
+            <section class="data-content">
+              <p>Capa de los indicadores hídricos de Colombia en los servicios geograficos del IDEAM con los límites del nivel departamental.</p>
+            </section>
+          </article>
+          <article class="data-item" ng-controller="AboutDataCtrl" ng-class="{active: displayContent}">
+            <div class="icon fa fa-database"></div>
+            <header class="data-header" ng-click="toggleContent()">
+              <div class="expand fa fa-chevron-down" ng-hide="displayContent"></div>
+              <div class="expand fa fa-chevron-up" ng-show="displayContent"></div>
+              <h3>MapBox Satellite</h3>
+            </header>
+            <aside class="data-meta">
+              <div class="source">
+                <h4><span class="fa fa-share"></span>Fuente</h4><a href="https://www.mapbox.com/help/define-mapbox-satellite/">MapBox</a>
+              </div>
+              <div class="download">
+                <h4><span class="fa fa-download"></span>Descarga</h4>Descarga no disponible
+              </div>
+            </aside>
+            <section class="data-content">
+              <p>Mapa mundial que fusiona imágenessatelitales de alta resolución proveniente de distintas fuentes, como proveedores comerciales (Digital Globe) y datos libres de NASA, USG y otros.</p>
+              <p>En el mapa, se destaca la región de Colombia.</p>
+            </section>
+          </article>
+          <article class="data-item" ng-controller="AboutDataCtrl" ng-class="{active: displayContent}">
+            <div class="icon fa fa-database"></div>
+            <header class="data-header" ng-click="toggleContent()">
+              <div class="expand fa fa-chevron-down" ng-hide="displayContent"></div>
+              <div class="expand fa fa-chevron-up" ng-show="displayContent"></div>
+              <h3>Aguas - OSM</h3>
+            </header>
+            <aside class="data-meta">
+              <div class="source">
+                <h4><span class="fa fa-share"></span>Fuente</h4><a href="https://www.mapbox.com/vector-tiles/mapbox-streets-v7/">OpenStreetMap en MapBox Streets v7</a>
+              </div>
+              <div class="download">
+                <h4><span class="fa fa-download"></span>Descarga</h4>Descarga no disponible
+              </div>
+            </aside>
+            <section class="data-content">
+              <p>Los ríos y otros cuerpos de agua mapeados por colaboradores del OpenStreetMap y disponibles en "Mapbox Streets v7". Los datos contienen información sobre cursos de agua, áreas, tipos y nombres de los ríos y reciben actualizaciones regulares.</p>
+            </section>
+          </article>
+          <article class="data-item" ng-controller="AboutDataCtrl" ng-class="{active: displayContent}">
+            <div class="icon fa fa-database"></div>
+            <header class="data-header" ng-click="toggleContent()">
+              <div class="expand fa fa-chevron-down" ng-hide="displayContent"></div>
+              <div class="expand fa fa-chevron-up" ng-show="displayContent"></div>
+              <h3>"Carreteras", Amazonía - RAISG</h3>
+            </header>
+            <aside class="data-meta">
+              <div class="source">
+                <h4><span class="fa fa-share"></span>Fuente</h4><a href="http://raisg.socioambiental.org/">RAISG</a>
+              </div>
+              <div class="download">
+                <h4><span class="fa fa-download"></span>Descarga</h4><a href="https://geo.socioambiental.org/arcgis/rest/services/raisg/raisg_vias/MapServer">RAISG</a>
+              </div>
+            </aside>
+            <section class="data-content">
+              <p>Los caminos de la Amazonía colombiana, incluyendo las carreteras y caminos sin pavimentar.</p>
+              <p>Concentradas en la zona con más perdida de bosque, las carreteras son consideradas un vector importante de la ocupación y la degradación de la selva amazónica.</p>
+            </section>
+          </article>
+          <article class="data-item" ng-controller="AboutDataCtrl" ng-class="{active: displayContent}">
+            <div class="icon fa fa-database"></div>
+            <header class="data-header" ng-click="toggleContent()">
+              <div class="expand fa fa-chevron-down" ng-hide="displayContent"></div>
+              <div class="expand fa fa-chevron-up" ng-show="displayContent"></div>
+              <h3>"Áreas Naturales Protegidas", Amazonía - RAISG</h3>
+            </header>
+            <aside class="data-meta">
+              <div class="source">
+                <h4><span class="fa fa-share"></span>Fuente</h4><a href="http://raisg.socioambiental.org/">RAISG</a>
+              </div>
+              <div class="download">
+                <h4><span class="fa fa-download"></span>Descarga</h4><a href="https://geo.socioambiental.org/arcgis/rest/services/raisg/raisg_anps/MapServer">RAISG</a>
+              </div>
+            </aside>
+            <section class="data-content">
+              <p>Áreas naturales protegidas en la Amazonía de Colombia, datos consolidados en el ambito de la Red Amazónica de Información Socioambiental Georreferenciada (RAISG).</p>
+              <p>Los límites de cada zona aparecen con el contorno verde e sus nombres etiquetados dentro de los polígonos.</p>
+            </section>
+          </article>
+          <article class="data-item" ng-controller="AboutDataCtrl" ng-class="{active: displayContent}">
+            <div class="icon fa fa-database"></div>
+            <header class="data-header" ng-click="toggleContent()">
+              <div class="expand fa fa-chevron-down" ng-hide="displayContent"></div>
+              <div class="expand fa fa-chevron-up" ng-show="displayContent"></div>
+              <h3>"Territorios Indígenas", Amazonía - RAISG</h3>
+            </header>
+            <aside class="data-meta">
+              <div class="source">
+                <h4><span class="fa fa-share"></span>Fuente</h4><a href="http://raisg.socioambiental.org/">RAISG</a>
+              </div>
+              <div class="download">
+                <h4><span class="fa fa-download"></span>Descarga</h4><a href="https://geo.socioambiental.org/arcgis/rest/services/raisg/raisg_tis/MapServer">RAISG</a>
+              </div>
+            </aside>
+            <section class="data-content">
+              <p>Territorios indígenas de la Amazonia colombiana destacados en rosa y el nombre de cada territorio marcado dentro de las zonas de ocupación.</p>
+              <p>Aumente el nível de zoom en el mapa para ver el nombre de cada carretera sobre su ruta.</p>
+            </section>
+          </article>
+        </section>
       </div>
     </nav>
     <div ng-controller="MapCtrl">
