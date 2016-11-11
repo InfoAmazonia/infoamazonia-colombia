@@ -34,7 +34,7 @@ module.exports = function(app) {
 		'$scope',
 		'$http',
 		function($rootScope, $scope, $http) {
-
+			/* sandwich nav toggling */
 			$scope.showNav = false;
 			$scope.toggleNav = function() {
 				if(!$scope.showNav)
@@ -42,7 +42,7 @@ module.exports = function(app) {
 				else
 					$scope.showNav = false;
 			};
-
+			/* -- */
 			/* sidebar toggling */
 			$scope.viewing = 'dashboard';
 			$scope.setView = function(view) {
@@ -56,7 +56,6 @@ module.exports = function(app) {
 				}
 			});
 			/* -- */
-
 			/* stories */
 			$scope.searchStories = '';
 			$http
@@ -87,17 +86,19 @@ module.exports = function(app) {
 		'$scope',
 		'$http',
 		'$rootScope',
-		function($scope, $http, $rootScope) {
-
+		'$timeout',
+		function($scope, $http, $rootScope, $timeout) {
+			/* dashboard tables config */
 			var tableId = '1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4';
-
+			$scope.dataSheet = {};
 			$http.jsonp(getGDriveJsonp(tableId, 1)).then(function(res) {
-				$scope.dataTable = parseSheet(res.data.feed.entry, 'departamento');
+				$scope.dataSheet = parseSheet(res.data.feed.entry, 'departamento');
 			});
 			$http.jsonp(getGDriveJsonp(tableId, 2)).then(function(res) {
 				$scope.dataIndex = parseSheet(res.data.feed.entry, 'column');
 			});
-
+			/* -- */
+			/* dashboard tables methods */
 			$scope.dataColumn = function(key, val) {
 				return $scope.matchColumns(key, val)[0];
 			};
@@ -122,20 +123,25 @@ module.exports = function(app) {
 				});
 				return _.uniq(keys);
 			};
-
+			/* -- */
+			/* main chart setup */
 			$scope.mainChart = {};
-			$scope.$watch('dataTable', function() {
-				if($scope.dataTable) {
-					$scope.mainChart = {
-						ref: _.last($scope.dataUniqKeys('reference'))
-					};
+			$scope.$watch('dataSheet', function() {
+				if($scope.dataSheet) {
+					$scope.mainChart.ref = _.last($scope.dataUniqKeys('reference'));
+					// redo action (for some reason sometimes it returns unedefined)
+					$timeout(function() {
+						$scope.mainChart.ref = _.last($scope.dataUniqKeys('reference'));
+					}, 50);
 				}
 			});
 			$scope.selectMainChartRef = function(ref) {
 				$scope.mainChart.ref = ref;
 			};
-			$scope.$watch('mainChart.ref', function(ref) {
-				console.log(ref);
+			$scope.$watch('mainChart', function() {
+				var ref = false;
+				if($scope.mainChart)
+					ref = $scope.mainChart.ref;
 				var series = [];
 				if(ref) {
 					var cols = $scope.matchColumns('reference', ref);
@@ -145,20 +151,18 @@ module.exports = function(app) {
 					$scope.mainSeries = _.uniq(series);
 					$scope.mainChartConfig = {};
 					$scope.mainSeries.forEach(function() {
-
 						if(!$scope.mainChartConfig[series])
 							$scope.mainChartConfig[series] = angular.extend({}, highchartsDefaults);
-
 						var sData = {
 							data: []
 						};
-						for(var k1 in $scope.dataTable) {
+						for(var k1 in $scope.dataSheet) {
 							var iData = [];
 							iData[0] = k1;
-							for(var k2 in $scope.dataTable[k1]) {
+							for(var k2 in $scope.dataSheet[k1]) {
 								var match = $scope.dataColumn('column', k2);
 								if(match.reference == $scope.mainChart.ref) {
-									var val = parseFloat($scope.dataTable[k1][k2]);
+									var val = parseFloat($scope.dataSheet[k1][k2]);
 									if(!isNaN(val))
 										iData[1] = val;
 									else
@@ -170,10 +174,10 @@ module.exports = function(app) {
 						$scope.mainChartConfig[series].series = [sData];
 					});
 				}
-			});
-
+			}, true);
+			/* -- */
+			/* grid item chart setup */
 			$scope.chartConfig = angular.extend({}, highchartsDefaults);
-
 			$rootScope.$on('mapGridItem', function(ev, item) {
 				$scope.gridItem = item;
 				if(item) {
@@ -198,10 +202,9 @@ module.exports = function(app) {
 					window.dispatchEvent(new Event('resize'));
 				}, 100);
 			});
-
+			/* -- */
 		}
 	])
-
 	.controller('MapCtrl', [
 		'$rootScope',
 		'$scope',
