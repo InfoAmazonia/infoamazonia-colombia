@@ -1,0 +1,19 @@
+article.data-item(ng-controller="AboutDataCtrl" ng-class="{active: displayContent}")
+  .icon.fa.fa-database
+  header.data-header(ng-click="toggleContent()")
+    .expand.fa.fa-chevron-down(ng-hide="displayContent")
+    .expand.fa.fa-chevron-up(ng-show="displayContent")
+    block title
+  aside.data-meta
+    .source
+      h4
+        span.fa.fa-share
+        | Fuente
+      block source
+    .download
+      h4
+        span.fa.fa-download
+        | Descarga
+      block download
+  section.data-content
+    block content
