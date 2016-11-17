@@ -15,7 +15,7 @@ html
 		link(rel="stylesheet" href="lib/highcharts/css/highcharts.css")
 		link(rel="stylesheet" href="css/app.css")
 		block head
-	body(ng-controller="SiteCtrl")
+	body(ng-controller="SiteCtrl" ng-class="{'site-nav': showNav}")
 		header#masthead
 			.container
 				.twelve.columns
@@ -25,9 +25,10 @@ html
 							img(src="img/infoamazonia.png")
 							| Colombia
 
-		nav#main-nav(ng-class="{active: showNav}")
+		nav#main-nav
 			a.fa.fa-bars(title="Menu" aria-hidden="true" href="javascript:void(0);" ng-click="toggleNav()" ng-hide="showNav")
 			a.fa.fa-close(title="Menu" aria-hidden="true" href="javascript:void(0);" ng-click="toggleNav()" ng-show="showNav")
+		section#main-nav-content(ng-class="{active: showNav}")
 			.nav-content
 				block nav-content
 
