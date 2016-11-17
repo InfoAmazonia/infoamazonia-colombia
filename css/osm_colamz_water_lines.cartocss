@@ -1,0 +1,28 @@
+#osm_colamz_water_lines [zoom>=7] {
+  line-color: #117e9f;
+  line-opacity: 1;
+  line-width: 0.2;
+    [zoom>=8] {  line-width: 0.3;}
+    [zoom>=9] {  line-width: 0.5;}
+    [zoom>=10] {  line-width: 1;}
+    [zoom>=12] {  line-width: 5;}
+    [zoom>=14] {  line-width: 15;}
+}
+
+#osm_colamz_water_lines::labels [zoom>=9] {
+  text-name: [name];
+  text-face-name: 'Open Sans Semibold';
+  text-size: 11;
+  text-fill: #FFFFFF;
+  text-min-distance: 30;
+  text-halo-radius: 0.5;
+  text-halo-fill: #273e5b;//#6F808D;
+  text-dy: 0;
+  text-allow-overlap: false;
+  text-placement: line;
+  text-placement-type: simple;
+
+    [zoom>=10] {text-size: 13;}
+    [zoom>=11] {text-size: 15;}
+    [zoom>=12] {text-size: 16;}
+}

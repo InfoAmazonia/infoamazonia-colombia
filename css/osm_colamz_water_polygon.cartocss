@@ -1,0 +1,4 @@
+#osm_colamz_water_polygon [zoom>=5] {
+  polygon-fill: #117e9f; //#00ffff;//#093e53;
+  polygon-opacity: 1;
+}

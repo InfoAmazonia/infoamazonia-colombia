@@ -1,0 +1,29 @@
+#aislados_referencia_ {
+  marker-width: 7;
+  marker-fill: #660033;
+  marker-fill-opacity: 1;
+  marker-allow-overlap: false;
+  marker-line-width: 1;
+  marker-line-color: #660033;
+  marker-line-opacity: 1;
+}
+#aislados_referencia::labels[zoom>=8] {
+  text-name: [nombre];
+  text-face-name: 'Open Sans Regular';
+  text-size: 13;
+  text-fill: #660033;
+  text-label-position-tolerance: 10;
+  text-halo-fill:#cc0033;
+  text-halo-radius: 0.2;
+  text-dx: 0;
+  text-dy: -10;
+  text-transform: capitalize;
+  text-allow-overlap: false;
+  text-placement: point;
+  text-placement-type: dummy;
+
+  [zoom=9]  {text-size: 16;}
+  [zoom=10]  {text-size: 17;}
+  [zoom=11]  {text-size: 18;}
+
+}
