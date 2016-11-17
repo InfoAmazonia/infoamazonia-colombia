@@ -4,14 +4,23 @@ p A través de la iniciativa Visión Amazonía, Colombia se ha comprometido a re
 
 p La plataforma InfoAmazonia Colombia agrega en su mapa información satelital actualizada junto a histórias generadas por periodistas. Los datos de la cobertura boscosa del territorio amazónico colombiano resultan de las mediciones hechas por el IDEAM. Las gráficas muestran las tasas de deforestación más recientes de acuerdo con el instituto.
 
-section.data
+section#data
   h2 Datos
-  include data/bnb
-  include data/deforest
-  include data/limite_amazonia
-  include data/dept
-  include data/satellite
-  include data/water
-  include data/roads
-  include data/protected_areas
-  include data/indig_territ
+  .data-container
+    include data/bnb
+    include data/deforest
+    include data/limite_amazonia
+    include data/dept
+    include data/satellite
+    include data/water
+    include data/roads
+    include data/protected_areas
+    include data/indig_territ
+
+section#partners
+  h2 Colaboradores
+  .partner-list
+    .partner
+      img(src="img/dejusticia.jpg")
+    .partner
+      img(src="img/carto.png")
