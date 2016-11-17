@@ -20,8 +20,8 @@ block content
 					a(ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')") Artículos
 			.sidebar-sections
 				section#dashboard.sidebar-section(ng-controller="DashboardCtrl" ng-show="viewing == 'dashboard'")
-					.dashboard-main(ng-hide="gridItem")
-						p.main(ng-hide="gridItem") La plataforma InfoAmazonia Colombia agrega en su mapa información satelital actualizada junto a histórias generadas por periodistas. Los datos de la cobertura boscosa del territorio amazónico colombiano resultan de las mediciones hechas por el IDEAM. Las gráficas muestran las tasas de deforestación más recientes de acuerdo con el instituto.
+					.dashboard-main(ng-show="showDashboardMain()")
+						p.main La plataforma InfoAmazonia Colombia agrega en su mapa información satelital actualizada junto a histórias generadas por periodistas. Los datos de la cobertura boscosa del territorio amazónico colombiano resultan de las mediciones hechas por el IDEAM. Las gráficas muestran las tasas de deforestación más recientes de acuerdo con el instituto.
 						.main-chart(ng-show="dataSheet")
 							nav.ref-nav.sub-nav
 								a.ref(ng-repeat="ref in (dataUniqKeys('reference') | validate:'number')" ng-click="selectMainChartRef(ref)" href="javascript:void(0);" ng-class="{active:mainChart.ref == ref}") {{ref}}

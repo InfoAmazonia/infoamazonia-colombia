@@ -14,13 +14,13 @@ module.exports = function(map, $http) {
 					cartocss: 'css/osm_colamz_water_polygon.cartocss',
 					user: 'infoamazonia',
 					sql: "SELECT * FROM osm_colamz_water_polygon",
-					interactivity: 'nacionales_nombre'
+					interactivity: null
 				},
 				{
-					cartocss: 'css/protected_areas.cartocss',
+					cartocss: 'css/osm_colamz_water_lines.cartocss',
 					user: 'infoamazonia',
-					sql: "select * from anp_nacional where nacionales_pais= 'Colombia'",
-					interactivity: 'nacionales_nombre'
+					sql: "SELECT * FROM osm_colamz_water_lines",
+					interactivity: null
 				}
 			]
 		},
@@ -72,7 +72,11 @@ module.exports = function(map, $http) {
 		var layerGroup = L.layerGroup({
 			zIndex: config.zIndex
 		});
-		control.addOverlay(layerGroup, config.name);
+		var target = config.target || control;
+		if(target.addOverlay)
+			target.addOverlay(layerGroup, config.name);
+		else
+			target.addLayer(layerGroup);
 		config.sublayers.forEach(function(sublayerConfig) {
 			$http.get(sublayerConfig.cartocss).then(function(res) {
 				var cartocss = res.data;

@@ -384,7 +384,9 @@ module.exports = function(app) {
 										$rootScope.$broadcast('mapGridItem', e.data);
 									});
 								});
-								grid.on('mouseover', function(e) {
+								var outTimeout;
+								grid.on('mousemove', function(e) {
+									clearTimeout(outTimeout);
 									if(!clicked) {
 										scope.$apply(function() {
 											$rootScope.$broadcast('mapGridItem', e.data);
@@ -393,9 +395,11 @@ module.exports = function(app) {
 								});
 								grid.on('mouseout', function(e) {
 									if(!clicked) {
-										scope.$apply(function() {
-											$rootScope.$broadcast('mapGridItem', false);
-										});
+										outTimeout = setTimeout(function() {
+											scope.$apply(function() {
+												$rootScope.$broadcast('mapGridItem', false);
+											});
+										}, 200);
 									}
 								});
 							}
