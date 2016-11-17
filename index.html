@@ -222,8 +222,8 @@
         </header>
         <div class="sidebar-sections">
           <section class="sidebar-section" id="dashboard" ng-controller="DashboardCtrl" ng-show="viewing == 'dashboard'">
-            <div class="dashboard-main" ng-hide="gridItem">
-              <p class="main" ng-hide="gridItem">La plataforma InfoAmazonia Colombia agrega en su mapa información satelital actualizada junto a histórias generadas por periodistas. Los datos de la cobertura boscosa del territorio amazónico colombiano resultan de las mediciones hechas por el IDEAM. Las gráficas muestran las tasas de deforestación más recientes de acuerdo con el instituto.</p>
+            <div class="dashboard-main" ng-show="showDashboardMain()">
+              <p class="main">La plataforma InfoAmazonia Colombia agrega en su mapa información satelital actualizada junto a histórias generadas por periodistas. Los datos de la cobertura boscosa del territorio amazónico colombiano resultan de las mediciones hechas por el IDEAM. Las gráficas muestran las tasas de deforestación más recientes de acuerdo con el instituto.</p>
               <div class="main-chart" ng-show="dataSheet">
                 <nav class="ref-nav sub-nav"><a class="ref" ng-repeat="ref in (dataUniqKeys('reference') | validate:'number')" ng-click="selectMainChartRef(ref)" href="javascript:void(0);" ng-class="{active:mainChart.ref == ref}">{{ref}}</a></nav>
                 <div class="main-series">

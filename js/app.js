@@ -134,6 +134,9 @@ module.exports = function(app) {
 			};
 			/* -- */
 			/* main chart setup */
+			$scope.showDashboardMain = function() {
+				return !$scope.gridItem;
+			};
 			$scope.mainChart = {};
 			$scope.$watch('dataSheet', function() {
 				if($scope.dataSheet) {
@@ -188,6 +191,9 @@ module.exports = function(app) {
 			/* grid item chart setup */
 			$scope.chartConfig = angular.extend({}, highchartsDefaults);
 			$rootScope.$on('mapGridItem', function(ev, item) {
+				if(angular.equals($scope.gridItem, item)) {
+					return false;
+				}
 				$scope.gridItem = item;
 				if(item) {
 					var series = $scope.dataUniqKeys('series');
@@ -793,7 +799,9 @@ module.exports = function(app) {
 										$rootScope.$broadcast('mapGridItem', e.data);
 									});
 								});
-								grid.on('mouseover', function(e) {
+								var outTimeout;
+								grid.on('mousemove', function(e) {
+									clearTimeout(outTimeout);
 									if(!clicked) {
 										scope.$apply(function() {
 											$rootScope.$broadcast('mapGridItem', e.data);
@@ -802,9 +810,11 @@ module.exports = function(app) {
 								});
 								grid.on('mouseout', function(e) {
 									if(!clicked) {
-										scope.$apply(function() {
-											$rootScope.$broadcast('mapGridItem', false);
-										});
+										outTimeout = setTimeout(function() {
+											scope.$apply(function() {
+												$rootScope.$broadcast('mapGridItem', false);
+											});
+										}, 200);
 									}
 								});
 							}
