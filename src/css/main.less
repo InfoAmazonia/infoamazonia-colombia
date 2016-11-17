@@ -433,6 +433,24 @@
 }
 
 #dashboard {
+	position: relative;
+	.dashboard-main,
+	.grid-item {
+		.transform(translate(0, 0));
+		transition: all linear .2s;
+		&.ng-hide-add,
+		&.ng-hide-remove {
+		}
+		&.ng-hide-add {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		&.ng-hide {
+			.transform(translate(0, -2rem));
+			opacity: 0;
+		}
+	}
 	.grid-item {
 		h2 {
 			font-size: 3em;

@@ -133,6 +133,9 @@ module.exports = function(app) {
 			};
 			/* -- */
 			/* main chart setup */
+			$scope.showDashboardMain = function() {
+				return !$scope.gridItem;
+			};
 			$scope.mainChart = {};
 			$scope.$watch('dataSheet', function() {
 				if($scope.dataSheet) {
@@ -187,6 +190,9 @@ module.exports = function(app) {
 			/* grid item chart setup */
 			$scope.chartConfig = angular.extend({}, highchartsDefaults);
 			$rootScope.$on('mapGridItem', function(ev, item) {
+				if(angular.equals($scope.gridItem, item)) {
+					return false;
+				}
 				$scope.gridItem = item;
 				if(item) {
 					var series = $scope.dataUniqKeys('series');
