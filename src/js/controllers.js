@@ -42,6 +42,14 @@ module.exports = function(app) {
 				else
 					$scope.showNav = false;
 			};
+			document.onkeydown = function(evt) {
+				evt = evt || window.event;
+				if (evt.keyCode == 27 && $scope.showNav) {
+					$scope.$apply(function() {
+						$scope.showNav = false;
+					});
+				}
+			};
 			/* -- */
 			/* sidebar toggling */
 			$scope.viewing = 'dashboard';
