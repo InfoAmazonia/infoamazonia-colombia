@@ -215,12 +215,6 @@ module.exports = function(app) {
 								zIndex: 1
 							})
 						},
-						rivers: {
-							title: 'Rivers',
-							layer: L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/ciuu7vi3k00dj2js5rt68bm9t/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
-								zIndex: 3
-							})
-						},
 						labels: {
 							title: 'Labels',
 							layer: L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/ciuu34i5l005h2inn3843b6b3/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {

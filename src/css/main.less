@@ -108,13 +108,16 @@
 		opacity: 0;
 		overflow: hidden;
 		.transition(all .2s linear);
-		font-size: 1.2em;
+		font-size: 1.25em;
 		line-height: 1.5;
 		h2 {
-			font-size: 3em;
+			font-size: 2em;
 			line-height: 1.5;
 			margin: 0 0 2rem;
+			padding-bottom: 1rem;
 			border-bottom: 1px solid #f0f0f0;
+			color: #666;
+			text-transform: uppercase;
 		}
 		h3 {
 			font-size: 1.6em;
@@ -191,6 +194,28 @@
 							margin-right: 1rem;
 						}
 					}
+				}
+			}
+		}
+		#data {
+			.data-container {
+				margin: -2rem 0 4rem;
+				background: #fcfcfc;
+				padding: 2rem 2rem 0;
+				border-left: 1px solid #f0f0f0;
+				border-right: 1px solid #f0f0f0;
+				border-radius: 4px;
+			}
+		}
+		#partners {
+			.partner-list {
+				width: 100%;
+				display: flex;
+				flex-flow: row wrap;
+				.partner {
+					flex: 1 1 20%;
+					padding: 4rem;
+					text-align: center;
 				}
 			}
 		}
