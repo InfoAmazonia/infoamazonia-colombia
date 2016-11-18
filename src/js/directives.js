@@ -77,10 +77,7 @@ module.exports = function(app) {
 									scope.layers.forEach(function(layer) {
 										scope.layerGroup.addLayer(layer);
 									});
-									scope.displayLayer(scope.items[0]);
-									$timeout(function() {
-										scope.toggleAuto();
-									}, 2000);
+									scope.displayLayer(scope.items[scope.items.length-1]);
 								});
 							}
 						});
