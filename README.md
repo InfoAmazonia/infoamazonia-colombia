@@ -24,7 +24,7 @@ App files are built into the `public/` directory, which can be linked or copied 
 For development you can use python's http server:
 
 ```
-$ cd dist
+$ cd public
 $ python -m SimpleHTTPServer
 ```
 
