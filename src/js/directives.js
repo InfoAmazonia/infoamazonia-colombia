@@ -406,7 +406,8 @@ module.exports = function(app) {
 function getCartoCSS(column, quantiles) {
 
 	var cartocss = [
-		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 1; line-opacity: 0.5; line-color: #fff; }',
+		'#layer { polygon-fill: transparent; polygon-opacity: 1; line-width: 0; line-opacity: 0.5; line-color: #fff; }',
+		'#layer[zoom>=5] { line-width: 1; }',
 		'#layer[zoom>=8] { line-width: 2; }',
 		'#layer[zoom>=10] { line-width: 3; }',
 		'#layer::labels[zoom>=7] {',
