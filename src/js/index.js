@@ -1,3 +1,5 @@
+require('./leaflet.legendcontrol');
+
 var app = angular.module('ia-colombia', [
 	'ngAnimate',
 	'highcharts-ng'
