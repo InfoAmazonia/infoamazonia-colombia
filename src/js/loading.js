@@ -52,7 +52,8 @@ module.exports = function(app) {
 	])
 
 	.service('LoadingService', [
-		function() {
+		'$timeout',
+		function($timeout) {
 
 			var loads = [];
 
@@ -74,9 +75,9 @@ module.exports = function(app) {
 					return load._id;
 				},
 				remove: function(id) {
-					loads = loads.filter(function(load) { return load._id !== id; });
-					loads = loads;
-					return loads;
+					$timeout(function() {
+						loads = loads.filter(function(load) { return load._id !== id; });
+					}, 10);
 				}
 			}
 
@@ -108,25 +109,18 @@ module.exports = function(app) {
 		function($q, $rootScope, $timeout, service) {
 			return {
 				request: function(config) {
-
 					if(config.loadingMessage)
 						config.loadingId = service.add(config.loadingMessage);
-
 					return config || $q.when(config);
 				},
 				response: function(response) {
-
 					if(response.config.loadingId)
 						service.remove(response.config.loadingId);
-
 					return response || $q.when(response);
 				},
 				responseError: function(rejection) {
-
-
 					if(rejection.config.loadingId)
 						service.remove(rejection.config.loadingId);
-
 					return $q.reject(rejection);
 				}
 			};
