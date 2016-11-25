@@ -188,6 +188,7 @@ module.exports = function(app) {
 			return {
 				restrict: 'EAC',
 				scope: {
+					legend: '=',
 					username: '=',
 					sql: '=',
 					query: '=',
@@ -203,6 +204,21 @@ module.exports = function(app) {
 						zoom: 1,
 						scrollWheelZoom: true,
 						fadeAnimation: false
+					});
+
+					var legendControl = L.control.legend({
+						position: 'bottomleft'
+					});
+					map.addControl(legendControl);
+
+				 	scope.$watch('legend', function(legend, prevLegend) {
+						console.log(legend);
+						if(prevLegend) {
+							legendControl.removeLegend(prevLegend);
+						}
+						if(legend) {
+							legendControl.addLegend(legend);
+						}
 					});
 
 					var layers = {

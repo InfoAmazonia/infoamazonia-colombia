@@ -258,6 +258,11 @@ module.exports = function(app) {
 			};
 			/* -- */
 			/* data config */
+			var legend = '';
+			legend += '<p><span class="sqr bosque"></span> Bosque</p>';
+			legend += '<p><span class="sqr no-bosque"></span> No bosque</p>';
+			legend += '<p><span class="sqr"></span> Sin información</p>';
+			$scope.legend = legend;
 			$scope.user = 'infoamazonia';
 			$scope.dataTable = 'ideam_deforestacion_anual';
 			$scope.geomTable = 'provincias_area_estudio_amz_wgs84';

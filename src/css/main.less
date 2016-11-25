@@ -251,6 +251,9 @@
 			margin-left: 2rem;
 		}
 	}
+	.leaflet-bottom {
+		bottom: 80px;
+	}
 	.leaflet-control-layers,
 	.leaflet-bar a, .leaflet-bar a:hover {
 		background: #111;
@@ -291,6 +294,37 @@
 	.leaflet-popup-tip {
 		background: #000;
 		color: #fff;
+	}
+	.map-legends {
+		width: 200px;
+		max-height: 300px;
+		overflow: auto;
+		.map-legend {
+			background: rgba(0,0,0,0.8);
+			color: #fff;
+			padding: .8rem;
+			p {
+				margin: 0 0 .5rem;
+				&:last-child {
+					margin: 0;
+				}
+			}
+			.sqr {
+				float: left;
+				display: block;
+				margin: 0 1rem 0 0;
+				width: 15px;
+				height: 15px;
+				border: 1px solid rgba(255,255,255,0.5);
+				background: #000;
+				&.bosque {
+					background: #009966;
+				}
+				&.no-bosque {
+					background: #FF9966;
+				}
+			}
+		}
 	}
 }
 
