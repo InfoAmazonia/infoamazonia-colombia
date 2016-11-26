@@ -263,10 +263,10 @@
                   <div class="post-box">
                     <header class="post-header">
                       <div class="thumbnail" ng-show="story.properties.thumbnail.full" back-img="{{story.properties.thumbnail.full}}"></div>
-                      <h2><a ng-href="{{story.properties.url}}">{{story.properties.title}}</a></h2>
+                      <h2><a ng-href="{{story.properties.url}}" ng-bind-html="story.properties.title | trustHtml"></a></h2>
                     </header>
                     <section class="post-content">
-                      <p>{{story.properties.excerpt}}</p>
+                      <p ng-bind-html="story.properties.excerpt | trustHtml"></p>
                     </section>
                   </div>
                   <aside class="post-date">
