@@ -23,6 +23,17 @@ module.exports = function(app) {
 		}
 	]);
 
+	app.filter('trustHtml', [
+		'$sce',
+		function($sce) {
+			return _.memoize(function(input) {
+				return $sce.trustAsHtml(input);
+			}, function() {
+				return JSON.stringify(arguments);
+			})
+		}
+	]);
+
 	app.filter('validate', [
 		function() {
 			return function(input, validation) {
