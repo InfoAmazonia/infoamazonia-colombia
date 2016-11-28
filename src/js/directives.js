@@ -212,7 +212,6 @@ module.exports = function(app) {
 					map.addControl(legendControl);
 
 				 	scope.$watch('legend', function(legend, prevLegend) {
-						console.log(legend);
 						if(prevLegend) {
 							legendControl.removeLegend(prevLegend);
 						}
