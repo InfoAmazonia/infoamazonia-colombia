@@ -287,22 +287,6 @@ module.exports = function(app) {
 			/* -- */
 		}
 	])
-	.controller('DeforestCtrl', [
-		'$scope',
-		'$http',
-		function($scope, $http) {
-			/* deforestation tables config */
-			var tableId = '1LO4rgPi9uPOSJ2GkxJdDnxFs1huz8F7c7CyMLtjWrms';
-			$scope.dataSheet = {};
-			$http.jsonp(getGDriveJsonp(tableId, 2)).then(function(res) {
-				$scope.dataSheet = parseSheet(res.data.feed.entry, 'local');
-			});
-			// $scope.$watch('dataSheet', function() {
-			// 	console.log($scope.dataSheet);
-			// });
-			/* -- */
-		}
-	])
 	.controller('MapCtrl', [
 		'$rootScope',
 		'$scope',
