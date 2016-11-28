@@ -235,11 +235,17 @@
             <div class="dashboard-main" ng-show="showDashboardMain()">
               <p class="main">La plataforma InfoAmazonia Colombia agrega en su mapa información satelital actualizada junto a histórias generadas por periodistas. Los datos de la cobertura boscosa del territorio amazónico colombiano resultan de las mediciones hechas por el IDEAM. Las gráficas muestran las tasas de deforestación más recientes de acuerdo con el instituto.</p>
               <div class="main-chart" ng-show="dataSheet">
-                <nav class="ref-nav sub-nav"><a class="ref" ng-repeat="ref in (dataUniqKeys('reference') | validate:'number')" ng-click="selectMainChartRef(ref)" href="javascript:void(0);" ng-class="{active:mainChart.ref == ref}">{{ref}}</a></nav>
+                <nav class="ref-nav sub-nav"><a class="ref" ng-repeat="ref in (dataUniqKeys('reference') | validate:'number')" ng-click="selectMainChartRef(ref); selectColombiaChartRef(ref)" href="javascript:void(0);" ng-class="{active:mainChart.ref == ref}">{{ref}}</a></nav>
+                <nav class="ref-nav sub-nav sub-sub-nav"><a class="ref" ng-click="selectChart('departamento')" href="javascript:void(0);" ng-class="{active:selectedChart == 'departamento'}">Departamentos</a><a class="ref" ng-click="selectChart('pais')" href="javascript:void(0);" ng-class="{active:selectedChart == 'pais'}">Colombia</a></nav>
                 <div class="main-series">
                   <div class="series" ng-repeat="series in mainSeries">
                     <h3>{{series}}</h3>
-                    <highchart config="mainChartConfig[series]"></highchart>
+                    <div ng-show="selectedChart == 'departamento'">
+                      <highchart config="mainChartConfig[series]"></highchart>
+                    </div>
+                    <div ng-show="selectedChart == 'pais'">
+                      <highchart config="colombiaChartConfig[series]"></highchart>
+                    </div>
                   </div>
                 </div>
               </div>
