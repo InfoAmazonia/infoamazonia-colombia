@@ -1,7 +1,9 @@
 
-<section id="map-timeline" ng-class="{playing: auto}">
-  <div class="map-timeline-controller" ng-click="toggleAuto()"><a class="fa fa-play" ng-hide="auto"></a><a class="fa fa-stop" ng-show="auto"></a></div>
-  <div class="map-timeline-layer" ng-repeat="item in items" ng-click="stopAuto(); displayLayer(item)" ng-class="{active: activeItem.title == item.title, played: item._played}">
-    <h2>{{item.title}}</h2>
-  </div>
-</section>
+<div class="map-timeline-container">
+  <section id="map-timeline" ng-class="{playing: auto}">
+    <div class="map-timeline-controller" ng-click="toggleAuto()"><a class="fa fa-play" ng-hide="auto"></a><a class="fa fa-stop" ng-show="auto"></a></div>
+    <div class="map-timeline-layer" ng-repeat="item in items" ng-click="stopAuto(); displayLayer(item)" ng-class="{active: activeItem.title == item.title, played: item._played}">
+      <h2>{{item.title}}</h2>
+    </div>
+  </section>
+</div>

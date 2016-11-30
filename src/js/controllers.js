@@ -97,16 +97,31 @@ module.exports = function(app) {
 		'$timeout',
 		function($scope, $http, $rootScope, $timeout) {
 			/* dashboard tables config */
-			var tableId = '1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4';
+			var deptTableId = '1SJwsxzWkuBa6BwcgOWVDDODMAaeMgbrM1IQUoRB5WG4';
 			$scope.dataSheet = {};
-			$http.jsonp(getGDriveJsonp(tableId, 1)).then(function(res) {
+			$http.jsonp(getGDriveJsonp(deptTableId, 1)).then(function(res) {
 				$scope.dataSheet = parseSheet(res.data.feed.entry, 'departamento');
 			});
-			$http.jsonp(getGDriveJsonp(tableId, 2)).then(function(res) {
+			$http.jsonp(getGDriveJsonp(deptTableId, 2)).then(function(res) {
 				$scope.dataIndex = parseSheet(res.data.feed.entry, 'column');
 			});
 			/* -- */
-			/* dashboard tables methods */
+			/* colombia table config */
+			var colombiaTableId = '1LO4rgPi9uPOSJ2GkxJdDnxFs1huz8F7c7CyMLtjWrms';
+			$scope.colombiaDataSheet = {};
+			$http.jsonp(getGDriveJsonp(colombiaTableId, 2)).then(function(res) {
+				$scope.colombiaDataSheet = parseSheet(res.data.feed.entry, 'departamento');
+			});
+			/* -- */
+			/* tables methods */
+			$scope.selectedChart = 'departamento';
+			$scope.selectChart = function(name) {
+				$scope.selectedChart = name;
+				window.dispatchEvent(new Event('resize'));
+				setTimeout(function() {
+					window.dispatchEvent(new Event('resize'));
+				}, 100);
+			}
 			$scope.dataColumn = function(key, val) {
 				return $scope.matchColumns(key, val)[0];
 			};
@@ -177,12 +192,64 @@ module.exports = function(app) {
 									if(!isNaN(val))
 										iData[1] = val;
 									else
-										iData[1] = null
+										iData[1] = null;
 								}
 							}
 							sData.data.push(iData);
 						}
 						$scope.mainChartConfig[series].series = [sData];
+					});
+				}
+			}, true);
+			/* -- */
+			/* colombia chart setup */
+			$scope.colombiaChart = {};
+			$scope.$watch('colombiaDataSheet', function() {
+				if($scope.colombiaDataSheet) {
+					$scope.colombiaChart.ref = _.last($scope.dataUniqKeys('reference'));
+					// redo action (for some reason sometimes it returns unedefined)
+					$timeout(function() {
+						$scope.colombiaChart.ref = _.last($scope.dataUniqKeys('reference'));
+					}, 50);
+				}
+			});
+			$scope.selectColombiaChartRef = function(ref) {
+				$scope.colombiaChart.ref = ref;
+			};
+			$scope.$watch('colombiaChart', function() {
+				var ref = false;
+				if($scope.colombiaChart)
+					ref = $scope.colombiaChart.ref;
+				var series = [];
+				if(ref) {
+					var cols = $scope.matchColumns('reference', ref);
+					cols.forEach(function(col) {
+						series.push(col.series);
+					});
+					$scope.colombiaSeries = _.uniq(series);
+					$scope.colombiaChartConfig = {};
+					$scope.colombiaSeries.forEach(function() {
+						if(!$scope.colombiaChartConfig[series])
+							$scope.colombiaChartConfig[series] = angular.extend({}, highchartsDefaults);
+						var sData = {
+							data: []
+						};
+						for(var k1 in $scope.colombiaDataSheet) {
+							var iData = [];
+							iData[0] = k1;
+							for(var k2 in $scope.colombiaDataSheet[k1]) {
+								var match = $scope.dataColumn('column', k2);
+								if(match && match.reference == $scope.colombiaChart.ref) {
+									var val = parseFloat($scope.colombiaDataSheet[k1][k2]);
+									if(!isNaN(val))
+										iData[1] = val;
+									else
+										iData[1] = null;
+								}
+							}
+							sData.data.push(iData);
+						}
+						$scope.colombiaChartConfig[series].series = [sData];
 					});
 				}
 			}, true);
