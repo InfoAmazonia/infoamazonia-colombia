@@ -253,7 +253,6 @@ module.exports = function(app) {
 						$scope.colombiaChartConfig[series].series = [sData];
 					});
 				}
-				console.log($scope.colombiaChartConfig);
 			}, true);
 			/* -- */
 			/* grid item chart setup */
