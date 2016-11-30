@@ -25,16 +25,17 @@ block content
 						.main-chart(ng-show="dataSheet")
 							nav.ref-nav.sub-nav
 								a.ref(ng-repeat="ref in (dataUniqKeys('reference') | validate:'number')" ng-click="selectMainChartRef(ref); selectColombiaChartRef(ref)" href="javascript:void(0);" ng-class="{active:mainChart.ref == ref}") {{ref}}
-							nav.ref-nav.sub-nav.sub-sub-nav
-								a.ref(ng-click="selectChart('departamento')" href="javascript:void(0);" ng-class="{active:selectedChart == 'departamento'}") Departamentos
-								a.ref(ng-click="selectChart('pais')" href="javascript:void(0);" ng-class="{active:selectedChart == 'pais'}") Colombia
 							.main-series
 								.series(ng-repeat="series in mainSeries")
 									h3 {{series}}
 									div(ng-show="selectedChart == 'departamento'")
+										table.global-data
+											tr.global-data-item(ng-repeat="item in colombiaChartConfig[series].series[0].data")
+												th {{item[0]}}
+												td {{item[1]}} ha
+										h4 Departamentos
 										highchart(config="mainChartConfig[series]")
-									div(ng-show="selectedChart == 'pais'")
-										highchart(config="colombiaChartConfig[series]")
+										//- highchart(config="colombiaChartConfig[series]")
 					.grid-item(ng-show="gridItem")
 						h2 {{gridItem[dataColumn('reference', 'title').column]}}
 						.series(ng-repeat="series in dataUniqKeys('series')")
@@ -56,8 +57,8 @@ block content
 										//- 	span.publisher
 										//- 		span.lsf clip
 										//- 		span.publisher-content
-									section.post-content
-										p(ng-bind-html="story.properties.excerpt | trustHtml")
+									//- section.post-content
+									//- 	p(ng-bind-html="story.properties.excerpt | trustHtml")
 								aside.post-date
 									p.date(ng-show="isDifferentDate(stories, i-1, story.properties.date)") {{story.properties.date | formatDate:'DD/MM/YYYY'}}
 									p.time {{story.properties.date | formatDate:'hh:mm A'}}
