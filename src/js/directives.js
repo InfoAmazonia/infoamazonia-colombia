@@ -370,13 +370,17 @@ module.exports = function(app) {
 								layer = L.tileLayer(tilesUrl.tiles[0], {zIndex: 10});
 								dataLayerGroup.addLayer(layer);
 								scope.sql.getBounds(scope.query).done(function(bounds) {
+									var paddingRight = 0;
+									if(window.innerWidth > 720) {
+										paddingRight = window.innerWidth * .4;
+									}
 									map.fitBounds(bounds, {
 										paddingTopLeft: [
 											0,
 											0
 										],
 										paddingBottomRight: [
-											window.innerWidth * .4,
+											paddingRight,
 											0
 										]
 									});

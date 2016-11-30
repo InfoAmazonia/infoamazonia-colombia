@@ -1,12 +1,56 @@
-@media (max-width: 400px) {
+@media (max-width: 720px) {
   .container {
     margin: 0 1rem;
   }
+  .leaflet-container {
+    .leaflet-top {
+      top: 50px;
+    }
+    .leaflet-left {
+      .leaflet-control {
+        margin-left: 1rem;
+      }
+    }
+    .leaflet-bottom {
+      bottom: 120px;
+    }
+  }
   #masthead {
     padding: 1rem 0;
+    h1 {
+      font-size: 2em;
+    }
   }
-  #map-timeline {
-    bottom: 6rem;
+  #main-nav {
+    .fa.fa-bars,
+    .fa.fa-info-circle,
+    .fa.fa-info,
+    .fa.fa-close {
+      margin: .8rem 1rem;
+    }
+  }
+  #main-nav-content {
+    top: 64px;
+    .nav-content {
+      width: auto;
+      padding: 0 1rem;
+      margin: 1rem 0;
+      #data {
+        .data-container {
+          padding: 1rem 1rem 0;
+        }
+      }
+      #partners {
+        .partner-list {
+          .partner {
+            padding: 1rem;
+          }
+        }
+      }
+    }
+  }
+  .map-timeline-container {
+    bottom: 5.8rem;
     margin: 0;
     width: auto;
     left: 1rem;
@@ -18,5 +62,12 @@
     top: 100%;
     margin-top: -4.4rem;
     padding: 0 1rem;
+  }
+  #loading {
+    text-align: center;
+    .fa {
+      left: 0;
+      right: 0;
+    }
   }
 }
