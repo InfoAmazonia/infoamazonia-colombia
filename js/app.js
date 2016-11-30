@@ -687,6 +687,7 @@ module.exports = function(app) {
 				link: function(scope, element, attrs) {
 
 					var map = L.map(element[0], {
+						attributionControl: false,
 						center: [0,0],
 						zoom: 1,
 						scrollWheelZoom: true,
