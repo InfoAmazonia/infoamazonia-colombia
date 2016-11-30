@@ -253,6 +253,7 @@ module.exports = function(app) {
 						$scope.colombiaChartConfig[series].series = [sData];
 					});
 				}
+				console.log($scope.colombiaChartConfig);
 			}, true);
 			/* -- */
 			/* grid item chart setup */
@@ -876,12 +877,12 @@ module.exports = function(app) {
 								grid = new L.UtfGrid(tilesUrl.grids[0][0] + '&callback={cb}');
 								dataLayerGroup.addLayer(grid);
 								var clicked = false;
-								grid.on('click', function(e) {
-									clicked = true;
-									scope.$apply(function() {
-										$rootScope.$broadcast('mapGridItem', e.data);
-									});
-								});
+								// grid.on('click', function(e) {
+								// 	clicked = true;
+								// 	scope.$apply(function() {
+								// 		$rootScope.$broadcast('mapGridItem', e.data);
+								// 	});
+								// });
 								var outTimeout;
 								grid.on('mousemove', function(e) {
 									clearTimeout(outTimeout);
@@ -917,10 +918,10 @@ function getCartoCSS(column, quantiles) {
 		'#layer[zoom>=5] { line-width: 1; }',
 		'#layer[zoom>=8] { line-width: 2; }',
 		'#layer[zoom>=10] { line-width: 3; }',
-		'#layer::labels[zoom>=7] {',
+		'#layer::labels[zoom>=6] {',
 		'text-name: [departamento];',
 		'text-face-name: "Open Sans Italic";',
-		'text-size: 12;',
+		'text-size: 10;',
 		'text-fill: #FFFFFF;',
 		'text-label-position-tolerance: 0;',
 		'text-transform: uppercase;',
@@ -929,10 +930,11 @@ function getCartoCSS(column, quantiles) {
 		'text-allow-overlap: false;',
 		'text-placement: interior;',
 		'text-placement-type: simple;',
+		'[zoom=7]{text-size: 12;}',
 		'[zoom=8]{text-size: 15;}',
 		'[zoom=9]{text-size: 17;}',
 		'[zoom>=10]{text-size: 19;}',
-		'}'
+		'}',
 	];
 
 	// quantiles.forEach(function(qt, i) {

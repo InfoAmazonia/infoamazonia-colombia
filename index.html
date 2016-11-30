@@ -236,15 +236,18 @@
               <p class="main">La plataforma InfoAmazonia Colombia agrega en su mapa información satelital actualizada junto a histórias generadas por periodistas. Los datos de la cobertura boscosa del territorio amazónico colombiano resultan de las mediciones hechas por el IDEAM. Las gráficas muestran las tasas de deforestación más recientes de acuerdo con el instituto.</p>
               <div class="main-chart" ng-show="dataSheet">
                 <nav class="ref-nav sub-nav"><a class="ref" ng-repeat="ref in (dataUniqKeys('reference') | validate:'number')" ng-click="selectMainChartRef(ref); selectColombiaChartRef(ref)" href="javascript:void(0);" ng-class="{active:mainChart.ref == ref}">{{ref}}</a></nav>
-                <nav class="ref-nav sub-nav sub-sub-nav"><a class="ref" ng-click="selectChart('departamento')" href="javascript:void(0);" ng-class="{active:selectedChart == 'departamento'}">Departamentos</a><a class="ref" ng-click="selectChart('pais')" href="javascript:void(0);" ng-class="{active:selectedChart == 'pais'}">Colombia</a></nav>
                 <div class="main-series">
                   <div class="series" ng-repeat="series in mainSeries">
                     <h3>{{series}}</h3>
                     <div ng-show="selectedChart == 'departamento'">
+                      <table class="global-data">
+                        <tr class="global-data-item" ng-repeat="item in colombiaChartConfig[series].series[0].data">
+                          <th>{{item[0]}}</th>
+                          <td>{{item[1]}} ha</td>
+                        </tr>
+                      </table>
+                      <h4>Departamentos</h4>
                       <highchart config="mainChartConfig[series]"></highchart>
-                    </div>
-                    <div ng-show="selectedChart == 'pais'">
-                      <highchart config="colombiaChartConfig[series]"></highchart>
                     </div>
                   </div>
                 </div>
@@ -271,9 +274,6 @@
                       <div class="thumbnail" ng-show="story.properties.thumbnail.full" back-img="{{story.properties.thumbnail.full}}"></div>
                       <h2><a ng-href="{{story.properties.url}}" ng-bind-html="story.properties.title | trustHtml"></a></h2>
                     </header>
-                    <section class="post-content">
-                      <p ng-bind-html="story.properties.excerpt | trustHtml"></p>
-                    </section>
                   </div>
                   <aside class="post-date">
                     <p class="date" ng-show="isDifferentDate(stories, i-1, story.properties.date)">{{story.properties.date | formatDate:'DD/MM/YYYY'}}</p>

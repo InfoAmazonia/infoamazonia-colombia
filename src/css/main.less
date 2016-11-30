@@ -316,7 +316,7 @@
 				width: 15px;
 				height: 15px;
 				border: 1px solid rgba(255,255,255,0.5);
-				background: #000;
+				background: #330000;
 				&.bosque {
 					background: #009966;
 				}
@@ -328,11 +328,14 @@
 	}
 }
 
-#map-timeline {
+.map-timeline-container {
 	position: fixed;
 	bottom: 2rem;
 	left: 2rem;
-	width: 50%;
+	width: 45%;
+}
+#map-timeline {
+	width: 100%;
 	display: table;
 	background: rgba(0,0,0,0.5);
 	border: 1px solid rgba(255,255,255,0.6);
@@ -442,6 +445,7 @@
 	font-size: .8em;
 	border: 0;
 	border-spacing: 1rem;
+	.box-shadow(0 0 0);
 	a {
 		line-height: 30px;
 		border-radius: 4px;

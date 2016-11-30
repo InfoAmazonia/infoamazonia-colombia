@@ -1,4 +1,4 @@
-#aislados_referencia_ {
+#aislados_referencia_[zoom>=7] {
   marker-width: 7;
   marker-fill: #660033;
   marker-fill-opacity: 1;
@@ -6,6 +6,9 @@
   marker-line-width: 1;
   marker-line-color: #660033;
   marker-line-opacity: 1;
+  [nombre='Nukak Maku'] {
+    marker-opacity: 0;
+  }
 }
 #aislados_referencia::labels[zoom>=8] {
   text-name: [nombre];
@@ -25,5 +28,9 @@
   [zoom=9]  {text-size: 16;}
   [zoom=10]  {text-size: 17;}
   [zoom=11]  {text-size: 18;}
+
+  [nombre='Nukak Maku'] {
+    text-opacity: 0;
+  }
 
 }
