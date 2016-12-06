@@ -389,12 +389,12 @@ module.exports = function(app) {
 								grid = new L.UtfGrid(tilesUrl.grids[0][0] + '&callback={cb}');
 								dataLayerGroup.addLayer(grid);
 								var clicked = false;
-								grid.on('click', function(e) {
-									clicked = true;
-									scope.$apply(function() {
-										$rootScope.$broadcast('mapGridItem', e.data);
-									});
-								});
+								// grid.on('click', function(e) {
+								// 	clicked = true;
+								// 	scope.$apply(function() {
+								// 		$rootScope.$broadcast('mapGridItem', e.data);
+								// 	});
+								// });
 								var outTimeout;
 								grid.on('mousemove', function(e) {
 									clearTimeout(outTimeout);
