@@ -231,7 +231,7 @@ module.exports = function(app) {
 						labels: {
 							title: 'Labels',
 							layer: L.tileLayer('https://api.mapbox.com/styles/v1/infoamazonia/ciuu34i5l005h2inn3843b6b3/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mb2FtYXpvbmlhIiwiYSI6InItajRmMGsifQ.JnRnLDiUXSEpgn7bPDzp7g', {
-								zIndex: 6
+								zIndex: 15
 							})
 						}
 					};
