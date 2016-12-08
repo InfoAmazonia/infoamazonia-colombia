@@ -505,9 +505,23 @@
 	}
 	p.main {
 		font-size: 1.4em;
-		line-height: 1.5;
+		line-height: 1.7;
 		// font-family: "Open Sans Condensed";
 		// font-weight: 700;
+		a {
+			// display: inline-block;
+			margin: 0 .2rem;
+			padding: .15rem .5rem;
+			border: 1px solid rgba(255,255,255,0.2);
+			color: #fff;
+			font-weight: 600;
+			font-size: .9em;
+			.border-radius(3px);
+			background: rgba(255,255,255,0.08);
+			&:hover {
+				background: rgba(255,255,255,0.2);
+			}
+		}
 	}
 	input {
 		background: #000;
@@ -536,6 +550,24 @@
 		&.ng-hide {
 			.transform(translate(0, -2rem));
 			opacity: 0;
+		}
+	}
+	.dashboard-main {
+		.partners {
+			margin: 0 0 2rem;
+			.partner-list {
+				width: 100%;
+				display: table;
+				.partner {
+					text-align: center;
+					vertical-align: middle;
+					display: table-cell;
+					img {
+						max-width: 200px;
+						height: auto;
+					}
+				}
+			}
 		}
 	}
 	h4 {

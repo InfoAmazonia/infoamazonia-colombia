@@ -30,7 +30,7 @@
           <div class="partner-list">
             <div class="partner"><a href="http://www.dejusticia.org/" target="_blank" rel="external"><img src="img/dejusticia.jpg"></a></div>
             <div class="partner"><a href="http://www.elespectador.com/noticias" target="_blank" rel="external"><img src="img/el-espectador.jpg"></a></div>
-            <div class="partner"><a href="http://infoamazonia.org" target="_blank" rel="external"><img src="img/carto.png"></a></div>
+            <div class="partner"><a href="http://carto.com" target="_blank" rel="external"><img src="img/carto.png"></a></div>
           </div>
         </section>
         <p>InfoAmazonia Colombia es una iniciativa sin fines de lucro que busca mantener los datos acerca de la deforestación en la región Amazónica de Colombia, siempre actualizados y disponibles al público. El proyecto ha sido creado una alianza de <a href="http://infoamazonia.org/" target="_blank" rel="external">InfoAmazonia</a> con el Panel de Científicos del Centro de Estudios de Derecho, <a href="http://www.dejusticia.org/" target="_blank" rel="external">Justicia y Sociedad-Dejusticia-</a>; y el grupo periodístico <a href="http://www.elespectador.com/noticias" target="_blank" rel="external">El Espectador</a>.
@@ -235,9 +235,16 @@
           <section class="sidebar-section" id="dashboard" ng-controller="DashboardCtrl" ng-show="viewing == 'dashboard'">
             <div class="dashboard-main" ng-show="showDashboardMain()">
               <p class="main">La plataforma InfoAmazonia Colombia agrega en su mapa información satelital actualizada junto a historias generadas por periodistas. Los datos de la cobertura boscosa del territorio amazónico colombiano resultan de las mediciones hechas por el Instituto de Hidrología, Meteorología y Estudios Ambientales de Colombia-<a href="http://www.ideam.gov.co/" target="_blank" rel="external">IDEAM</a>-.</p>
-              <p class="main">Las gráficas muestran las tasas de deforestación más recientes de acuerdo con el instituto. Este proyecto es posible gracias a la colaboración con el Panel de Científicos del Centro de Estudios de Derecho, <a href="http://www.dejusticia.org/" target="_blank" rel="external">Justicia y Sociedad-Dejusticia-</a>, <a href="http://www.elespectador.com/noticias" target="_blank" rel="external">El Espectador</a> e <a href="http://infoamazonia.org" rel="external" target="_blank">InfoAmazonia</a>.
-              </p>
+              <p class="main">Las gráficas muestran las tasas de deforestación más recientes de acuerdo con el instituto.</p>
+              <div class="partners">
+                <h2>Colaboradores</h2>
+                <div class="partner-list">
+                  <div class="partner"><a href="http://www.dejusticia.org/" target="_blank" rel="external"><img src="img/dejusticia_b.png"></a></div>
+                  <div class="partner"><a href="http://www.elespectador.com/noticias" target="_blank" rel="external"><img src="img/el-espectador_b.png"></a></div>
+                </div>
+              </div>
               <div class="main-chart" ng-show="dataSheet">
+                <h2>Datos</h2>
                 <nav class="ref-nav sub-nav"><a class="ref" ng-repeat="ref in (dataUniqKeys('reference') | validate:'number')" ng-click="selectMainChartRef(ref); selectColombiaChartRef(ref)" href="javascript:void(0);" ng-class="{active:mainChart.ref == ref}">{{ref}}</a></nav>
                 <div class="main-series">
                   <div class="series" ng-repeat="series in mainSeries">
