@@ -52,19 +52,6 @@ module.exports = function(app) {
 				}
 			};
 			/* -- */
-			/* sidebar toggling */
-			$scope.viewing = 'dashboard';
-			$scope.setView = function(view) {
-				$scope.viewing = view;
-			};
-			$scope.$watch('viewing', function() {
-				if($scope.viewing == 'stories') {
-					$rootScope.$broadcast('toggleStories', true);
-				} else {
-					$rootScope.$broadcast('toggleStories', false);
-				}
-			});
-			/* -- */
 			/* stories */
 			$scope.searchStories = '';
 			$http
@@ -498,6 +485,53 @@ module.exports = function(app) {
 		};
 	});
 
+	app.directive('sidebarContent', [
+		'$rootScope',
+		function($rootScope) {
+			return {
+				restrict: 'EA',
+				link: function(scope, element, attrs) {
+					scope.viewing = false;
+					if(!isMobileWidth())
+						scope.viewing = 'dashboard';
+					scope.setView = function(view) {
+						if(isMobileWidth() && view == scope.viewing)
+							scope.viewing = false;
+						else
+							scope.viewing = view;
+					};
+					scope.$watch('viewing', function(viewing, prev) {
+
+						if(isMobileWidth()) {
+							if(!prev && viewing) {
+								$rootScope.$broadcast('map.fitBounds', {
+									paddingTopLeft: [0,0],
+									paddingBottomRight: [0,window.innerHeight*.4]
+								});
+							} else if(prev && !viewing) {
+								$rootScope.$broadcast('map.fitBounds', {
+									paddingTopLeft: [0,0],
+									paddingBottomRight: [0,0]
+								});
+							}
+						}
+
+						if(scope.viewing)
+							jQuery('body').addClass('active-sidebar')
+						else
+							jQuery('body').removeClass('active-sidebar')
+
+						if(scope.viewing == 'stories') {
+							$rootScope.$broadcast('toggleStories', true);
+						} else {
+							$rootScope.$broadcast('toggleStories', false);
+						}
+					});
+				}
+			}
+		}
+	]);
+
 	app.directive('story', [
 		function() {
 			return {
@@ -694,6 +728,12 @@ module.exports = function(app) {
 						fadeAnimation: false
 					});
 
+					var bounds;
+
+					scope.$on('map.fitBounds', function(ev, padding) {
+						map.fitBounds(bounds || map.getBounds(), padding);
+					});
+
 					var legendControl = L.control.legend({
 						position: 'bottomleft'
 					});
@@ -857,11 +897,12 @@ module.exports = function(app) {
 							} else {
 								layer = L.tileLayer(tilesUrl.tiles[0], {zIndex: 10});
 								dataLayerGroup.addLayer(layer);
-								scope.sql.getBounds(scope.query).done(function(bounds) {
+								scope.sql.getBounds(scope.query).done(function(bnds) {
 									var paddingRight = 0;
-									if(window.innerWidth > 720) {
+									if(!window.isMobileWidth()) {
 										paddingRight = window.innerWidth * .4;
 									}
+									bounds = bnds;
 									map.fitBounds(bounds, {
 										paddingTopLeft: [
 											0,
@@ -1085,6 +1126,12 @@ module.exports = {
 };
 
 },{}],6:[function(require,module,exports){
+window.mobileWidth = 720;
+
+window.isMobileWidth = function() {
+	return window.innerWidth <= window.mobileWidth;
+};
+
 require('./leaflet.legendcontrol');
 
 var app = angular.module('ia-colombia', [

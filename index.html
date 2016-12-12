@@ -227,7 +227,7 @@
         <div id="map" map sql="sql" legend="legend" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem" geojson="filteredStories | memoize"></div>
       </div>
       <map-timeline items="timeline.items"></map-timeline>
-      <section id="sidebar">
+      <section id="sidebar" sidebar-content>
         <header>
           <nav id="sidebar-nav"><a ng-class="{active: viewing == 'dashboard'}" ng-click="setView('dashboard')">Gráficos</a><a ng-class="{active: viewing == 'stories'}" ng-click="setView('stories')">Artículos</a></nav>
         </header>

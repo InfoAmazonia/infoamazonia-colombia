@@ -32,12 +32,13 @@ block content
 							.partner-list
 								.partner
 									a(href="http://www.dejusticia.org/" target="_blank" rel="external")
-										img(src="img/dejusticia.jpg")
+										img(src="img/dejusticia_b.png")
 								.partner
 									a(href="http://www.elespectador.com/noticias" target="_blank" rel="external")
 										img(src="img/el-espectador_b.png")
 
 						.main-chart(ng-show="dataSheet")
+							h2 Datos
 							nav.ref-nav.sub-nav
 								a.ref(ng-repeat="ref in (dataUniqKeys('reference') | validate:'number')" ng-click="selectMainChartRef(ref); selectColombiaChartRef(ref)" href="javascript:void(0);" ng-class="{active:mainChart.ref == ref}") {{ref}}
 							.main-series
