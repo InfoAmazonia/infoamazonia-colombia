@@ -12,7 +12,20 @@
       }
     }
     .leaflet-bottom {
-      bottom: 120px;
+      bottom: 7.2rem;
+    }
+    .map-legends {
+      width: 100%;
+      .map-legend {
+        width: 100%;
+        display: table;
+        background: transparent;
+        p {
+          margin: 0;
+          padding: 0;
+          display: table-cell;
+        }
+      }
     }
   }
   #masthead {
@@ -54,11 +67,16 @@
     }
   }
   .map-timeline-container {
-    bottom: 5.8rem;
+    bottom: 5.5rem;
     margin: 0;
     width: auto;
     left: 1rem;
     right: 1rem;
+    font-size: .8em;
+    h2 {
+      line-height: 1;
+      margin: .5rem 0;
+    }
   }
   #sidebar {
     width: auto;
@@ -66,12 +84,26 @@
     top: 100%;
     margin-top: -4.4rem;
     padding: 0 1rem;
+    font-size: .8em;
   }
   #loading {
     text-align: center;
     .fa {
       left: 0;
       right: 0;
+    }
+  }
+  body.active-sidebar {
+    #sidebar {
+      top: 60%;
+    }
+    .map-timeline-container {
+      display: none;
+    }
+    .leaflet-container {
+      .map-legends {
+        display: none !important;
+      }
     }
   }
 }

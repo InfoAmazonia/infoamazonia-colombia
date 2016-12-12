@@ -13,7 +13,7 @@ block content
 		.map-container
 			#map(map sql="sql" legend="legend" username="user" query="query" columns="columns" table="dataTable" grid-item="gridItem" geojson="filteredStories | memoize")
 		map-timeline(items="timeline.items")
-		section#sidebar
+		section#sidebar(sidebar-content)
 			header
 				nav#sidebar-nav
 					a(ng-class="{active: viewing == 'dashboard'}" ng-click="setView('dashboard')") Gráficos

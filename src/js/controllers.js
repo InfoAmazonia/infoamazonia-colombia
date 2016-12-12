@@ -51,19 +51,6 @@ module.exports = function(app) {
 				}
 			};
 			/* -- */
-			/* sidebar toggling */
-			$scope.viewing = 'dashboard';
-			$scope.setView = function(view) {
-				$scope.viewing = view;
-			};
-			$scope.$watch('viewing', function() {
-				if($scope.viewing == 'stories') {
-					$rootScope.$broadcast('toggleStories', true);
-				} else {
-					$rootScope.$broadcast('toggleStories', false);
-				}
-			});
-			/* -- */
 			/* stories */
 			$scope.searchStories = '';
 			$http
