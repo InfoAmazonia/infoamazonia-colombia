@@ -69,8 +69,9 @@ module.exports = function(app) {
 				link: function(scope, element, attrs) {
 					scope.$watch('focused', function() {
 						if(scope.story.properties.id == scope.focused) {
+							console.log(scope.focused);
 							$('#sidebar').animate({
-								scrollTop: $(element).position().top -50
+								scrollTop: $(element).position().top + 150
 							}, 200);
 							setTimeout(function() {
 								$(element).removeClass('focused-story');
@@ -443,12 +444,14 @@ module.exports = function(app) {
 								grid = new L.UtfGrid(tilesUrl.grids[0][0] + '&callback={cb}');
 								dataLayerGroup.addLayer(grid);
 								var clicked = false;
-								// grid.on('click', function(e) {
-								// 	clicked = true;
-								// 	scope.$apply(function() {
-								// 		$rootScope.$broadcast('mapGridItem', e.data);
-								// 	});
-								// });
+								grid.on('click', function(e) {
+									if(isMobileWidth()) {
+										clicked = true;
+										scope.$apply(function() {
+											$rootScope.$broadcast('mapGridItem', e.data);
+										});
+									}
+								});
 								var outTimeout;
 								grid.on('mousemove', function(e) {
 									clearTimeout(outTimeout);
