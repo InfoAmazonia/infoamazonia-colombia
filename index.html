@@ -78,7 +78,7 @@
               </aside>
               <section class="data-content">
                 <p>Cifras anuales de deforestación calculadas por el IDEAM (Instituto de Hidrologia, Metereologia y Estudos Ambientales) desde de los datos resultantes del monitoreo de la cobertura boscosa y presentados a la prensa por medio de archivos non abiertos (.pdf, .ppt y otros).</p>
-                <p>En el nivel departamental, los datos del IDEAM se refieren a departamentos enteros y no están divididos por regiones - por eso los datos de los departamentos Meta, Vichada y (que tienen límites políticos fuera del Bioma Amazónico) no se refieren solamente a la deforestación amazónica. Las cifras correspondientes al departamento Cauca, que tiene un pequeño porcentaje de su territorio en la región amazónica, no son difundidas por IDEAM como parte de la Amazonía. Nariño tampoco es considerado un departamento amazónico.</p>
+                <p>En el nivel departamental, los datos del IDEAM se refieren a departamentos enteros y no están divididos por regiones - por eso los datos de los departamentos Meta y Vichada (que tienen límites políticos fuera del Bioma Amazónico) no se refieren solamente a la deforestación amazónica. Las cifras correspondientes al departamento Cauca, que tiene un pequeño porcentaje de su territorio en la región amazónica, no son difundidas por IDEAM como parte de la Amazonía. Nariño tampoco es considerado un departamento amazónico.</p>
               </section>
             </article>
             <article class="data-item" ng-controller="AboutDataCtrl" ng-class="{active: displayContent}">
@@ -105,25 +105,6 @@
               <header class="data-header" ng-click="toggleContent()">
                 <div class="expand fa fa-chevron-down" ng-hide="displayContent"></div>
                 <div class="expand fa fa-chevron-up" ng-show="displayContent"></div>
-                <h3>"Departamentos", Colombia - IDEAM</h3>
-              </header>
-              <aside class="data-meta">
-                <div class="source">
-                  <h4><span class="fa fa-share"></span>Fuente</h4><a href="http://www.ideam.gov.co/">IDEAM</a>
-                </div>
-                <div class="download">
-                  <h4><span class="fa fa-download"></span>Descarga</h4><a href="http://geoapps.ideam.gov.co:8080/geoserver/indicadores_hidricos/wfs?">IDEAM</a>
-                </div>
-              </aside>
-              <section class="data-content">
-                <p>Capa de los indicadores hídricos de Colombia en los servicios geograficos del IDEAM con los límites del nivel departamental.</p>
-              </section>
-            </article>
-            <article class="data-item" ng-controller="AboutDataCtrl" ng-class="{active: displayContent}">
-              <div class="icon fa fa-database"></div>
-              <header class="data-header" ng-click="toggleContent()">
-                <div class="expand fa fa-chevron-down" ng-hide="displayContent"></div>
-                <div class="expand fa fa-chevron-up" ng-show="displayContent"></div>
                 <h3>MapBox Satellite</h3>
               </header>
               <aside class="data-meta">
@@ -135,7 +116,7 @@
                 </div>
               </aside>
               <section class="data-content">
-                <p>Mapa mundial que fusiona imágenessatelitales de alta resolución proveniente de distintas fuentes, como proveedores comerciales (Digital Globe) y datos libres de NASA, USG y otros.</p>
+                <p>Mapa mundial que fusiona imágenes satelitales de alta resolución proveniente de distintas fuentes, como proveedores comerciales (Digital Globe) y datos libres de NASA, USG y otros.</p>
                 <p>En el mapa, se destaca la región de Colombia.</p>
               </section>
             </article>
@@ -144,18 +125,18 @@
               <header class="data-header" ng-click="toggleContent()">
                 <div class="expand fa fa-chevron-down" ng-hide="displayContent"></div>
                 <div class="expand fa fa-chevron-up" ng-show="displayContent"></div>
-                <h3>Aguas - OSM</h3>
+                <h3>"Aguas", Amazonía de Colombia - OSM</h3>
               </header>
               <aside class="data-meta">
                 <div class="source">
-                  <h4><span class="fa fa-share"></span>Fuente</h4><a href="https://www.mapbox.com/vector-tiles/mapbox-streets-v7/">OpenStreetMap en MapBox Streets v7</a>
+                  <h4><span class="fa fa-share"></span>Fuente</h4><a href="https://www.openstreetmap.org/">OpenStreetMap</a>
                 </div>
                 <div class="download">
-                  <h4><span class="fa fa-download"></span>Descarga</h4>Descarga no disponible
+                  <h4><span class="fa fa-download"></span>Descarga</h4><a href="https://www.openstreetmap.org/export#map=5/51.522/-7.778">OpenStreetMap</a>
                 </div>
               </aside>
               <section class="data-content">
-                <p>Los ríos y otros cuerpos de agua mapeados por colaboradores del OpenStreetMap y disponibles en "Mapbox Streets v7". Los datos contienen información sobre cursos de agua, áreas, tipos y nombres de los ríos y reciben actualizaciones regulares.</p>
+                <p>Los ríos y otros cuerpos de agua de la amazonía de Colombia mapeados por colaboradores del OpenStreetMap. Los datos contienen información sobre cursos de agua, áreas, tipos y nombres de los ríos y son los mas recientes en la plataforma (bajados en noviembre/2016).</p>
               </section>
             </article>
             <article class="data-item" ng-controller="AboutDataCtrl" ng-class="{active: displayContent}">
