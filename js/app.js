@@ -55,7 +55,7 @@ module.exports = function(app) {
 			/* stories */
 			$scope.searchStories = '';
 			$http
-				.get('https://infoamazonia.org/es/?s=colombia&geojson=1')
+				.get('https://infoamazonia.org/es/?country=colombia&geojson=1')
 				.then(function(res) {
 					$scope.stories = res.data.features;
 					// console.log(res, res.headers(['X-Total-Count']));
