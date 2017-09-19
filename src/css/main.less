@@ -86,6 +86,7 @@
 	width: 0;
 	pointer-events: none;
 	.transition(all .2s linear);
+	font-size: 1.2em;
 	&.active {
 		pointer-events: auto;
 		background: #fff;
@@ -208,7 +209,7 @@
 			}
 		}
 		#partners {
-			width: 35%;
+			width: 32%;
 			float: right;
 			margin-left: 2rem;
 			margin-bottom: 2rem;
@@ -216,6 +217,9 @@
 			border: 1px solid #eee;
 			border-radius: 4px;
 			font-size: .8em;
+			h2 {
+				font-size: 1.2em;
+			}
 			.partner-list {
 				width: 100%;
 				display: block;
@@ -223,7 +227,8 @@
 					padding: 1rem 0;
 					text-align: center;
 					img {
-						max-width: 100%;
+						margin: 0 auto;
+						max-width: 90%;
 					}
 				}
 			}
@@ -580,9 +585,10 @@
 					vertical-align: middle;
 					display: table-cell;
 					img {
+						display: block;
+						width: 80%;
+						margin: 1rem auto;
 						max-width: 160px;
-						max-height: 30px;
-						width: auto;
 						height: auto;
 					}
 				}
