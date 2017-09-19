@@ -1,3 +1,9 @@
+window.mobileWidth = 720;
+
+window.isMobileWidth = function() {
+	return window.innerWidth <= window.mobileWidth;
+};
+
 require('./leaflet.legendcontrol');
 
 var app = angular.module('ia-colombia', [
